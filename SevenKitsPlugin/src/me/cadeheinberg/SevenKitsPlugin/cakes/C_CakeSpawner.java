@@ -1,4 +1,4 @@
-package me.cadeheinberg.SevenKitsPlugin;
+package me.cadeheinberg.SevenKitsPlugin.cakes;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,6 +13,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import me.cadeheinberg.SevenKitsPlugin.A_Main;
+import me.cadeheinberg.SevenKitsPlugin.D_NpcSpawner;
+import me.cadeheinberg.SevenKitsPlugin.Vars;
 
 public class C_CakeSpawner {
 

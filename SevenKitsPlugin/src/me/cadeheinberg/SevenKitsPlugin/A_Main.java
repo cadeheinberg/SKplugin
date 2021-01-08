@@ -1,5 +1,5 @@
 package me.cadeheinberg.SevenKitsPlugin;
-//added small change
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -23,12 +23,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
+import me.cadeheinberg.SevenKitsPlugin.cakes.C_CakeSpawner;
 
 public class A_Main extends JavaPlugin {
 
   public Plugin plugin;
-  
-  //make among us gamemode
 
   public static World kitpvp;
   public static World sandbox;

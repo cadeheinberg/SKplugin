@@ -11,6 +11,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
+import me.cadeheinberg.SevenKitsPlugin.cakes.C_CakeSpawner;
 
 public class ScoreBoardObject {
 

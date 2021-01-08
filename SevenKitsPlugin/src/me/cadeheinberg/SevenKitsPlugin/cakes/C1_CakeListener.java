@@ -1,9 +1,11 @@
-package me.cadeheinberg.SevenKitsPlugin;
+package me.cadeheinberg.SevenKitsPlugin.cakes;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import me.cadeheinberg.SevenKitsPlugin.E1_Fighter;
+import me.cadeheinberg.SevenKitsPlugin.Vars;
 
 public class C1_CakeListener {
 

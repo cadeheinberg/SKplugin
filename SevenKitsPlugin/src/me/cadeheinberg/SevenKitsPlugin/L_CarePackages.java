@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import me.cadeheinberg.SevenKitsPlugin.cakes.C_CakeSpawner;
 
 public class L_CarePackages implements Listener {
 

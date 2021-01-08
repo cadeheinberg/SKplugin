@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import me.cadeheinberg.SevenKitsPlugin.cakes.C_CakeSpawner;
 
 public class F5_Igor {
 
