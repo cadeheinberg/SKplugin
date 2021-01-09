@@ -1,32 +1,62 @@
 package me.cade.PluginSK;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import me.cade.PluginSK.BuildKits.*;
+import me.cade.PluginSK.Damaging.*;
+import me.cade.PluginSK.NPCS.*;
+import me.cade.PluginSK.PlayerJoin.*;
 
 public class Main extends JavaPlugin{
   
-  public static World kitpvp;
+  public static World hub;
+  public static Location hubSpawn;
   
   @Override
   public void onEnable() {
     getConfig().options().copyDefaults(true);
     saveConfig();
-    //establish mysql connecton
+    Database.startConnection();
     setLocations();
-    //build kits
-    //spawn npcs
+    F_KitBuilder.buildAllKits();
+    D_SpawnKitSelectors.spawnKitSelectors();
+    registerListeners();
+  }
+  
+  private void registerListeners() {
+    Bukkit.getServer().getPluginManager().registerEvents(new D0_NpcListener(), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new FallDamageListener(), this);
   }
   
   @Override
   public void onDisable() {
-    //close mysql connection
+    Database.closeConnection();
+    D_SpawnKitSelectors.removeAllNpcs();
   }
   
   public void setLocations() {
     Bukkit.getServer().createWorld(new WorldCreator("kitpvp"));
-    kitpvp = Bukkit.getServer().getWorld("kitpvp");
+    hub = Bukkit.getServer().getWorld("kitpvp");
+    hubSpawn = new Location(hub, -1052.5, 197.5, -131.5);
   }
-
+  
+  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    if (sender instanceof ConsoleCommandSender) {
+      return false;
+    }
+    Player player = (Player) sender;
+    if (label.equals("spawn")) {
+        player.teleport(hubSpawn);
+        return true;
+    }
+    return false; 
+  }
 }

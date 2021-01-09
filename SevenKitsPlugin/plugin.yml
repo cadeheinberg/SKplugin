@@ -6,9 +6,6 @@ api-version: '1.13'
 
 commands:
   spawn:
-  setcake:
-  addexp:
-  justspawnallnpcs:
-  justdespawnallnpcs:
+  
   
   
