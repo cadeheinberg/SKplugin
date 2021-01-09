@@ -1,31 +1,14 @@
-main: me.cadeheinberg.SevenKitsPlugin.A_Main
-name: SevenKitsPlugin
+main: me.cade.PluginSK.Main
+name: PluginSK
 version: 1.0
 author: CadeHeinberg
 api-version: '1.13'
 
 commands:
   spawn:
-  discord:
   setcake:
-  resetplayer:
-  bountyset:
-  fw:
   addexp:
   justspawnallnpcs:
   justdespawnallnpcs:
-  pvotedinccakes:
-  paycakes:
-  paymoney:
-  addakill:
-  givekit:
-  resetallplayers:
-  resetallkillsdeaths:
-  givekittoall:
-  resetplayerbutkd:
-  hub:
-  sellcakes:
-  buycakes:
-  whataremycommands:
   
   
