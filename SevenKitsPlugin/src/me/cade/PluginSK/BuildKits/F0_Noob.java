@@ -14,8 +14,7 @@ public class F0_Noob {
   private static final int kitID = 0;
   private static final String kitName = ChatColor.WHITE + "Noob";
   private static final Color armorColor = Color.fromRGB(255, 255, 255);
-  private static Weapon[] items;
-  private static ChatColor w= ChatColor.WHITE;
+  private static Weapon item;
   
   private Player player;
   
@@ -26,33 +25,29 @@ public class F0_Noob {
 
   public static void giveKit(Player player, int kitIndex) {
     PlayerInventory playInv = player.getInventory();
-    playInv.addItem(items[kitIndex].getWeaponItem());
+    playInv.addItem(item.getWeaponItem());
     F_KitArmor.giveArmor(player, armorColor);
     player.closeInventory();
     player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 8, 1);
   }
   
   public static void makeKit() {
-    String name = w + "Noob Sword";
-    String dependent = ChatColor.YELLOW + " power";
 
-    String whiteString = w + "";
-    String attack = ChatColor.YELLOW + " attack damage";
-    String special = ChatColor.YELLOW + " ground pound damage";
-    String cool = ChatColor.YELLOW + " cooldown";
+    int baseDamage = F_Stats.getDamageList(kitID)[0];
+    
+    String name = ChatColor.WHITE + "Noob Sword";
+    String lore1 = ChatColor.WHITE + "" + baseDamage + ChatColor.YELLOW + " attack damage";   
 
-    items = new Weapon[4];
-
-    for (int i = 0; i < 4; i++) {
-      items[i] = new Weapon(F_Materials.getMaterialList(kitID)[i], name,
-        whiteString + F_Stats.getDamageList(kitID)[i] + attack,
-        whiteString + F_Stats.getSpecialDamageList(kitID)[i] + special,
-        whiteString + F_Stats.getPowerList(kitID)[i] + dependent,
-        whiteString + F_Stats.getCooldownList(kitID)[i] + cool);
-      items[i].addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE,
-        new AttributeModifier("GENERIC_ATTACK_DAMAGE", F_Stats.getDamageList(kitID)[i],
-          AttributeModifier.Operation.ADD_NUMBER));
-    }
+    item = new Weapon(F_Materials.getMaterial(kitID), name, lore1);
+    
+    item.addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE,
+      new AttributeModifier("GENERIC_ATTACK_DAMAGE", baseDamage,
+        AttributeModifier.Operation.ADD_NUMBER));
+    
+  }
+  
+  public static Weapon getWeapon() {
+    return item;
   }
   
   public Player getPlayer() {
@@ -70,9 +65,6 @@ public class F0_Noob {
   public static int getKitID() {
     return kitID;
   }
-
-  public static Weapon[] getItemList() {
-    return items;
-  }
+  
 
 }

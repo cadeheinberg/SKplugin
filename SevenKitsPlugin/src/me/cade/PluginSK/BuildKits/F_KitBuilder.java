@@ -6,8 +6,8 @@ public class F_KitBuilder {
     F_Materials.makeMaterials();
     F_Stats.makeStats();
     F0_Noob.makeKit();
-    F1_Booster.makeKit();
-    F2_Shotty.makeKit();
+    F1_Beserker.makeKit();
+    F2_Scorch.makeKit();
     F3_Goblin.makeKit();
     F4_Igor.makeKit();
     F5_Heavy.makeKit();

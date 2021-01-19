@@ -2,8 +2,10 @@ package me.cade.PluginSK;
 
 import java.util.HashMap;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import me.cade.PluginSK.BuildKits.F_KitFilter;
+import me.cade.PluginSK.KitListeners.G_KitFilter;
 
 public class Fighter {
   
@@ -13,9 +15,22 @@ public class Fighter {
   private int kitID;
   private int kitIndex;
   
+  private boolean fighterAbility;
+  
   public Fighter(Player player) {
     this.player = player;
     this.uuid = player.getUniqueId();
+    this.fighterAbility = false;
+    this.player.setExp(1);
+    this.player.setLevel(0);
+    this.player.setInvisible(false);
+    removeGlow();
+  }
+  
+  private void removeGlow() {
+    for (Player otherPlayer : Bukkit.getOnlinePlayers()) {
+      Glowing.setGlowing(this.player, otherPlayer, false);
+    }
   }
   
   public void addToFightersHashMap() {
@@ -49,6 +64,17 @@ public class Fighter {
 
   public UUID getUuid() {
     return uuid;
+  }
+
+  public boolean isFighterAbility() {
+    return fighterAbility;
+  }
+
+  public void setFighterAbility(boolean fighterAbility) {
+    if(!fighterAbility) {
+      G_KitFilter.deactivateSpecialFromKitID(player, this.kitID, this.kitIndex);
+    }
+    this.fighterAbility = fighterAbility;
   }
   
 }

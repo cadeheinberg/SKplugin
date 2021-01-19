@@ -9,18 +9,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import me.cade.PluginSK.Weapon;
 
-public class F5_Heavy {
+public class F1_Beserker {
 
-	private static final int kitID = 5;
-	private static final String kitName = ChatColor.BLUE + "Heavy";
-	private static final Color armorColor = Color.fromRGB(8, 111, 255);
-	private static Weapon item;
-	
-	private Player player;
-	
-	//special will be a wall/shield idk
-	
-  public F5_Heavy(Player player, int kitIndex) {
+  private static final int kitID = 1;
+  private static final String kitName = ChatColor.LIGHT_PURPLE + "Beserker";
+  private static final Color armorColor = Color.fromRGB(150, 0, 255);
+  private static Weapon item;  
+  private Player player;
+
+  public F1_Beserker(Player player, int kitIndex) {
     this.player = player;
     giveKit(player, kitIndex);
   }
@@ -36,13 +33,11 @@ public class F5_Heavy {
   public static void makeKit() {
 
     int baseDamage = F_Stats.getDamageList(kitID)[0];
-    Double projectileDamage = F_Stats.getProjectileDamageList(kitID)[0];
     
-    String name = ChatColor.BLUE + "Heavy Weapon";
-    String lore1 = ChatColor.WHITE + "" + baseDamage + ChatColor.YELLOW + " attack damage";  
-    String lore2 = ChatColor.WHITE + "" + projectileDamage + ChatColor.YELLOW + " arrow damage";  
+    String name = ChatColor.LIGHT_PURPLE + "Beserker Axe";
+    String lore1 = ChatColor.WHITE + "" + baseDamage + ChatColor.YELLOW + " attack damage";   
 
-    item = new Weapon(F_Materials.getMaterial(kitID), name, lore1, lore2);
+    item = new Weapon(F_Materials.getMaterial(kitID), name, lore1);
     
     item.addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE,
       new AttributeModifier("GENERIC_ATTACK_DAMAGE", baseDamage,
@@ -53,7 +48,7 @@ public class F5_Heavy {
   public static Weapon getWeapon() {
     return item;
   }
-	
+  
   public Player getPlayer() {
     return this.player;
   }

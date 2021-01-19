@@ -7,10 +7,10 @@ public class F_KitFilter {
   public static void giveKitFromKitID(Player player, int kitID, int kitIndex) {
     if (kitID == F0_Noob.getKitID()) {
       new F0_Noob(player, kitIndex);
-    } else if (kitID == F1_Booster.getKitID()) {
-      new F1_Booster(player, kitIndex);
-    } else if (kitID == F2_Shotty.getKitID()) {
-      new F2_Shotty(player, kitIndex);
+    } else if (kitID == F1_Beserker.getKitID()) {
+      new F1_Beserker(player, kitIndex);
+    } else if (kitID == F2_Scorch.getKitID()) {
+      new F2_Scorch(player, kitIndex);
     } else if (kitID == F3_Goblin.getKitID()) {
       new F3_Goblin(player, kitIndex);
     } else if (kitID == F4_Igor.getKitID()) {

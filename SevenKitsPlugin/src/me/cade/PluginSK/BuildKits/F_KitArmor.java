@@ -1,10 +1,13 @@
 package me.cade.PluginSK.BuildKits;
 
+import java.util.ArrayList;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class F_KitArmor {
@@ -32,6 +35,23 @@ public class F_KitArmor {
     lch.setColor(armorColor);
     lle.setColor(armorColor);
     lbo.setColor(armorColor);
+    
+
+    lhe.addAttributeModifier(Attribute.GENERIC_ARMOR,
+      new AttributeModifier("GENERIC_ARMOR", 5, AttributeModifier.Operation.ADD_NUMBER));
+    lch.addAttributeModifier(Attribute.GENERIC_ARMOR,
+      new AttributeModifier("GENERIC_ARMOR", 5, AttributeModifier.Operation.ADD_NUMBER));
+    lle.addAttributeModifier(Attribute.GENERIC_ARMOR,
+      new AttributeModifier("GENERIC_ARMOR", 5, AttributeModifier.Operation.ADD_NUMBER));
+    lbo.addAttributeModifier(Attribute.GENERIC_ARMOR,
+      new AttributeModifier("GENERIC_ARMOR", 5, AttributeModifier.Operation.ADD_NUMBER));
+   
+    ArrayList<String> itemLore = new ArrayList<String>();
+    itemLore.add(3 + " armor protection");
+    lhe.setLore(itemLore);
+    lch.setLore(itemLore);
+    lle.setLore(itemLore);
+    lbo.setLore(itemLore);
 
     lhe.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
     lch.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);

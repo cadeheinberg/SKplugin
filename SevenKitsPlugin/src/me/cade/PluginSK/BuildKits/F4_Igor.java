@@ -14,8 +14,7 @@ public class F4_Igor {
   private static final int kitID = 4;
   private static final String kitName = ChatColor.RED + "Igor";
   private static final Color armorColor = Color.fromRGB(255, 15, 99);
-  private static Weapon[] items;
-  private static ChatColor r;
+  private static Weapon item;
 
   private Player player;
   
@@ -26,36 +25,31 @@ public class F4_Igor {
 
   public void giveKit(Player player, int index) {
     PlayerInventory playInv = player.getInventory();
-    playInv.addItem(items[index].getWeaponItem());
+    playInv.addItem(item.getWeaponItem());
     F_KitArmor.giveArmor(player, armorColor);
     player.closeInventory();
     player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 8, 1);
   }
 
   public static void makeKit() {
-    r = ChatColor.RED;
 
-    String name = r + "Igors Trident";
-    String dependent = ChatColor.YELLOW + " type";
-
-    String w = ChatColor.WHITE + "";
-    String attack = ChatColor.YELLOW + " attack damage";
-    String special = ChatColor.YELLOW + " special damage";
-    String cool = ChatColor.YELLOW + " cooldown";
-
-    items = new Weapon[4];
+    int baseDamage = F_Stats.getDamageList(kitID)[0];
+    Double projectileDamage = F_Stats.getProjectileDamageList(kitID)[0];
     
-    for (int i = 0; i < 4; i++) {
-      items[i] = new Weapon(F_Materials.getMaterialList(kitID)[i], name,
-        w + F_Stats.getDamageList(kitID)[i] + attack,
-        w + F_Stats.getSpecialDamageList(kitID)[i] + special,
-        w + F_Stats.getStringList(kitID)[i] + dependent,
-        w + F_Stats.getCooldownList(kitID)[i] + cool);
-      items[i].addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE,
-        new AttributeModifier("GENERIC_ATTACK_DAMAGE", F_Stats.getDamageList(kitID)[i],
-          AttributeModifier.Operation.ADD_NUMBER));
-    }
+    String name = ChatColor.RED + "Igors Trident";
+    String lore1 = ChatColor.WHITE + "" + baseDamage + ChatColor.YELLOW + " attack damage";  
+    String lore2 = ChatColor.WHITE + "" + projectileDamage + ChatColor.YELLOW + " trident damage";  
 
+    item = new Weapon(F_Materials.getMaterial(kitID), name, lore1, lore2);
+    
+    item.addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE,
+      new AttributeModifier("GENERIC_ATTACK_DAMAGE", baseDamage,
+        AttributeModifier.Operation.ADD_NUMBER));
+    
+  }
+  
+  public static Weapon getWeapon() {
+    return item;
   }
   
   public Player getPlayer() {
@@ -72,10 +66,6 @@ public class F4_Igor {
 
   public static int getKitID() {
     return kitID;
-  }
-
-  public static Weapon[] getItemList() {
-    return items;
   }
 
 }
