@@ -3,9 +3,10 @@ name: PluginSK
 version: 1.0
 author: CadeHeinberg
 api-version: '1.13'
+depend: [ProtocolLib, GlowAPI]
 
 commands:
   spawn:
-  
-  
+  givekit:
+  givekittoall:
   

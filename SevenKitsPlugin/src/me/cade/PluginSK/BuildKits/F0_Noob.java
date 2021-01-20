@@ -12,9 +12,10 @@ import me.cade.PluginSK.Weapon;
 public class F0_Noob {
 
   private static final int kitID = 0;
-  private static final String kitName = ChatColor.WHITE + "Noob";
+  private static final String kitName = "Noob";
   private static final Color armorColor = Color.fromRGB(255, 255, 255);
   private static Weapon item;
+  private static ChatColor kitChatColor = ChatColor.WHITE;
   
   private Player player;
   
@@ -46,6 +47,11 @@ public class F0_Noob {
     
   }
   
+  public static ChatColor getKitChatColor() {
+    return kitChatColor;
+  }
+  
+  
   public static Weapon getWeapon() {
     return item;
   }
@@ -65,6 +71,7 @@ public class F0_Noob {
   public static int getKitID() {
     return kitID;
   }
-  
+
+
 
 }

@@ -14,7 +14,7 @@ public class F_Materials {
     materialList.add(Material.IRON_SHOVEL);
     materialList.add(Material.BOW);
     materialList.add(Material.TRIDENT);
-    materialList.add(Material.IRON_HOE);
+    materialList.add(Material.BLAZE_ROD);
     materialList.add(Material.NETHERITE_SWORD);
   }
 

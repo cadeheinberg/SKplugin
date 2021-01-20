@@ -13,20 +13,20 @@ public class G_KitFilter {
       return;
     }
     if (kitID == F0_Noob.getKitID()) {
-
+      G0_Noob.deActivateSpecial(player);
     } else if (kitID == F1_Beserker.getKitID()) {
-
+      G1_Beserker.deActivateSpecial(player);
     } else if (kitID == F2_Scorch.getKitID()) {
       G2_Scorch.deActivateSpecial(player);
     } else if (kitID == F3_Goblin.getKitID()) {
       G3_Goblin.deActivateSpecial(player);
     } else if (kitID == F4_Igor.getKitID()) {
-
-    } else if (kitID == F5_Heavy.getKitID()) {
-
-    } else if (kitID == F6_Zero.getKitID()) {
-      G6_Zero.deActivateSpecial(player);
-    }
+      G4_Igor.deactivateSpecialAbility(player);
+    } else if (kitID == F5_Wizard.getKitID()) {
+      G5_Wizard.deActivateSpecial(player);
+    } else if (kitID == F6_Grief.getKitID()) {
+      G6_Grief.deactivateSpecialAbility(player);
+    } 
   }
 
 }

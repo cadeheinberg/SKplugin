@@ -1,74 +1,119 @@
 package me.cade.PluginSK.KitListeners;
 
+import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import me.cade.PluginSK.AbilityEnchantment;
+import me.cade.PluginSK.Fighter;
 import me.cade.PluginSK.Glowing;
-import me.cade.PluginSK.PlayerGlow;
+import me.cade.PluginSK.BuildKits.F3_Goblin;
+import me.cade.PluginSK.BuildKits.F_Stats;
+import me.cade.PluginSK.Damaging.DealDamage;
 
 public class G3_Goblin {
-  
+
   // dropping the bow activates special ability
   // which is whenever a player is hit with sword
   // or arrow it slows and poisons them and barrage arrow
-  
+
   public static void doDrop(Player killer) {
-    if(killer.getExp() < 1) {
+    if (killer.getExp() < 1) {
       killer.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
     }
     G8_Cooldown.startAbilityDuration(killer, 200, 300);
-    locateNearestEnemy(killer);
+    CraftPlayer craftPlayer = (CraftPlayer) killer;
+    AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
+    locateNearestEnemy(killer, 200);
     killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 8, 1);
   }
-  
-  private static void locateNearestEnemy(Player killer) {
-    for( Entity victim : killer.getNearbyEntities(100, 50, 100)) {
-      if(victim instanceof Player) {
-        killer.sendMessage(ChatColor.AQUA + "Enemy Located");
-        killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 8, 1);
-        PlayerGlow.setPlayerGlowOn((Player) victim, new Player[] {killer});
-        return;
+
+  private static void locateNearestEnemy(Player killer, int duration) {
+    Player closestPlayer = null;
+    double lowestDistance = 0;
+    double currentDistance = 0;
+    int itterator = 0;
+
+    // search other team eventually instead
+    for (Entity victim : killer.getNearbyEntities(100, 50, 100)) {
+      if (victim instanceof Player) {
+        currentDistance = killer.getLocation().distance(victim.getLocation());
+        if (itterator == 0) {
+          lowestDistance = currentDistance;
+          closestPlayer = (Player) victim;
+          itterator++;
+          continue;
+        }
+        if (currentDistance < lowestDistance) {
+          lowestDistance = currentDistance;
+          closestPlayer = (Player) victim;
+        }
+        itterator++;
       }
     }
-    killer.sendMessage(ChatColor.RED + "No enemies in range");
+
+    if (closestPlayer == null) {
+      killer.sendMessage(ChatColor.RED + "No enemies in range");
+    }
+
+    ArrayList<Player> viewers = new ArrayList<Player>();
+    viewers.add(killer);
+    // eventually should just use team
+
+    Glowing.setGlowingOn((Player) closestPlayer, killer, viewers);
+
+    killer.sendMessage(ChatColor.AQUA + "Enemy Located");
+    killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 8, 1);
+
   }
-  
+
   public static void deActivateSpecial(Player player) {
     turnOffLocater(player);
+    CraftPlayer craftPlayer = (CraftPlayer) player;
+    AbilityEnchantment.removeEnchanted(craftPlayer.getHandle());
   }
-  
+
   private static void turnOffLocater(Player killer) {
     Player victim = Bukkit.getPlayer(Glowing.glowMap.get(killer.getUniqueId()));
-    if(victim == null) {
+    if (victim == null) {
       return;
     }
-    if(!victim.isOnline()) {
+    if (!victim.isOnline()) {
       return;
     }
-    Glowing.setGlowing(victim, killer, false);
+    ArrayList<Player> viewers = new ArrayList<Player>();
+    viewers.add(killer);
+    // eventually should just use team
+    Glowing.setGlowingOff(victim, killer, viewers);
   }
-  
-  public static void doArrorwHitEntity(Player killer, LivingEntity victim, Arrow arrow) {
-//    if(arrow.getFireTicks() > 0) {
-//      victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
-//      victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 2));
-//    }
-  }
-  
-  public static void doArrowShoot(Player shooter, Arrow arrow) {
-//    if (Fighter.fighters.get((shooter).getUniqueId()).isFighterAbility()) {
-//      arrow.setFireTicks(1000);
-    
-//      maybe do barrage
-    
-//    }
 
+  public static void doArrorwHitEntity(Player killer, LivingEntity victim, Arrow arrow) {
+    DealDamage.dealAmount(killer, victim, F_Stats.getDamageList(F3_Goblin.getKitID())[0]);
+    if (arrow.getFireTicks() > 0) {
+      victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
+      victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 2));
+    }
+  }
+
+  public static boolean doArrowShoot(Player shooter, Arrow arrow) {
+    if (shooter.getCooldown(F3_Goblin.getWeapon().getWeaponItem().getType()) > 0) {
+      return false;
+    }
+    shooter.setCooldown(F3_Goblin.getWeapon().getWeaponItem().getType(),
+      F_Stats.getTicksList(F3_Goblin.getKitID())[0]);
+    if (Fighter.get(shooter).isFighterAbility()) {
+      arrow.setFireTicks(1000);
+    }
+    return true;
   }
 
 

@@ -42,9 +42,9 @@ public class G_KitListener implements Listener {
       if (e.getItem().getType() == F2_Scorch.getWeapon().getWeaponItem().getType()) {
         G2_Scorch.doRightClick(player);
       }
-    } else if (kitID == F5_Heavy.getKitID()) {
-      if (e.getItem().getType() == F5_Heavy.getWeapon().getWeaponItem().getType()) {
-        G5_Heavy.doRightClick(player);
+    } else if (kitID == F5_Wizard.getKitID()) {
+      if (e.getItem().getType() == F5_Wizard.getWeapon().getWeaponItem().getType()) {
+        G5_Wizard.doRightClick(player);
       }  
     }
   }
@@ -69,11 +69,11 @@ public class G_KitListener implements Listener {
       G3_Goblin.doDrop(player);
     } else if (kitID == F4_Igor.getKitID()) {
       G4_Igor.doDrop(player);
-    } else if (kitID == F5_Heavy.getKitID()) {
-      G5_Heavy.doDrop(player);
-    } else if (kitID == F6_Zero.getKitID()) {
-      G6_Zero.doDrop(player);
-    }
+    } else if (kitID == F5_Wizard.getKitID()) {
+      G5_Wizard.doDrop(player);
+    } else if (kitID == F6_Grief.getKitID()) {
+      G6_Grief.doDrop(player);
+    } 
   }
 
   @EventHandler
@@ -136,7 +136,9 @@ public class G_KitListener implements Listener {
     }
     if (e.getEntityType() == EntityType.TRIDENT) {
       if (e.getEntity().getShooter() instanceof Player) {
-        G4_Igor.doThrowTrident((Player) e.getEntity().getShooter(), (CraftTrident) e.getEntity());
+        if(!(G4_Igor.doThrowTrident((Player) e.getEntity().getShooter(), (CraftTrident) e.getEntity()))) {
+          e.setCancelled(true);
+        }
       }
     }
   }
@@ -148,7 +150,9 @@ public class G_KitListener implements Listener {
     }
     if (e.getEntity() instanceof Player) {
       if (e.getProjectile().getType() == EntityType.ARROW) {
-        G3_Goblin.doArrowShoot(((Player) e.getEntity()), (Arrow) e.getProjectile());
+        if(!(G3_Goblin.doArrowShoot(((Player) e.getEntity()), (Arrow) e.getProjectile()))) {
+          e.setCancelled(true);
+        }
       }
     }
   }

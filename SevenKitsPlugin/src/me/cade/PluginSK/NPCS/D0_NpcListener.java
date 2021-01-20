@@ -1,6 +1,7 @@
 package me.cade.PluginSK.NPCS;
 
 import org.bukkit.GameMode;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,9 @@ public class D0_NpcListener implements Listener {
     Player player = e.getPlayer();
     String name = e.getRightClicked().getCustomName();
     if (name == null) {
+      return;
+    }
+    if(e.getRightClicked().getType() != EntityType.ARMOR_STAND) {
       return;
     }
     // Kit Names

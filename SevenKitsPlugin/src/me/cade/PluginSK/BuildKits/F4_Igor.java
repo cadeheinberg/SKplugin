@@ -12,10 +12,11 @@ import me.cade.PluginSK.Weapon;
 public class F4_Igor {
 
   private static final int kitID = 4;
-  private static final String kitName = ChatColor.RED + "Igor";
+  private static final String kitName = "Igor";
   private static final Color armorColor = Color.fromRGB(255, 15, 99);
   private static Weapon item;
-
+  private static ChatColor kitChatColor = ChatColor.RED;
+  
   private Player player;
   
   public F4_Igor(Player player, int kitIndex) {
@@ -46,6 +47,10 @@ public class F4_Igor {
       new AttributeModifier("GENERIC_ATTACK_DAMAGE", baseDamage,
         AttributeModifier.Operation.ADD_NUMBER));
     
+  }
+  
+  public static ChatColor getKitChatColor() {
+    return kitChatColor;
   }
   
   public static Weapon getWeapon() {

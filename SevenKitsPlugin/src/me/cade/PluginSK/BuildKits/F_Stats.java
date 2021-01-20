@@ -39,30 +39,31 @@ public class F_Stats {
     // goblin
     // goblin
     // goblin
-    damageList.add(new Integer[] {4, 5, 6, 6});
-    ticksList.add(new Integer[] {38, 34, 30, 68});
-    projectileDamageList.add(new Double[] {1.0, 1.0, 1.25, 1.25});
-
-    // igor
-    // igor
-    // igor
-    damageList.add(new Integer[] {5, 5, 6, 6});
-    ticksList.add(new Integer[] {30, 30, 25, 20});
-    projectileDamageList.add(new Double[] {5.0, 6.0, 7.0, 4.0});
-
-    // heavy
-    // heavy
-    // heavy
-    damageList.add(new Integer[] {5, 5, 6, 6});
+    damageList.add(new Integer[] {6, 6, 6, 6});
     ticksList.add(new Integer[] {5, 5, 5, 5});
-    projectileDamageList.add(new Double[] {1.0, 1.5, 1.5, 2.0});
+    projectileDamageList.add(new Double[] {4.0, 4.0, 4.0, 4.0});
+
+    // igor
+    // igor
+    // igor
+    damageList.add(new Integer[] {6, 6, 6, 6});
+    ticksList.add(new Integer[] {10, 10, 10, 10});
+    projectileDamageList.add(new Double[] {7.0, 7.0, 7.0, 7.0});
 
     // wizard
     // wizard
     // wizard
-    damageList.add(new Integer[] {4, 5, 5, 6});
+    damageList.add(new Integer[] {6, 6, 6, 6});
+    ticksList.add(new Integer[] {55, 55, 55, 55});
+    projectileDamageList.add(new Double[] {6.5, 6.5, 6.5, 6.5});
+    
+    // grief
+    // grief
+    damageList.add(new Integer[] {7, 7, 7, 7});
     ticksList.add(null);
     projectileDamageList.add(null);
+
+
   }
 
   public static Integer[] getDamageList(int index) {

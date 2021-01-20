@@ -1,12 +1,12 @@
 package me.cade.PluginSK.KitListeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import me.cade.PluginSK.Glowing;
+import me.cade.PluginSK.AbilityEnchantment;
 
 public class G0_Noob {
 
@@ -28,14 +28,18 @@ public class G0_Noob {
   }
   
   private static void activateSpecial(Player killer, int durationTicks, int rechargeTicks) {
-    for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-      Glowing.setGlowing(killer, player, false);
-    }
-    killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, durationTicks, 1));
-    killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, durationTicks, 2));
+    killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, durationTicks, 0));
+    killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, durationTicks, 1));
+    CraftPlayer craftPlayer = (CraftPlayer) killer;
+    AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
     G8_Cooldown.startAbilityDuration(killer, durationTicks, rechargeTicks);
     killer.sendMessage(ChatColor.AQUA + "Special Ability Activated");
     killer.playSound(killer.getLocation(), Sound.ENTITY_HORSE_ANGRY, 8, 1);
+  }
+  
+  public static void deActivateSpecial(Player killer) {
+    CraftPlayer craftPlayer = (CraftPlayer) killer;
+    AbilityEnchantment.removeEnchanted(craftPlayer.getHandle());
   }
 
 }

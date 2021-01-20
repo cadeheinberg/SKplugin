@@ -34,13 +34,13 @@ public class D_SpawnKitSelectors {
     String p = y + "" + b + "";
     kits = new D1_ArmorStand[7];
     kitNames = new String[7];
-    kitNames[0] = p + "  Noob  ";
-    kitNames[1] = p + " Beserker ";
-    kitNames[2] = p + " Scorch ";
-    kitNames[3] = p + " Goblin ";
-    kitNames[4] = p + "  Igor  ";
-    kitNames[5] = p + "  Heavy  ";
-    kitNames[6] = p + " Wizard ";
+    kitNames[0] = p + "  " + F0_Noob.getKitName() + "  ";
+    kitNames[1] = p + "  " + F1_Beserker.getKitName() + "  ";
+    kitNames[2] = p + "  " + F2_Scorch.getKitName() + "  ";
+    kitNames[3] = p + "  " + F3_Goblin.getKitName() + "  ";
+    kitNames[4] = p + "  " + F4_Igor.getKitName() + "  ";
+    kitNames[5] = p + "  " + F5_Wizard.getKitName() + "  ";
+    kitNames[6] = p + "  " + F6_Grief.getKitName() + "  ";
     
     ItemStack[] itemsHeld = new ItemStack[7];
     itemsHeld[0] = F0_Noob.getWeapon().getWeaponItem();
@@ -48,8 +48,8 @@ public class D_SpawnKitSelectors {
     itemsHeld[2] = F2_Scorch.getWeapon().getWeaponItem();
     itemsHeld[3] = F3_Goblin.getWeapon().getWeaponItem();
     itemsHeld[4] = F4_Igor.getWeapon().getWeaponItem();
-    itemsHeld[5] = F5_Heavy.getWeapon().getWeaponItem();
-    itemsHeld[6] = F6_Zero.getWeapon().getWeaponItem();
+    itemsHeld[5] = F5_Wizard.getWeapon().getWeaponItem();
+    itemsHeld[6] = F6_Grief.getWeapon().getWeaponItem();
     
     Color[] colors = new Color[7];
     colors[0] = F0_Noob.getArmorColor();
@@ -57,8 +57,8 @@ public class D_SpawnKitSelectors {
     colors[2] = F2_Scorch.getArmorColor();
     colors[3] = F3_Goblin.getArmorColor();
     colors[4] = F4_Igor.getArmorColor();
-    colors[5] = F5_Heavy.getArmorColor();
-    colors[6] = F6_Zero.getArmorColor();
+    colors[5] = F5_Wizard.getArmorColor();
+    colors[6] = F6_Grief.getArmorColor();
     
     double x = -1046.5;
     for(int i = 0; i < 7; i++) {

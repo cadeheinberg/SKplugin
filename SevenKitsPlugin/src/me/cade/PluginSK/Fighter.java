@@ -2,7 +2,6 @@ package me.cade.PluginSK;
 
 import java.util.HashMap;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import me.cade.PluginSK.BuildKits.F_KitFilter;
 import me.cade.PluginSK.KitListeners.G_KitFilter;
@@ -17,6 +16,9 @@ public class Fighter {
   
   private boolean fighterAbility;
   
+  private UUID lastToDamage;
+  private UUID lastDamagedBy;
+  
   public Fighter(Player player) {
     this.player = player;
     this.uuid = player.getUniqueId();
@@ -24,13 +26,11 @@ public class Fighter {
     this.player.setExp(1);
     this.player.setLevel(0);
     this.player.setInvisible(false);
-    removeGlow();
+    this.player.setWalkSpeed((float) 0.2);
   }
   
-  private void removeGlow() {
-    for (Player otherPlayer : Bukkit.getOnlinePlayers()) {
-      Glowing.setGlowing(this.player, otherPlayer, false);
-    }
+  public static Fighter get(Player player) {
+    return fighters.get(player.getUniqueId());
   }
   
   public void addToFightersHashMap() {
@@ -40,6 +40,12 @@ public class Fighter {
   public void giveKit() {
     player.getInventory().clear();
     F_KitFilter.giveKitFromKitID(player, this.kitID, this.kitIndex);
+  }
+  
+  public void giveKit(int kitID, int kidIndex) {
+    this.setKitID(kitID);
+    this.setKitIndex(kidIndex);
+    this.giveKit();
   }
 
   public Player getPlayer() {
@@ -75,6 +81,22 @@ public class Fighter {
       G_KitFilter.deactivateSpecialFromKitID(player, this.kitID, this.kitIndex);
     }
     this.fighterAbility = fighterAbility;
+  }
+
+  public UUID getLastToDamage() {
+    return lastToDamage;
+  }
+
+  public void setLastToDamage(Player lastToDamage) {
+    this.lastToDamage = lastToDamage.getUniqueId();
+  }
+
+  public UUID getLastDamagedBy() {
+    return lastDamagedBy;
+  }
+
+  public void setLastDamagedBy(Player lastDamagedBy) {
+    this.lastDamagedBy = lastDamagedBy.getUniqueId();
   }
   
 }

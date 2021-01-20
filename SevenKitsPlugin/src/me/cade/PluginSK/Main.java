@@ -1,6 +1,7 @@
 package me.cade.PluginSK;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -44,6 +45,8 @@ public class Main extends JavaPlugin{
     Bukkit.getServer().getPluginManager().registerEvents(new FallDamageListener(), this);
     Bukkit.getServer().getPluginManager().registerEvents(new G_KitListener(), this);
     Bukkit.getServer().getPluginManager().registerEvents(new BasicPermissions(), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new EntityDamage(), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new PlayerChat(), this);
   }
   
   @Override
@@ -59,7 +62,7 @@ public class Main extends JavaPlugin{
   
   private void addPlayersToFighters() {
     for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-      player.teleport(Main.hubSpawn);
+//      player.teleport(Main.hubSpawn);
       Fighter fighter = new Fighter(player);
       fighter.addToFightersHashMap();
     }
@@ -73,6 +76,28 @@ public class Main extends JavaPlugin{
     if (label.equals("spawn")) {
         player.teleport(hubSpawn);
         return true;
+    }else if (label.equals("givekit")) {
+      if (!(player.isOp())) {
+        player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
+          + " operator " + ChatColor.RED + "on this server");
+        return false;
+      }
+      Player giveCake = Bukkit.getPlayer(args[0]);
+      int kitID = Integer.parseInt(args[1].toString());
+      int kitIndex = Integer.parseInt(args[2].toString());
+      Fighter fighter = Fighter.get(giveCake);
+      fighter.giveKit(kitID, kitIndex);
+    } else if (label.equals("givekittoall")) {
+      if (!(player.isOp())) {
+        player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
+          + " operator " + ChatColor.RED + "on this server");
+        return false;
+      }
+      int kitID = Integer.parseInt(args[0].toString());
+      int kitIndex = Integer.parseInt(args[1].toString());
+      for (Player giveTo : Bukkit.getOnlinePlayers()) {
+        Fighter.get(giveTo).giveKit(kitID, kitIndex);
+      }
     }
     return false; 
   }

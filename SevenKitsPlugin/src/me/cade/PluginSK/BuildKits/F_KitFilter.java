@@ -15,11 +15,11 @@ public class F_KitFilter {
       new F3_Goblin(player, kitIndex);
     } else if (kitID == F4_Igor.getKitID()) {
       new F4_Igor(player, kitIndex);
-    } else if (kitID == F5_Heavy.getKitID()) {
-      new F5_Heavy(player, kitIndex);
-    } else if (kitID == F6_Zero.getKitID()) {
-      new F6_Zero(player, kitIndex);
-    }
+    } else if (kitID == F5_Wizard.getKitID()) {
+      new F5_Wizard(player, kitIndex);
+    } else if (kitID == F6_Grief.getKitID()) {
+      new F6_Grief(player, kitIndex);
+    } 
   }
 
 }

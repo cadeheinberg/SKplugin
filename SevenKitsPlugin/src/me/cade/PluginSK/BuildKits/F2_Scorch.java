@@ -12,10 +12,11 @@ import me.cade.PluginSK.Weapon;
 public class F2_Scorch {
 
   private static final int kitID = 2;
-  private static final String kitName = ChatColor.GOLD + "Scorch";
+  private static final String kitName = "Scorch";
   private static final Color armorColor = Color.fromRGB(255, 255, 0);
   private static Weapon item;
-
+  private static ChatColor kitChatColor = ChatColor.YELLOW;
+  
   private Player player;
   
   public F2_Scorch(Player player, int kitIndex) {
@@ -46,6 +47,10 @@ public class F2_Scorch {
       new AttributeModifier("GENERIC_ATTACK_DAMAGE", baseDamage,
         AttributeModifier.Operation.ADD_NUMBER));
     
+  }
+  
+  public static ChatColor getKitChatColor() {
+    return kitChatColor;
   }
   
   public static Weapon getWeapon() {

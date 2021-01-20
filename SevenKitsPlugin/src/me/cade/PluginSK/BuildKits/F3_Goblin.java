@@ -15,11 +15,12 @@ import me.cade.PluginSK.Weapon;
 public class F3_Goblin {
 
   private static final int kitID = 3;
-  private static final String kitName = ChatColor.GREEN + "Goblin";
+  private static final String kitName = "Goblin";
   private static final Color armorColor = Color.fromRGB(77, 255, 0);
   private static Weapon item;
   private static Weapon goblinSword;
-
+  private static ChatColor kitChatColor = ChatColor.GREEN;
+  
   private Player player;
   
   public F3_Goblin(Player player, int kitIndex) {
@@ -50,7 +51,7 @@ public class F3_Goblin {
     item.getWeaponItem().addEnchantment(Enchantment.ARROW_INFINITE, 1);
     
     goblinSword = new Weapon(Material.WOODEN_SWORD, ChatColor.GREEN + "Goblin Sword",
-      F_Stats.getDamageList(kitID)[0] + " damage", "Fire Aspect");
+      ChatColor.WHITE + "" + F_Stats.getDamageList(kitID)[0] + ChatColor.YELLOW + " damage", "Fire Aspect");
     
     goblinSword.addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE,
       new AttributeModifier("GENERIC_ATTACK_DAMAGE", F_Stats.getDamageList(kitID)[0],
@@ -58,6 +59,10 @@ public class F3_Goblin {
     
     goblinSword.applyWeaponUnsafeEnchantment(Enchantment.FIRE_ASPECT, 2);
     
+  }
+  
+  public static ChatColor getKitChatColor() {
+    return kitChatColor;
   }
   
   public static Weapon getWeapon() {

@@ -10,8 +10,8 @@ public class F_KitBuilder {
     F2_Scorch.makeKit();
     F3_Goblin.makeKit();
     F4_Igor.makeKit();
-    F5_Heavy.makeKit();
-    F6_Zero.makeKit();
+    F6_Grief.makeKit();
+    F5_Wizard.makeKit();
   }
 
 }

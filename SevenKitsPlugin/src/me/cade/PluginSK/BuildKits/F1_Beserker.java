@@ -12,11 +12,12 @@ import me.cade.PluginSK.Weapon;
 public class F1_Beserker {
 
   private static final int kitID = 1;
-  private static final String kitName = ChatColor.LIGHT_PURPLE + "Beserker";
+  private static final String kitName = "Beserker";
   private static final Color armorColor = Color.fromRGB(150, 0, 255);
   private static Weapon item;  
   private Player player;
-
+  private static ChatColor kitChatColor = ChatColor.LIGHT_PURPLE;
+  
   public F1_Beserker(Player player, int kitIndex) {
     this.player = player;
     giveKit(player, kitIndex);
@@ -43,6 +44,10 @@ public class F1_Beserker {
       new AttributeModifier("GENERIC_ATTACK_DAMAGE", baseDamage,
         AttributeModifier.Operation.ADD_NUMBER));
     
+  }
+  
+  public static ChatColor getKitChatColor() {
+    return kitChatColor;
   }
   
   public static Weapon getWeapon() {
