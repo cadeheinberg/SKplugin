@@ -42,7 +42,11 @@ public class G_KitListener implements Listener {
       if (e.getItem().getType() == F2_Scorch.getWeapon().getWeaponItem().getType()) {
         G2_Scorch.doRightClick(player);
       }
-    } else if (kitID == F5_Wizard.getKitID()) {
+    } else if (kitID == F1_Beserker.getKitID()) {
+      if (e.getItem().getType() == F1_Beserker.getWeapon().getWeaponItem().getType()) {
+        G1_Beserker.doRightClick(player);
+      }  
+    }else if (kitID == F5_Wizard.getKitID()) {
       if (e.getItem().getType() == F5_Wizard.getWeapon().getWeaponItem().getType()) {
         G5_Wizard.doRightClick(player);
       }  
@@ -97,7 +101,6 @@ public class G_KitListener implements Listener {
       if (e.getEntityType() == EntityType.TRIDENT) {
         G4_Igor.doTridentHitGround(shooter, e.getHitBlock().getLocation(),
           (CraftTrident) e.getEntity());
-        e.getEntity().remove();
       }
     }
 

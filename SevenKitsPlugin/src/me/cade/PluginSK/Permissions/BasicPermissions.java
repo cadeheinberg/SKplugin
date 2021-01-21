@@ -18,36 +18,31 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTakeLecternBookEvent;
-import me.cade.PluginSK.SafeZone;
 
 public class BasicPermissions implements Listener {
-  
+
   @EventHandler
   public void onPlace(BlockPlaceEvent e) {
-    if (SafeZone.safeZone(e.getBlock().getLocation())) { 
-        if (e.getPlayer().hasPermission("seven.builder")) {
-          if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
-            //allow to build
-            return;
-          }
-        }
-        e.setCancelled(true);
+    if (e.getPlayer().hasPermission("seven.builder")) {
+      if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
+        // allow to build
+        return;
       }
+    }
+    e.setCancelled(true);
   }
 
   @EventHandler
   public void onBreak(BlockBreakEvent e) {
-    if (SafeZone.safeZone(e.getBlock().getLocation())) { 
-      if (e.getPlayer().hasPermission("seven.builder")) {
-        if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
-          //allow to bureak
-          return;
-        }
+    if (e.getPlayer().hasPermission("seven.builder")) {
+      if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
+        // allow to bureak
+        return;
       }
-      e.setCancelled(true);
     }
+    e.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onGrow(BlockGrowEvent e) {
     e.setCancelled(true);
@@ -57,12 +52,12 @@ public class BasicPermissions implements Listener {
   public void onBurn(BlockBurnEvent e) {
     e.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onIgnite(BlockIgniteEvent e) {
     e.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onBook(PlayerTakeLecternBookEvent e) {
     if (e.getPlayer().isOp()) {
@@ -70,47 +65,47 @@ public class BasicPermissions implements Listener {
     }
     e.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onBed(PlayerBedEnterEvent e) {
     e.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onExplode(BlockExplodeEvent e) {
     e.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onFoodChange(FoodLevelChangeEvent e) {
     e.setCancelled(true);
     e.setFoodLevel(20);
   }
-  
+
   @EventHandler
   public void onCombust(EntityCombustEvent e) {
-    if (! (e.getEntity() instanceof LivingEntity)) {
-        e.setCancelled(true);
+    if (!(e.getEntity() instanceof LivingEntity)) {
+      e.setCancelled(true);
     }
   }
-  
+
   public void onSwapHand(PlayerSwapHandItemsEvent e) {
     e.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onExpChange(PlayerExpChangeEvent e) {
     e.setAmount(0);
   }
-  
+
   @EventHandler
   public void onGrabArmorStand(PlayerArmorStandManipulateEvent e) {
     e.setCancelled(true);
   }
-  
+
   @EventHandler
   public void onLevelChangeEvent(PlayerLevelChangeEvent e) {
     e.getPlayer().setLevel(0);
   }
-  
+
 }

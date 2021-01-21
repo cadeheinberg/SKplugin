@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import me.cade.PluginSK.Fighter;
+import me.cade.PluginSK.Glowing;
 import me.cade.PluginSK.PlayerChat;
 import me.cade.PluginSK.SafeZone;
 import me.cade.PluginSK.BuildKits.F0_Noob;
@@ -67,16 +68,20 @@ public class EntityDamage implements Listener {
     Player victim = e.getEntity();
     Player killer = null;
 
+    Glowing.setGlowingOffForAll(victim);
+    
     Fighter fVictim = Fighter.get(victim);
+    fVictim.incDeaths();
 
     killer = Bukkit.getPlayer(fVictim.getLastDamagedBy());
     if(!checkKillerStatus(killer, victim, fVictim)) {
       return;
     }
     Fighter fKiller = Fighter.get(killer);
+    fKiller.incKills();
     
     if (fKiller.getLastDamagedBy() != null) {
-      if (fKiller.getLastDamagedBy().equals(victim)) {
+      if (fKiller.getLastDamagedBy().equals(victim.getUniqueId())) {
         fKiller.setLastDamagedBy(null);
       }
     }
@@ -103,19 +108,19 @@ public class EntityDamage implements Listener {
   public void tellDeathMessage(String killerName, String victimName, int kitID) {
     String weaponName = "";
     if (kitID == F0_Noob.getKitID()) {
-      weaponName = F0_Noob.getKitName();
+      weaponName = F0_Noob.getKitChatColor() + F0_Noob.getKitName();
     } else if (kitID == F1_Beserker.getKitID()) {
-      weaponName = F1_Beserker.getKitName();
+      weaponName = F1_Beserker.getKitChatColor() + F1_Beserker.getKitName();
     } else if (kitID == F2_Scorch.getKitID()) {
-      weaponName = F2_Scorch.getKitName();
+      weaponName = F2_Scorch.getKitChatColor() + F2_Scorch.getKitName();
     } else if (kitID == F3_Goblin.getKitID()) {
-      weaponName = F3_Goblin.getKitName();
+      weaponName = F3_Goblin.getKitChatColor() + F3_Goblin.getKitName();
     } else if (kitID == F4_Igor.getKitID()) {
-      weaponName = F4_Igor.getKitName();
+      weaponName = F4_Igor.getKitChatColor() + F4_Igor.getKitName();
     } else if (kitID == F5_Wizard.getKitID()) {
-      weaponName = F5_Wizard.getKitName();
+      weaponName = F5_Wizard.getKitChatColor() + F5_Wizard.getKitName();
     } else if (kitID == F6_Grief.getKitID()) {
-      weaponName = F6_Grief.getKitName();
+      weaponName = F6_Grief.getKitChatColor() + F6_Grief.getKitName();
     } else {
       weaponName = "Fists";
     }

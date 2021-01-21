@@ -14,13 +14,12 @@ public class PlayerJoinListener implements Listener {
   public void onJoin(PlayerJoinEvent e) {
     Player player = e.getPlayer();
     player.teleport(Main.hubSpawn);
-    Fighter fighter = new Fighter(player);
-    fighter.addToFightersHashMap();
+    new Fighter(player);
   }
   
   @EventHandler
   public void onLeave(PlayerQuitEvent e) {
-
+    Fighter.get(e.getPlayer()).fighterLeftServer();
   }
   
   @EventHandler

@@ -13,6 +13,7 @@ import me.cade.PluginSK.Fighter;
 import me.cade.PluginSK.BuildKits.F4_Igor;
 import me.cade.PluginSK.BuildKits.F_Stats;
 import me.cade.PluginSK.Damaging.CreateExplosion;
+import me.cade.PluginSK.Damaging.DealDamage;
 
 public class G4_Igor {
 
@@ -57,16 +58,18 @@ public class G4_Igor {
     if(trident.getFireTicks() > 0) {
       Location local = victim.getLocation();
       local.setY(local.getY() - 0.5);
-      CreateExplosion.doAnExplosion(killer, local, 0.3,
-        F_Stats.getProjectileDamageList(F4_Igor.getKitID())[0]);
+      CreateExplosion.doAnExplosion(killer, local, 0.3, 6.5);
+      trident.remove();
+    } else {
+      DealDamage.dealAmount(killer, victim, F_Stats.getDamageList(F4_Igor.getKitID())[0]);
     }
   }
   
   public static void doTridentHitGround(Player killer, Location location, CraftTrident trident) {
     if(trident.getFireTicks() > 0) {
-      CreateExplosion.doAnExplosion(killer, location, 0.3,
-        F_Stats.getProjectileDamageList(F4_Igor.getKitID())[0]);
+      CreateExplosion.doAnExplosion(killer, location, 0.3, 6.0);
     }
+    trident.remove();
   }
 
 }

@@ -18,48 +18,48 @@ public class F_Stats {
     // noob
     // noob
     // noob
-    damageList.add(new Integer[] {4, 5, 5, 6});
+    damageList.add(new Integer[] {3, 3, 3, 3});
     ticksList.add(null);
     projectileDamageList.add(null);
 
     // booster
     // booster
     // booster
-    damageList.add(new Integer[] {4, 5, 5, 6});
-    ticksList.add(null);
+    damageList.add(new Integer[] {20, 20, 20, 20});
+    ticksList.add(new Integer[] {200, 200, 200, 200});
     projectileDamageList.add(null);
 
     // shotty
     // shotty
     // shotty
-    damageList.add(new Integer[] {4, 4, 4, 5});
+    damageList.add(new Integer[] {7, 7, 7, 7});
     ticksList.add(new Integer[] {38, 34, 30, 68});
     projectileDamageList.add(new Double[] {0.5, 0.75, 1.0, 1.0});
 
     // goblin
     // goblin
     // goblin
-    damageList.add(new Integer[] {6, 6, 6, 6});
+    damageList.add(new Integer[] {7, 7, 7, 7});
     ticksList.add(new Integer[] {5, 5, 5, 5});
-    projectileDamageList.add(new Double[] {4.0, 4.0, 4.0, 4.0});
+    projectileDamageList.add(new Double[] {4.5, 4.5, 4.5, 4.5});
 
     // igor
     // igor
     // igor
-    damageList.add(new Integer[] {6, 6, 6, 6});
+    damageList.add(new Integer[] {8, 8, 8, 8});
     ticksList.add(new Integer[] {10, 10, 10, 10});
-    projectileDamageList.add(new Double[] {7.0, 7.0, 7.0, 7.0});
+    projectileDamageList.add(new Double[] {5.0, 5.0, 5.0, 5.0});
 
     // wizard
     // wizard
     // wizard
-    damageList.add(new Integer[] {6, 6, 6, 6});
+    damageList.add(new Integer[] {8, 8, 8, 8});
     ticksList.add(new Integer[] {55, 55, 55, 55});
-    projectileDamageList.add(new Double[] {6.5, 6.5, 6.5, 6.5});
+    projectileDamageList.add(new Double[] {4.5, 4.5, 4.5, 4.5});
     
     // grief
     // grief
-    damageList.add(new Integer[] {7, 7, 7, 7});
+    damageList.add(new Integer[] {9, 9, 9, 9});
     ticksList.add(null);
     projectileDamageList.add(null);
 

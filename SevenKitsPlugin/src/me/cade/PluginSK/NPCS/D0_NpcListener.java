@@ -1,6 +1,8 @@
 package me.cade.PluginSK.NPCS;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,39 +30,60 @@ public class D0_NpcListener implements Listener {
     // Kit Names
     if (name.equals(D_SpawnKitSelectors.kitNames[0])) {
       Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-      fighter.setKitID(0);
-      fighter.setKitIndex(2);
-      fighter.giveKit();
+      if(fighter.getUnlockedBoolean(0)) {
+        fighter.giveKit(0, 0);
+      }else {
+        player.sendMessage(ChatColor.RED + "You do not own this kit");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+      }
     } else if (name.equals(D_SpawnKitSelectors.kitNames[1])) {
       Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-      fighter.setKitID(1);
-      fighter.setKitIndex(2);
-      fighter.giveKit();
+      if(fighter.getUnlockedBoolean(1)) {
+        fighter.giveKit(1, 0);
+      }else {
+        player.sendMessage(ChatColor.RED + "You do not own this kit");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+      }
     } else if (name.equals(D_SpawnKitSelectors.kitNames[2])) {
       Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-      fighter.setKitID(2);
-      fighter.setKitIndex(2);
-      fighter.giveKit();
+      if(fighter.getUnlockedBoolean(2)) {
+        fighter.giveKit(2, 0);
+      }else {
+        player.sendMessage(ChatColor.RED + "You do not own this kit");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+      }
     } else if (name.equals(D_SpawnKitSelectors.kitNames[3])) {
       Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-      fighter.setKitID(3);
-      fighter.setKitIndex(2);
-      fighter.giveKit();
+      if(fighter.getUnlockedBoolean(3)) {
+        fighter.giveKit(3, 0);
+      }else {
+        player.sendMessage(ChatColor.RED + "You do not own this kit");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+      }
     } else if (name.equals(D_SpawnKitSelectors.kitNames[4])) {
       Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-      fighter.setKitID(4);
-      fighter.setKitIndex(2);
-      fighter.giveKit();
+      if(fighter.getUnlockedBoolean(4)) {
+        fighter.giveKit(4, 0);
+      }else {
+        player.sendMessage(ChatColor.RED + "You do not own this kit");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+      }
     } else if (name.equals(D_SpawnKitSelectors.kitNames[5])) {
       Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-      fighter.setKitID(5);
-      fighter.setKitIndex(2);
-      fighter.giveKit();
+      if(fighter.getUnlockedBoolean(5)) {
+        fighter.giveKit(5, 0);
+      }else {
+        player.sendMessage(ChatColor.RED + "You do not own this kit");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+      }
     } else if (name.equals(D_SpawnKitSelectors.kitNames[6])) {
       Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-      fighter.setKitID(6);
-      fighter.setKitIndex(2);
-      fighter.giveKit();
+      if(fighter.getUnlockedBoolean(6)) {
+        fighter.giveKit(6, 0);
+      }else {
+        player.sendMessage(ChatColor.RED + "You do not own this kit");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+      }
     }
   }
     

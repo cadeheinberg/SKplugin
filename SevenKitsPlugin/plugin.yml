@@ -9,4 +9,5 @@ commands:
   spawn:
   givekit:
   givekittoall:
+  setunlocked:
   
