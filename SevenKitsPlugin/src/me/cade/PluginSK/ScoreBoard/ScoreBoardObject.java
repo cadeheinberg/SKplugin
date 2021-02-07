@@ -43,53 +43,53 @@ public class ScoreBoardObject {
     objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
     Score b = objective.getScore("");
-    b.setScore(14);
+    b.setScore(10);
 
     cookies = board.registerNewTeam("Cookies");
     cookies.setPrefix(ChatColor.AQUA + "Cookies: ");
-    cookies.setSuffix(ChatColor.WHITE + "$" + fighter.getCakes());
+    cookies.setSuffix(ChatColor.WHITE + "" + fighter.getCakes());
     cookies.addEntry(ChatColor.AQUA + "");
-    objective.getScore(ChatColor.AQUA + "").setScore(13);    
+    objective.getScore(ChatColor.AQUA + "").setScore(9);    
 
     Score b1 = objective.getScore(" ");
-    b1.setScore(11);
+    b1.setScore(8);
 
     kills = board.registerNewTeam("Kills");
     kills.setPrefix(ChatColor.LIGHT_PURPLE + "K/D: ");
     kills.setSuffix(ChatColor.WHITE + "" + fighter.getKills() + " / " + fighter.getDeaths());
     kills.addEntry(ChatColor.YELLOW + "");
-    objective.getScore(ChatColor.YELLOW + "").setScore(10);
+    objective.getScore(ChatColor.YELLOW + "").setScore(7);
 
     ratio = board.registerNewTeam("Ratio");
     ratio.setPrefix(ChatColor.LIGHT_PURPLE + "Ratio: ");
     ratio.setSuffix(ChatColor.WHITE + "" + getRatio());
     ratio.addEntry(ChatColor.DARK_AQUA + "");
-    objective.getScore(ChatColor.DARK_AQUA + "").setScore(9);
+    objective.getScore(ChatColor.DARK_AQUA + "").setScore(6);
 
     killStreak = board.registerNewTeam("Killstreak");
     killStreak.setPrefix(ChatColor.LIGHT_PURPLE + "Killstreak: ");
     killStreak.setSuffix(ChatColor.WHITE + "" + fighter.getKillStreak());
     killStreak.addEntry(ChatColor.DARK_BLUE + "");
-    objective.getScore(ChatColor.DARK_BLUE + "").setScore(8);
+    objective.getScore(ChatColor.DARK_BLUE + "").setScore(5);
 
     Score b3 = objective.getScore("   ");
-    b3.setScore(7);
+    b3.setScore(4);
 
     level = board.registerNewTeam("Level");
     level.setPrefix(ChatColor.YELLOW + "Level: ");
     level.setSuffix(ChatColor.WHITE + "" + fighter.getPlayerLevel());
     level.addEntry(ChatColor.DARK_GRAY + "");
-    objective.getScore(ChatColor.DARK_GRAY + "").setScore(6);
+    objective.getScore(ChatColor.DARK_GRAY + "").setScore(3);
 
     exp = board.registerNewTeam("Exp");
     exp.setPrefix(ChatColor.YELLOW + "Exp: ");
     exp.setSuffix(ChatColor.WHITE + "" + fighter.getExp() + "/"
       + Experience.getExpNeeded(fighter.getPlayerLevel()));
     exp.addEntry(ChatColor.DARK_GREEN + "");
-    objective.getScore(ChatColor.DARK_GREEN + "").setScore(5);
+    objective.getScore(ChatColor.DARK_GREEN + "").setScore(2);
 
     Score b4 = objective.getScore("    ");
-    b4.setScore(4);
+    b4.setScore(1);
     
     footer = board.registerNewTeam("Foot");
     footer.setPrefix("");

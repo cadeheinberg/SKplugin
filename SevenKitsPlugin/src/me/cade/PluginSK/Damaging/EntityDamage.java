@@ -25,7 +25,9 @@ public class EntityDamage implements Listener {
   //do grief give back health special
   @EventHandler
   public void onDamageByEntity(EntityDamageByEntityEvent e) {
-
+    if(!(e.getEntity() instanceof Player)) {
+      return;
+    }
     if (e.getCause() != EntityDamageByEntityEvent.DamageCause.ENTITY_ATTACK) {
       e.setDamage(0);
       return;

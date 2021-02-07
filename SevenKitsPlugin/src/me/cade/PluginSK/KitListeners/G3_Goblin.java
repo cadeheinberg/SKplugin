@@ -63,6 +63,7 @@ public class G3_Goblin {
 
     if (closestPlayer == null) {
       killer.sendMessage(ChatColor.RED + "No enemies in range");
+      return;
     }
 
     ArrayList<Player> viewers = new ArrayList<Player>();

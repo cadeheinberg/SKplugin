@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -14,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.cade.PluginSK.BuildKits.*;
 import me.cade.PluginSK.Damaging.*;
 import me.cade.PluginSK.KitListeners.G_KitListener;
+import me.cade.PluginSK.Money.CakeSpawner;
 import me.cade.PluginSK.NPCS.*;
 import me.cade.PluginSK.Permissions.BasicPermissions;
 import me.cade.PluginSK.Permissions.PickingUp;
@@ -41,7 +41,8 @@ public class Main extends JavaPlugin {
     registerListeners();
     Borders.startCheckingBorders();
     Experience.makeExpNeeded();
-
+    CakeSpawner.startCakes();
+    getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     // do last
     addPlayersToFighters();
   }
@@ -65,11 +66,11 @@ public class Main extends JavaPlugin {
     }
     Database.closeConnection();
     Borders.stopCheckingBorders();
+    CakeSpawner.stopCakes();
   }
 
   public void setLocations() {
-    Bukkit.getServer().createWorld(new WorldCreator("kitpvp"));
-    hub = Bukkit.getServer().getWorld("kitpvp");
+    hub = Bukkit.getServer().getWorld("world");
     hubSpawn = new Location(hub, -1052.5, 197.5, -131.5);
   }
 
@@ -122,6 +123,14 @@ public class Main extends JavaPlugin {
       Fighter fighter = Fighter.get(giveCake);
       fighter.setUnlocked(unlockedBitString);
       player.sendMessage("done");
+    }else if (label.equals("sendplayer")) {
+      if (!(player.isOp())) {
+        player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
+          + " operator " + ChatColor.RED + "on this server");
+        return false;
+      }
+      Player giveCake = Bukkit.getPlayer(args[0]);
+      BungeeSend.sendPlayer(giveCake);
     }
     return false;
   }

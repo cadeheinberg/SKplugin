@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import me.cade.PluginSK.Money.CakePickUp;
 
 public class PickingUp implements Listener{
   
@@ -17,12 +18,12 @@ public class PickingUp implements Listener{
     if (((Player) e.getEntity()).getGameMode() == GameMode.CREATIVE) {
       return;
     }
-//    if (e.getItem().getName().equals("Cake")) {
-//      e.getItem().remove();
-//      e.setCancelled(true);
-//      C1_CakeListener.pickUpCake((Player) e.getEntity());
-//      return;
-//    }
+    if (e.getItem().getName().equals("Cake")) {
+      e.getItem().remove();
+      e.setCancelled(true);
+      CakePickUp.pickUpCake((Player) e.getEntity());
+      return;
+    }
     e.setCancelled(true);
   }
 
