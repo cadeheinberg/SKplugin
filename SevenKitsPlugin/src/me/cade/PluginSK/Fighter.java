@@ -48,10 +48,10 @@ public class Fighter {
   }
   
   private void downloadDatabase() {
-    if (Database.playerExists(player)) {
+    if (MySQL.playerExists(player)) {
       downloadFighter();
     } else {
-      Database.addScore(player);
+      MySQL.addScore(player);
     }
     updateName();
   }
@@ -159,27 +159,27 @@ public class Fighter {
   }
   
   public void downloadFighter() {
-    this.setKitID(Database.getStat(player, Database.column[2]));
-    this.setKitIndex(Database.getStat(player, Database.column[3]));
-    this.setPlayerLevel(Database.getStat(player, Database.column[4]));
-    this.setKills(Database.getStat(player, Database.column[5]));
-    this.setKillStreak(Database.getStat(player, Database.column[6]));
-    this.setDeaths(Database.getStat(player, Database.column[7]));
-    this.setCakes(Database.getStat(player, Database.column[8]));
-    this.setExp(Database.getStat(player, Database.column[9]));
-    this.setUnlocked(Database.getStat(player, Database.column[10]));
+    this.setKitID(MySQL.getStat(player, MySQL.column[2]));
+    this.setKitIndex(MySQL.getStat(player, MySQL.column[3]));
+    this.setPlayerLevel(MySQL.getStat(player, MySQL.column[4]));
+    this.setKills(MySQL.getStat(player, MySQL.column[5]));
+    this.setKillStreak(MySQL.getStat(player, MySQL.column[6]));
+    this.setDeaths(MySQL.getStat(player, MySQL.column[7]));
+    this.setCakes(MySQL.getStat(player, MySQL.column[8]));
+    this.setExp(MySQL.getStat(player, MySQL.column[9]));
+    this.setUnlocked(MySQL.getStat(player, MySQL.column[10]));
   }
   
   public void uploadFighter() {
-    Database.setStat(player.getUniqueId().toString(), Database.column[2], this.getKitID());
-    Database.setStat(player.getUniqueId().toString(), Database.column[3], this.getKitIndex());
-    Database.setStat(player.getUniqueId().toString(), Database.column[4], this.getPlayerLevel());
-    Database.setStat(player.getUniqueId().toString(), Database.column[5], this.getKills());
-    Database.setStat(player.getUniqueId().toString(), Database.column[6], this.getKillStreak());
-    Database.setStat(player.getUniqueId().toString(), Database.column[7], this.getDeaths());
-    Database.setStat(player.getUniqueId().toString(), Database.column[8], this.getCakes());
-    Database.setStat(player.getUniqueId().toString(), Database.column[9], this.getExp());
-    Database.setStat(player.getUniqueId().toString(), Database.column[10], this.getUnlocked());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[2], this.getKitID());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[3], this.getKitIndex());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[4], this.getPlayerLevel());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[5], this.getKills());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[6], this.getKillStreak());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[7], this.getDeaths());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[8], this.getCakes());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[9], this.getExp());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlocked());
   }
 
   public int getPlayerLevel() {
@@ -288,7 +288,7 @@ public class Fighter {
   }
   
   private void updateName() {
-    Database.updateName(player, Database.column[1], player.getName());
+    MySQL.updateName(player, MySQL.column[1], player.getName());
   }
   
   public void setDefaults() {

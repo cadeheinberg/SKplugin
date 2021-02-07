@@ -33,7 +33,7 @@ public class Main extends JavaPlugin {
   public void onEnable() {
     getConfig().options().copyDefaults(true);
     saveConfig();
-    Database.startConnection();
+    MySQL.startConnection();
     setLocations();
     F_KitBuilder.buildAllKits();
     D_SpawnKitSelectors.removeAllNpcs();
@@ -64,7 +64,7 @@ public class Main extends JavaPlugin {
     for (Player player : Bukkit.getServer().getOnlinePlayers()) {
       Fighter.get(player).fighterLeftServer();
     }
-    Database.closeConnection();
+    MySQL.closeConnection();
     Borders.stopCheckingBorders();
     CakeSpawner.stopCakes();
   }
