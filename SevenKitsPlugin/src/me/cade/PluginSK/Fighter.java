@@ -45,6 +45,8 @@ public class Fighter {
     convertUnlocked();
     this.scoreBoardObject = new ScoreBoardObject(player);
     this.giveKit();
+    this.player.setExp(1);
+    this.player.setLevel(0);
   }
   
   private void downloadDatabase() {
@@ -58,6 +60,27 @@ public class Fighter {
   
   private void convertUnlocked(){
     String str = "" + unlocked;
+    if(str.length() < 1) {
+      str = "0000000";
+    }
+    else if(str.length() < 2) {
+      str = "1000000";
+    }
+    else if(str.length() < 3) {
+      str = "1100000";
+    }
+    else if(str.length() < 4) {
+      str = "1110000";
+    }
+    else if(str.length() < 5) {
+      str = "1111000";
+    }
+    else if(str.length() < 6) {
+      str = "1111100";
+    }
+    else if(str.length() < 7) {
+      str = "1111110";
+    }
     this.booleanUnlocked[0] = getBooleanFromInt(Integer.parseInt(str.substring(0, 1)));
     this.booleanUnlocked[1] = getBooleanFromInt(Integer.parseInt(str.substring(1, 2)));
     this.booleanUnlocked[2] = getBooleanFromInt(Integer.parseInt(str.substring(2, 3)));
@@ -297,10 +320,10 @@ public class Fighter {
     this.player.setLevel(0);
     this.player.setInvisible(false);
     this.player.setWalkSpeed((float) 0.2);
-    Glowing.setGlowingOffForAll(this.player);
+    //Glowing.setGlowingOffForAll(this.player);
     this.lastToDamage = null;
     this.lastDamagedBy = null;
-    this.kitID = 1;
+    this.kitID = 0;
     this.kitIndex = 0;
     this.playerLevel = 1;
     this.kills = 0;

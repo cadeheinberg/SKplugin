@@ -1,5 +1,7 @@
 package me.cade.PluginSK.PlayerJoin;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -15,6 +17,9 @@ public class PlayerJoinListener implements Listener {
     Player player = e.getPlayer();
     player.teleport(Main.hubSpawn);
     new Fighter(player);
+    for(Player online : Bukkit.getOnlinePlayers()) {
+      online.playSound(online.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 8, 1);
+    }
   }
   
   @EventHandler

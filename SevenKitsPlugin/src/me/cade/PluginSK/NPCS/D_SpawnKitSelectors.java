@@ -3,8 +3,6 @@ package me.cade.PluginSK.NPCS;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import me.cade.PluginSK.Main;
 import me.cade.PluginSK.BuildKits.*;
@@ -16,16 +14,6 @@ public class D_SpawnKitSelectors {
 
   private static ChatColor y;
   private static ChatColor b;
-  
-  public static void removeAllNpcs() {
-    for( Entity e : Main.hub.getEntities()) {
-      if(e instanceof Player) {
-        continue;
-      }else {
-        e.remove();
-      }
-    }
-  }
   
   @SuppressWarnings("deprecation")
   public static void spawnKitSelectors() {

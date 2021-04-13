@@ -12,6 +12,7 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 import me.cade.PluginSK.Fighter;
+import me.cade.PluginSK.Money.A_CakeManager;
 
 public class ScoreBoardObject {
 
@@ -45,8 +46,8 @@ public class ScoreBoardObject {
     Score b = objective.getScore("");
     b.setScore(10);
 
-    cookies = board.registerNewTeam("Cookies");
-    cookies.setPrefix(ChatColor.AQUA + "Cookies: ");
+    cookies = board.registerNewTeam(A_CakeManager.currencyNameSingular);
+    cookies.setPrefix(ChatColor.AQUA + A_CakeManager.currencyNameSingular + ": ");
     cookies.setSuffix(ChatColor.WHITE + "" + fighter.getCakes());
     cookies.addEntry(ChatColor.AQUA + "");
     objective.getScore(ChatColor.AQUA + "").setScore(9);    

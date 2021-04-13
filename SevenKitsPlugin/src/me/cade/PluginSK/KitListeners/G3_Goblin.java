@@ -1,7 +1,6 @@
 package me.cade.PluginSK.KitListeners;
 
 import java.util.ArrayList;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
@@ -13,7 +12,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import me.cade.PluginSK.AbilityEnchantment;
 import me.cade.PluginSK.Fighter;
-import me.cade.PluginSK.Glowing;
 import me.cade.PluginSK.BuildKits.F3_Goblin;
 import me.cade.PluginSK.BuildKits.F_Stats;
 import me.cade.PluginSK.Damaging.DealDamage;
@@ -69,8 +67,8 @@ public class G3_Goblin {
     ArrayList<Player> viewers = new ArrayList<Player>();
     viewers.add(killer);
     // eventually should just use team
-
-    Glowing.setGlowingOn((Player) closestPlayer, killer, viewers);
+    
+    //Glowing.setGlowingOn((Player) closestPlayer, killer, viewers);
 
     killer.sendMessage(ChatColor.AQUA + "Enemy Located");
     killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 8, 1);
@@ -84,20 +82,21 @@ public class G3_Goblin {
   }
 
   private static void turnOffLocater(Player killer) {
-    Player victim = Bukkit.getPlayer(Glowing.glowMap.get(killer.getUniqueId()));
-    if (victim == null) {
-      return;
-    }
-    if (!victim.isOnline()) {
-      return;
-    }
-    ArrayList<Player> viewers = new ArrayList<Player>();
-    viewers.add(killer);
+    //Player victim = Bukkit.getPlayer(Glowing.glowMap.get(killer.getUniqueId()));
+//    if (victim == null) {
+//      return;
+//    }
+//    if (!victim.isOnline()) {
+//      return;
+//    }
+//    ArrayList<Player> viewers = new ArrayList<Player>();
+//    viewers.add(killer);
     // eventually should just use team
-    Glowing.setGlowingOff(victim, killer, viewers);
+    //Glowing.setGlowingOff(victim, killer, viewers);
   }
 
   public static void doArrorwHitEntity(Player killer, LivingEntity victim, Arrow arrow) {
+    //create your own form of knockback
     DealDamage.dealAmount(killer, victim, F_Stats.getDamageList(F3_Goblin.getKitID())[0]);
     if (arrow.getFireTicks() > 0) {
       victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));

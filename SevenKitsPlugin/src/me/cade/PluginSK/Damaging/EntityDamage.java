@@ -8,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import me.cade.PluginSK.Fighter;
-import me.cade.PluginSK.Glowing;
 import me.cade.PluginSK.PlayerChat;
 import me.cade.PluginSK.SafeZone;
 import me.cade.PluginSK.BuildKits.F0_Noob;
@@ -70,7 +69,7 @@ public class EntityDamage implements Listener {
     Player victim = e.getEntity();
     Player killer = null;
 
-    Glowing.setGlowingOffForAll(victim);
+//    Glowing.setGlowingOffForAll(victim);
     
     Fighter fVictim = Fighter.get(victim);
     fVictim.incDeaths();

@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.cade.PluginSK.BuildKits.*;
 import me.cade.PluginSK.Damaging.*;
 import me.cade.PluginSK.KitListeners.G_KitListener;
-import me.cade.PluginSK.Money.CakeSpawner;
+import me.cade.PluginSK.Money.A_CakeManager;
 import me.cade.PluginSK.NPCS.*;
 import me.cade.PluginSK.Permissions.BasicPermissions;
 import me.cade.PluginSK.Permissions.PickingUp;
@@ -36,12 +36,12 @@ public class Main extends JavaPlugin {
     MySQL.startConnection();
     setLocations();
     F_KitBuilder.buildAllKits();
-    D_SpawnKitSelectors.removeAllNpcs();
+    D_SpawnAllNPCS.removeAllNpcs();
     D_SpawnAllNPCS.spawnNPCS();
     registerListeners();
     Borders.startCheckingBorders();
     Experience.makeExpNeeded();
-    CakeSpawner.startCakes();
+    A_CakeManager.startCakePackage();
     getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     // do last
     addPlayersToFighters();
@@ -65,8 +65,8 @@ public class Main extends JavaPlugin {
       Fighter.get(player).fighterLeftServer();
     }
     MySQL.closeConnection();
+    A_CakeManager.stopCakePackage();
     Borders.stopCheckingBorders();
-    CakeSpawner.stopCakes();
   }
 
   public void setLocations() {
