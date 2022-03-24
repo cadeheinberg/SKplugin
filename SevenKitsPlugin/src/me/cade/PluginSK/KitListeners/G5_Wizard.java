@@ -28,6 +28,8 @@ import net.minecraft.server.v1_16_R3.PlayerConnection;
 public class G5_Wizard {
 
   // drop to go use cloak
+	
+	//add ice cube spell
 
   public static void doDrop(Player killer) {
     if (killer.getExp() < 1) {

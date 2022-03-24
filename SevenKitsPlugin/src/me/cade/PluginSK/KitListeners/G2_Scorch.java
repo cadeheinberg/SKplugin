@@ -19,6 +19,8 @@ public class G2_Scorch {
   // right clicking shoots snowballs like a shotgun and has recoil
   // the snowballs normally just damage
   // if you drop the shovel, it makes snowballs do fire damage
+	
+	//another type of shovel could create ice that sticks out of the ground
 
   public static void doRightClick(Player player) {
     if (player.getCooldown(F2_Scorch.getWeapon().getWeaponItem().getType()) > 0) {

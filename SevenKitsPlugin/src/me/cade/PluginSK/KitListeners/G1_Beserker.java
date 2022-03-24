@@ -1,27 +1,17 @@
 package me.cade.PluginSK.KitListeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import me.cade.PluginSK.AbilityEnchantment;
-import me.cade.PluginSK.Main;
 import me.cade.PluginSK.BuildKits.F1_Beserker;
 import me.cade.PluginSK.BuildKits.F_Stats;
 
 public class G1_Beserker {
-
-  private static Plugin plugin = Main.getPlugin(Main.class);
 
   public static void doRightClick(Player player) {
     if (player.getCooldown(F1_Beserker.getWeapon().getWeaponItem().getType()) > 0) {
@@ -30,7 +20,7 @@ public class G1_Beserker {
     player.setCooldown(F1_Beserker.getWeapon().getWeaponItem().getType(),
       ((F_Stats.getTicksList(F1_Beserker.getKitID())[0])));
 
-    doIceCageSpell(player);
+    doBoosterJump(player);
   }
 
   public static void doDrop(Player killer) {
@@ -59,65 +49,11 @@ public class G1_Beserker {
     AbilityEnchantment.removeEnchanted(craftPlayer.getHandle());
   }
 
-  private static void doIceCageSpell(Player player) {
-    Item iceCube = player.getWorld().dropItem(player.getLocation(), new ItemStack(Material.ICE, 1));
-    Vector currentDirection = player.getLocation().getDirection().normalize();
-    currentDirection = currentDirection.multiply(new Vector(2, 2, 2));
-    iceCube.setVelocity(currentDirection);
-    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-      @Override
-      public void run() {
-        iceCube.remove();
-        Location iceLocation = iceCube.getLocation();
-        Block iceBlock = iceLocation.getBlock();
-        Block[] b = new Block[57];
-        int j = 0;
-        for (int i = -1; i < 3; i++) {
-          b[j++] = iceBlock.getRelative(2, i, -1);
-          b[j++] = iceBlock.getRelative(2, i, 0);
-          b[j++] = iceBlock.getRelative(2, i, 1);
-
-          b[j++] = iceBlock.getRelative(-2, i, -1);
-          b[j++] = iceBlock.getRelative(-2, i, 0);
-          b[j++] = iceBlock.getRelative(-2, i, 1);
-
-          b[j++] = iceBlock.getRelative(-1, i, 2);
-          b[j++] = iceBlock.getRelative(0, i, 2);
-          b[j++] = iceBlock.getRelative(1, i, 2);
-
-          b[j++] = iceBlock.getRelative(-1, i, -2);
-          b[j++] = iceBlock.getRelative(0, i, -2);
-          b[j++] = iceBlock.getRelative(1, i, -2);
-        }
-        // top
-        b[j++] = iceBlock.getRelative(-1, 3, -1);
-        b[j++] = iceBlock.getRelative(-1, 3, 0);
-        b[j++] = iceBlock.getRelative(-1, 3, 1);
-        b[j++] = iceBlock.getRelative(1, 3, -1);
-        b[j++] = iceBlock.getRelative(1, 3, 0);
-        b[j++] = iceBlock.getRelative(1, 3, 1);
-        b[j++] = iceBlock.getRelative(0, 3, -1);
-        b[j++] = iceBlock.getRelative(0, 3, 0);
-        b[j++] = iceBlock.getRelative(0, 3, 1);
-
-        player.getWorld().playSound(iceBlock.getLocation(), Sound.BLOCK_GLASS_BREAK, 2, 1);
-        for (int i = 0; i < 57; i++) {
-          Block block = b[i];
-          if (block.getType() != Material.AIR) {
-            continue;
-          }
-          if (i > 11) {
-            block.setType(Material.ICE);
-          }
-          Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-              block.setType(Material.AIR);
-            }
-          }, 120);
-        }
-      }
-    }, 10);
+  private static void doBoosterJump(Player player) {
+	    player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
+	    Vector currentDirection = player.getLocation().getDirection().normalize();
+	    currentDirection = currentDirection.multiply(new Vector(1.3, 1.3, 1.3));
+	    player.setVelocity(currentDirection);
   }
 
 }

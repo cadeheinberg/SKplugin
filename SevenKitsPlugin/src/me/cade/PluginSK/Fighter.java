@@ -5,11 +5,16 @@ import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import me.cade.PluginSK.BuildKits.F0_Noob;
 import me.cade.PluginSK.BuildKits.F_KitFilter;
+import me.cade.PluginSK.KitListeners.G0_Noob;
 import me.cade.PluginSK.KitListeners.G_KitFilter;
 import me.cade.PluginSK.ScoreBoard.ScoreBoardObject;
 
+
 public class Fighter {
+	
+	//your error for the unlocked might be in the way you are uploading it as a boolean array
   
   public static HashMap<UUID, Fighter> fighters = new HashMap<UUID,Fighter>();
   private Player player;
@@ -31,6 +36,8 @@ public class Fighter {
   private int unlocked;
   private boolean[] booleanUnlocked = new boolean[7];
   private ScoreBoardObject scoreBoardObject;
+  
+  private int noobTask;
   
   public Fighter(Player player) {
     this.player = player;
@@ -59,45 +66,16 @@ public class Fighter {
   }
   
   private void convertUnlocked(){
-    String str = "" + unlocked;
-    if(str.length() < 1) {
-      str = "0000000";
-    }
-    else if(str.length() < 2) {
-      str = "1000000";
-    }
-    else if(str.length() < 3) {
-      str = "1100000";
-    }
-    else if(str.length() < 4) {
-      str = "1110000";
-    }
-    else if(str.length() < 5) {
-      str = "1111000";
-    }
-    else if(str.length() < 6) {
-      str = "1111100";
-    }
-    else if(str.length() < 7) {
-      str = "1111110";
-    }
-    this.booleanUnlocked[0] = getBooleanFromInt(Integer.parseInt(str.substring(0, 1)));
-    this.booleanUnlocked[1] = getBooleanFromInt(Integer.parseInt(str.substring(1, 2)));
-    this.booleanUnlocked[2] = getBooleanFromInt(Integer.parseInt(str.substring(2, 3)));
+    this.booleanUnlocked[0] = true;
+    this.booleanUnlocked[1] = true;
+    this.booleanUnlocked[2] = true;
     
-    this.booleanUnlocked[3] = getBooleanFromInt(Integer.parseInt(str.substring(3, 4)));
-    this.booleanUnlocked[4] = getBooleanFromInt(Integer.parseInt(str.substring(4, 5)));
-    this.booleanUnlocked[5] = getBooleanFromInt(Integer.parseInt(str.substring(5, 6)));
+    this.booleanUnlocked[3] = true;
+    this.booleanUnlocked[4] = true;
+    this.booleanUnlocked[5] = true;
     
-    this.booleanUnlocked[6] = getBooleanFromInt(Integer.parseInt(str.substring(6)));
+    this.booleanUnlocked[6] = true;
   }
-  
-  private boolean getBooleanFromInt(int i) {
-      if(i == 0) {
-        return false;
-      }
-      return true;
-  } 
   
   public void fighterLeftServer() {
     uploadFighter();
@@ -265,6 +243,14 @@ public class Fighter {
     scoreBoardObject.updateRatio();
     scoreBoardObject.updateKillstreak();
   }
+  
+  public void doDeathChecks() {
+	    if (kitID == F0_Noob.getKitID()) {
+	        if (noobTask != -1) {
+	          G0_Noob.stopListening(player, this);
+	        }
+	      }
+  }
 
   public int getCakes() {
     return cakes;
@@ -331,6 +317,24 @@ public class Fighter {
     this.cakes = 500;
     this.killStreak = 0;
     this.exp = 0;
+    this.setNoobTask(-1);
+  }
+
+  public int getNoobTask() {
+	    return noobTask;
+	  }
+
+	  public void setNoobTask(int noobTask) {
+	    this.noobTask = noobTask;
+	  }
+
+public void checkListeningForNoob() {
+    if (kitID == F0_Noob.getKitID()) {
+      if (noobTask != -1) {
+        G0_Noob.stopListening(player, this);
+      }
+    }
+    return;
   }
   
 }

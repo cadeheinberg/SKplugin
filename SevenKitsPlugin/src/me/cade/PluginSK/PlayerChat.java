@@ -18,18 +18,11 @@ public class PlayerChat implements Listener {
   
   
   public static String calculatePlayerMessage(Player player, String note) {
-//    Fighter pFight = Vars.getFighter(player);
-//    int numLevel = pFight.getPlayerLevel();
-//    int numPrestige = pFight.getPrestige();
-    String message = "";
-    String levelPre = "";
-//    if (numPrestige == 1) {
-//      levelPre = ChatColor.LIGHT_PURPLE + "" + numLevel;
-//    } else if (numPrestige == 2) {
-//      levelPre = ChatColor.AQUA + "" + numLevel;
-//    } else if (numPrestige == 3) {
-//      levelPre = ChatColor.RED + "" + numLevel;
-//    }
+	  Fighter pFight = Fighter.get(player);
+	  int numLevel = pFight.getPlayerLevel();
+	  String message = "";
+	  String levelPre = "";
+	  levelPre = ChatColor.LIGHT_PURPLE + "" + numLevel;
     if (player.hasPermission("seven.owner")) {
       message = levelPre + ChatColor.RED + "" + ChatColor.BOLD + "" + "OWNER" + ChatColor.WHITE
         + " " + player.getName() + ": " + ChatColor.GRAY + note;
