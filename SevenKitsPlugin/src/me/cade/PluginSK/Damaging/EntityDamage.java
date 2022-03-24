@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import me.cade.PluginSK.Fighter;
+import me.cade.PluginSK.SpecialItems.H1_CombatTracker;
 import me.cade.PluginSK.PlayerChat;
 import me.cade.PluginSK.SafeZone;
 import me.cade.PluginSK.BuildKits.F0_Noob;
@@ -56,10 +57,8 @@ public class EntityDamage implements Listener {
     fVictim.setLastDamagedBy(killer);
     fKiller.setLastToDamage(victim);
 
-//    fVictim.setLastTimeDamaged(System.currentTimeMillis());
-//    killer.setCooldown(H1_CombatTracker.getTrackerMaterial(), 200);
-//    victim.setCooldown(H1_CombatTracker.getTrackerMaterial(), 200);
-//    victim.setCooldown(H1_CombatTracker.getHurtTrackerMaterial(), 200);
+    killer.setCooldown(H1_CombatTracker.getTrackerMaterial(), 200);
+    victim.setCooldown(H1_CombatTracker.getTrackerMaterial(), 200);
 
   }
   

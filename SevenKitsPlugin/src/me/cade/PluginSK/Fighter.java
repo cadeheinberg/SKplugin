@@ -5,11 +5,15 @@ import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
+
 import me.cade.PluginSK.BuildKits.F0_Noob;
+import me.cade.PluginSK.BuildKits.F_KitArmor;
 import me.cade.PluginSK.BuildKits.F_KitFilter;
 import me.cade.PluginSK.KitListeners.G0_Noob;
 import me.cade.PluginSK.KitListeners.G_KitFilter;
 import me.cade.PluginSK.ScoreBoard.ScoreBoardObject;
+import me.cade.PluginSK.SpecialItems.H1_CombatTracker;
 
 
 public class Fighter {
@@ -87,7 +91,9 @@ public class Fighter {
   
   public void giveKit() {
     player.getInventory().clear();
-    F_KitFilter.giveKitFromKitID(player, this.kitID, this.kitIndex);
+    F_KitFilter.giveKitFromKitID(player, this.kitID, this.kitIndex);;
+    player.getInventory().setItem(8, H1_CombatTracker.getTracker().getWeaponItem());
+    player.closeInventory();
   }
   
   public void giveKit(int kitID, int kidIndex) {

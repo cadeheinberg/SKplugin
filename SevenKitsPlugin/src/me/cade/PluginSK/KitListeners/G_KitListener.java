@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import me.cade.PluginSK.*;
 import me.cade.PluginSK.BuildKits.*;
+import me.cade.PluginSK.SpecialItems.H1_CombatTracker;
 
 public class G_KitListener implements Listener {
 
@@ -37,6 +38,10 @@ public class G_KitListener implements Listener {
       return;
     }
     Player player = e.getPlayer();
+    if(e.getItem().getType() == H1_CombatTracker.getTrackerMaterial()) {
+    	H1_CombatTracker.doRightClick(player);
+    	return;
+    }
     int kitID = Fighter.fighters.get(player.getUniqueId()).getKitID();
     if (kitID == F2_Scorch.getKitID()) {
       if (e.getItem().getType() == F2_Scorch.getWeapon().getWeaponItem().getType()) {
@@ -50,7 +55,7 @@ public class G_KitListener implements Listener {
       if (e.getItem().getType() == F5_Wizard.getWeapon().getWeaponItem().getType()) {
         G5_Wizard.doRightClick(player);
       }  
-    }
+    } 
   }
 
   @EventHandler

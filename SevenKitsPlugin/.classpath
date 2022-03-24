@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/Users/Patron/Desktop/SKplugin/ProtocolLib.jar"/>
-	<classpathentry kind="lib" path="/Users/Patron/Desktop/SKplugin/spigot-1.16.5.jar"/>
+	<classpathentry kind="lib" path="/Users/Patron/Desktop/Minecraft 3_2022 Plugins/SKplugin/ProtocolLib.jar"/>
+	<classpathentry kind="lib" path="/Users/Patron/Desktop/Minecraft 3_2022 Plugins/SKplugin/spigot-1.16.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

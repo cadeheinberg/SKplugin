@@ -19,6 +19,7 @@ import me.cade.PluginSK.Permissions.BasicPermissions;
 import me.cade.PluginSK.Permissions.PickingUp;
 import me.cade.PluginSK.PlayerJoin.*;
 import me.cade.PluginSK.ScoreBoard.Experience;
+import me.cade.PluginSK.SpecialItems.H1_CombatTracker;
 
 public class Main extends JavaPlugin {
 
@@ -43,6 +44,7 @@ public class Main extends JavaPlugin {
     Experience.makeExpNeeded();
     A_CakeManager.startCakePackage();
     getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+    H1_CombatTracker.makeTracker();
     // do last
     addPlayersToFighters();
   }

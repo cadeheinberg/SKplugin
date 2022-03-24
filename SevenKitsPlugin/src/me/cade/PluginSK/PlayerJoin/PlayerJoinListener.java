@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import me.cade.PluginSK.*;
 import org.bukkit.event.Listener;
+import me.cade.PluginSK.SpecialItems.H1_CombatTracker;
 
 public class PlayerJoinListener implements Listener {
 
@@ -30,6 +31,7 @@ public class PlayerJoinListener implements Listener {
   @EventHandler
   public void onRespawn(PlayerRespawnEvent e) {
     e.setRespawnLocation(Main.hubSpawn);
+    e.getPlayer().setCooldown(H1_CombatTracker.getTrackerMaterial(), 0);
   }
   
 }
