@@ -5,10 +5,7 @@ import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
-
 import me.cade.PluginSK.BuildKits.F0_Noob;
-import me.cade.PluginSK.BuildKits.F_KitArmor;
 import me.cade.PluginSK.BuildKits.F_KitFilter;
 import me.cade.PluginSK.KitListeners.G0_Noob;
 import me.cade.PluginSK.KitListeners.G_KitFilter;
@@ -37,8 +34,7 @@ public class Fighter {
   private int deaths;
   private int cakes;
   private int exp;
-  private int unlocked;
-  private boolean[] booleanUnlocked = new boolean[7];
+  private int[] unlockedKits = new int[7];
   private ScoreBoardObject scoreBoardObject;
   
   private int noobTask;
@@ -51,9 +47,9 @@ public class Fighter {
   }
   
   private void fighterJoin() {
-    setDefaults();
-    downloadDatabase();
-    convertUnlocked();
+    this.setDefaults();
+    this.downloadDatabase();
+    this.grantUnlocked();
     this.scoreBoardObject = new ScoreBoardObject(player);
     this.giveKit();
     this.player.setExp(1);
@@ -67,18 +63,6 @@ public class Fighter {
       MySQL.addScore(player);
     }
     updateName();
-  }
-  
-  private void convertUnlocked(){
-    this.booleanUnlocked[0] = true;
-    this.booleanUnlocked[1] = true;
-    this.booleanUnlocked[2] = true;
-    
-    this.booleanUnlocked[3] = true;
-    this.booleanUnlocked[4] = true;
-    this.booleanUnlocked[5] = true;
-    
-    this.booleanUnlocked[6] = true;
   }
   
   public void fighterLeftServer() {
@@ -174,7 +158,13 @@ public class Fighter {
     this.setDeaths(MySQL.getStat(player, MySQL.column[7]));
     this.setCakes(MySQL.getStat(player, MySQL.column[8]));
     this.setExp(MySQL.getStat(player, MySQL.column[9]));
-    this.setUnlocked(MySQL.getStat(player, MySQL.column[10]));
+    this.setUnlockedKit(0, MySQL.getStat(player, MySQL.column[10]));
+    this.setUnlockedKit(1, MySQL.getStat(player, MySQL.column[11]));
+    this.setUnlockedKit(2, MySQL.getStat(player, MySQL.column[12]));
+    this.setUnlockedKit(3, MySQL.getStat(player, MySQL.column[13]));
+    this.setUnlockedKit(4, MySQL.getStat(player, MySQL.column[14]));
+    this.setUnlockedKit(5, MySQL.getStat(player, MySQL.column[15]));
+    this.setUnlockedKit(6, MySQL.getStat(player, MySQL.column[16]));
   }
   
   public void uploadFighter() {
@@ -186,7 +176,13 @@ public class Fighter {
     MySQL.setStat(player.getUniqueId().toString(), MySQL.column[7], this.getDeaths());
     MySQL.setStat(player.getUniqueId().toString(), MySQL.column[8], this.getCakes());
     MySQL.setStat(player.getUniqueId().toString(), MySQL.column[9], this.getExp());
-    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlocked());
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(0));
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(1));
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(2));
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(3));
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(4));
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(5));
+    MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(6));
   }
 
   public int getPlayerLevel() {
@@ -289,17 +285,12 @@ public class Fighter {
     scoreBoardObject.updateExp();
   }
 
-  public int getUnlocked() {
-    return unlocked;
-  }
-
-  public void setUnlocked(int unlocked) {
-    this.unlocked = unlocked;
-    this.convertUnlocked();
+  public void setUnlockedKit(int kitID, int index) {
+	  this.unlockedKits[kitID] = index;
   }
   
-  public boolean getUnlockedBoolean(int kitID) {
-    return booleanUnlocked[kitID];
+  public int getUnlockedKit(int kitID) {
+    return unlockedKits[kitID];
   }
   
   private void updateName() {
@@ -323,7 +314,24 @@ public class Fighter {
     this.cakes = 500;
     this.killStreak = 0;
     this.exp = 0;
+    this.unlockedKits[0] = 1;
+    this.unlockedKits[1] = 1;
+    this.unlockedKits[2] = 1;
+    this.unlockedKits[3] = 1;
+    this.unlockedKits[4] = 1;
+    this.unlockedKits[5] = 1;
+    this.unlockedKits[6] = 1;
     this.setNoobTask(-1);
+  }
+  
+  public void grantUnlocked(){
+	    this.unlockedKits[0] = 1;
+	    this.unlockedKits[1] = 1;
+	    this.unlockedKits[2] = 1;
+	    this.unlockedKits[3] = 1;
+	    this.unlockedKits[4] = 1;
+	    this.unlockedKits[5] = 1;
+	    this.unlockedKits[6] = 1;
   }
 
   public int getNoobTask() {

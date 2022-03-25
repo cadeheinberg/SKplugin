@@ -9,6 +9,6 @@ commands:
   spawn:
   givekit:
   givekittoall:
-  setunlocked:
   sendplayer:
+  secondworld:
   

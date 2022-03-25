@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -29,6 +30,8 @@ public class Main extends JavaPlugin {
 
   public static World hub;
   public static Location hubSpawn;
+  public static World secondWorld;
+  public static Location secondWorldSpawn;
 
   @Override
   public void onEnable() {
@@ -74,6 +77,9 @@ public class Main extends JavaPlugin {
   public void setLocations() {
     hub = Bukkit.getServer().getWorld("world");
     hubSpawn = new Location(hub, -1052.5, 197.5, -131.5);
+    Bukkit.getServer().createWorld(new WorldCreator("secondworld"));
+    secondWorld = Bukkit.getServer().getWorld("secondworld");
+    secondWorldSpawn = new Location(secondWorld, -1052.5, 197.5, -131.5);
   }
 
   private void addPlayersToFighters() {
@@ -92,7 +98,10 @@ public class Main extends JavaPlugin {
     if (label.equals("spawn")) {
       player.teleport(hubSpawn);
       return true;
-    } else if (label.equals("givekit")) {
+    } else if (label.equals("secondworld")) {
+        player.teleport(secondWorldSpawn);
+        return true;
+     }else if (label.equals("givekit")) {
       if (!(player.isOp())) {
         player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
           + " operator " + ChatColor.RED + "on this server");
@@ -114,18 +123,7 @@ public class Main extends JavaPlugin {
       for (Player giveTo : Bukkit.getOnlinePlayers()) {
         Fighter.get(giveTo).giveKit(kitID, kitIndex);
       }
-    } else if (label.equals("setunlocked")) {
-      if (!(player.isOp())) {
-        player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
-          + " operator " + ChatColor.RED + "on this server");
-        return false;
-      }
-      Player giveCake = Bukkit.getPlayer(args[0]);
-      int unlockedBitString = Integer.parseInt(args[1].toString());
-      Fighter fighter = Fighter.get(giveCake);
-      fighter.setUnlocked(unlockedBitString);
-      player.sendMessage("done");
-    }else if (label.equals("sendplayer")) {
+    } else if (label.equals("sendplayer")) {
       if (!(player.isOp())) {
         player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
           + " operator " + ChatColor.RED + "on this server");

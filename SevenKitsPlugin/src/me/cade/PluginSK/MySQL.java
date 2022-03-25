@@ -41,7 +41,7 @@ public class MySQL {
     }
     
     tableName = "playerstats";
-    column = new String[11];
+    column = new String[17];
     column[0] = "UUID";
     column[1] = "PlayerName";
     column[2] = "KitID";
@@ -52,7 +52,13 @@ public class MySQL {
     column[7] = "Deaths";
     column[8] = "Cakes";
     column[9] = "Exp";
-    column[10] = "Unlocked";
+    column[10] = "Kit00";
+    column[11] = "Kit01";
+    column[12] = "Kit02";
+    column[13] = "Kit03";
+    column[14] = "Kit04";
+    column[15] = "Kit05";
+    column[16] = "Kit06";
 
   }
   
