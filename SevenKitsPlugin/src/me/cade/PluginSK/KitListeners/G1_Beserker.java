@@ -30,7 +30,7 @@ public class G1_Beserker {
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
     }
-    activateSpecial(killer, 300, 500);
+    activateSpecial(killer, 300, 50);
   }
 
   private static void activateSpecial(Player killer, int durationTicks, int rechargeTicks) {
@@ -53,7 +53,7 @@ public class G1_Beserker {
   private static void doBoosterJump(Player player) {
 	    player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
 	    Vector currentDirection = player.getLocation().getDirection().normalize();
-	    currentDirection = currentDirection.multiply(new Vector(1.3, 1.3, 1.3));
+	    currentDirection = currentDirection.multiply(new Vector(1.7, 1.7, 1.7));
 	    player.setVelocity(currentDirection);
   }
 

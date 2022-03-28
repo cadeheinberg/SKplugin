@@ -46,7 +46,7 @@ public class G2_Scorch {
       return;
     }
     killer.setCooldown(F2_Scorch.getWeapon().getWeaponItem().getType(), 0);
-    activateSpecial(killer, 100, 1000);
+    activateSpecial(killer, 100, 50);
   }
 
   private static void activateSpecial(Player killer, int durationTicks, int rechargeTicks) {

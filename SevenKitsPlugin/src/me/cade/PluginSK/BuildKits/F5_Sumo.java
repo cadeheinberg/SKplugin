@@ -10,17 +10,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import me.cade.PluginSK.Weapon;
 
-public class F5_Wizard {
+public class F5_Sumo {
 
   private static final int kitID = 5;
-  private static final String kitName = "Wizard";
+  private static final String kitName = "Sumo";
   private static final Color armorColor = Color.fromRGB(8, 111, 255);
   private static Weapon item;
   private static ChatColor kitChatColor = ChatColor.BLUE;
   
   private Player player;
   
-  public F5_Wizard(Player player, int kitIndex) {
+  public F5_Sumo(Player player, int kitIndex) {
     this.player = player;
     giveKit(player, kitIndex);
   }
@@ -39,13 +39,13 @@ public class F5_Wizard {
     int baseDamage = F_Stats.getDamageList(kitID)[0];
     Double projectileDamage = F_Stats.getProjectileDamageList(kitID)[0];
     
-    String name = ChatColor.BLUE + "Wizard Wand";
+    String name = ChatColor.BLUE + "Sumo Stick";
     String lore1 = ChatColor.WHITE + "" + baseDamage + ChatColor.YELLOW + " attack damage";  
     String lore2 = ChatColor.WHITE + "" + projectileDamage + ChatColor.YELLOW + " spell damage"; 
 
     item = new Weapon(F_Materials.getMaterial(kitID), name, lore1, lore2);
     
-    item.getWeaponItem().addUnsafeEnchantment(Enchantment.KNOCKBACK, 2);
+    item.getWeaponItem().addUnsafeEnchantment(Enchantment.KNOCKBACK, 3);
     
     item.addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE,
       new AttributeModifier("GENERIC_ATTACK_DAMAGE", baseDamage,

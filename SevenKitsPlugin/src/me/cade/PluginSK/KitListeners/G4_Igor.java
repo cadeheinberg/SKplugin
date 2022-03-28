@@ -1,13 +1,19 @@
 package me.cade.PluginSK.KitListeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftTrident;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
+
 import me.cade.PluginSK.AbilityEnchantment;
 import me.cade.PluginSK.Fighter;
 import me.cade.PluginSK.BuildKits.F4_Igor;
@@ -28,12 +34,22 @@ public class G4_Igor {
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
     }
-    G8_Cooldown.startAbilityDuration(killer, 200, 300);
+    G8_Cooldown.startAbilityDuration(killer, 200, 50);
     CraftPlayer craftPlayer = (CraftPlayer) killer;
     AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
+	launchFirework(killer);
     killer.sendMessage(ChatColor.AQUA + "Special Ability Activated");
     killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 8, 1);
   }
+  
+	public static void launchFirework(Player killer) {
+	      Firework firework = killer.getWorld().spawn(killer.getLocation(), Firework.class);
+	      FireworkMeta data = (FireworkMeta) firework.getFireworkMeta();
+	      data.addEffects(FireworkEffect.builder().withColor(Color.PURPLE).withColor(Color.YELLOW)
+	        .with(Type.BALL_LARGE).withFlicker().build());
+	      data.setPower(1);
+	      firework.setFireworkMeta(data);
+	}
   
   public static void deactivateSpecialAbility(Player killer) {
     CraftPlayer craftPlayer = (CraftPlayer) killer;

@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.cade.PluginSK.BuildKits.F0_Noob;
 import me.cade.PluginSK.BuildKits.F_KitFilter;
-import me.cade.PluginSK.KitListeners.G0_Noob;
+import me.cade.PluginSK.KitListeners.G5_Sumo;
 import me.cade.PluginSK.KitListeners.G_KitFilter;
 import me.cade.PluginSK.ScoreBoard.ScoreBoardObject;
 import me.cade.PluginSK.SpecialItems.H1_CombatTracker;
@@ -48,7 +48,7 @@ public class Fighter {
 	private int[] unlockedKits = new int[7];
 	private ScoreBoardObject scoreBoardObject;
 
-	private int noobTask;
+	private int groundPoundTask;
 
 	public Fighter(Player player) {
 		this.player = player;
@@ -82,15 +82,22 @@ public class Fighter {
 	
 	public void fighterLeftServer() {
 		uploadFighter();
+		if(isAbilityActive()) {
+			setAbilityActive(false);
+		}
+		if(!isAbilityRecharged()) {
+			setAbilityRecharged(true);
+		};
+		player.setExp(1);
+		player.setLevel(0);
+	    player.setWalkSpeed((float) 0.2);
 	}
 	
 	public void fighterDeath() {
 		if(isAbilityActive()) {
-			player.sendMessage("called 1");
 			setAbilityActive(false);
 		}
 		if(!isAbilityRecharged()) {
-			player.sendMessage("called 2");
 			setAbilityRecharged(true);
 		};
 		player.setExp(1);
@@ -108,24 +115,20 @@ public class Fighter {
 	}
 	
 	public void setAbilityActive(boolean fighterAbility) {
-		player.sendMessage("Setting abilityActive: " + fighterAbility);
 		this.abilityActive = fighterAbility;
 		if (!fighterAbility) {
 			//turning ability active off
 			player.setCooldown(Material.BIRCH_FENCE, 0);
-			player.sendMessage("abilityActive turning off");
 			cancelCooldownTask();
 			G_KitFilter.deactivateSpecialFromKitID(player, this.kitID, this.kitIndex);
 		}
 	}
 
 	public void setAbilityRecharged(boolean fighterRecharged) {
-		player.sendMessage("Setting abilityRecharged: " + fighterRecharged);
 		this.abilityRecharged = fighterRecharged;
 		if(fighterRecharged) {
 			//turning ability charged fully on
 			player.setCooldown(Material.JUNGLE_FENCE, 0);
-			player.sendMessage("abilityRecharged turning on");
 			cancelRechargeTask();
 		}
 	}
@@ -321,8 +324,8 @@ public class Fighter {
 
 	public void doDeathChecks() {
 		if (kitID == F0_Noob.getKitID()) {
-			if (noobTask != -1) {
-				G0_Noob.stopListening(player, this);
+			if (groundPoundTask != -1) {
+				G5_Sumo.stopListening(player, this);
 			}
 		}
 	}
@@ -396,7 +399,7 @@ public class Fighter {
 		this.unlockedKits[4] = 0;
 		this.unlockedKits[5] = 0;
 		this.unlockedKits[6] = 0;
-		this.setNoobTask(-1);
+		this.setGroundPoundTask(-1);
 		this.setCooldownTask(-1);
 	}
 
@@ -410,18 +413,18 @@ public class Fighter {
 		this.unlockedKits[6] = 1;
 	}
 
-	public int getNoobTask() {
-		return noobTask;
+	public int getGroundPoundTask() {
+		return groundPoundTask;
 	}
 
-	public void setNoobTask(int noobTask) {
-		this.noobTask = noobTask;
+	public void setGroundPoundTask(int groundPoundTask) {
+		this.groundPoundTask = groundPoundTask;
 	}
 
 	public void checkListeningForNoob() {
 		if (kitID == F0_Noob.getKitID()) {
-			if (noobTask != -1) {
-				G0_Noob.stopListening(player, this);
+			if (groundPoundTask != -1) {
+				G5_Sumo.stopListening(player, this);
 			}
 		}
 		return;

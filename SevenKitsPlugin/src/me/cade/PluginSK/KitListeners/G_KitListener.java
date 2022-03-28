@@ -51,9 +51,9 @@ public class G_KitListener implements Listener {
       if (e.getItem().getType() == F1_Beserker.getWeapon().getWeaponItem().getType()) {
         G1_Beserker.doRightClick(player);
       }  
-    }else if (kitID == F5_Wizard.getKitID()) {
-      if (e.getItem().getType() == F5_Wizard.getWeapon().getWeaponItem().getType()) {
-        G5_Wizard.doRightClick(player);
+    }else if (kitID == F5_Sumo.getKitID()) {
+      if (e.getItem().getType() == F5_Sumo.getWeapon().getWeaponItem().getType()) {
+        G5_Sumo.doRightClick(player);
       }  
     } 
   }
@@ -78,8 +78,8 @@ public class G_KitListener implements Listener {
       G3_Goblin.doDrop(player);
     } else if (kitID == F4_Igor.getKitID()) {
       G4_Igor.doDrop(player);
-    } else if (kitID == F5_Wizard.getKitID()) {
-      G5_Wizard.doDrop(player);
+    } else if (kitID == F5_Sumo.getKitID()) {
+      G5_Sumo.doDrop(player);
     } else if (kitID == F6_Grief.getKitID()) {
       G6_Grief.doDrop(player);
     } 

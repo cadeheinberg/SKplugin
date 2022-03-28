@@ -15,8 +15,8 @@ public class F_KitFilter {
       new F3_Goblin(player, kitIndex);
     } else if (kitID == F4_Igor.getKitID()) {
       new F4_Igor(player, kitIndex);
-    } else if (kitID == F5_Wizard.getKitID()) {
-      new F5_Wizard(player, kitIndex);
+    } else if (kitID == F5_Sumo.getKitID()) {
+      new F5_Sumo(player, kitIndex);
     } else if (kitID == F6_Grief.getKitID()) {
       new F6_Grief(player, kitIndex);
     } 

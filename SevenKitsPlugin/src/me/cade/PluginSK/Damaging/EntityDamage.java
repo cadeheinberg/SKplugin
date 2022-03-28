@@ -16,7 +16,7 @@ import me.cade.PluginSK.BuildKits.F1_Beserker;
 import me.cade.PluginSK.BuildKits.F2_Scorch;
 import me.cade.PluginSK.BuildKits.F3_Goblin;
 import me.cade.PluginSK.BuildKits.F4_Igor;
-import me.cade.PluginSK.BuildKits.F5_Wizard;
+import me.cade.PluginSK.BuildKits.F5_Sumo;
 import me.cade.PluginSK.BuildKits.F6_Grief;
 import me.cade.PluginSK.KitListeners.G6_Grief;
 
@@ -159,8 +159,8 @@ public class EntityDamage implements Listener {
       weaponName = F3_Goblin.getKitChatColor() + F3_Goblin.getKitName();
     } else if (kitID == F4_Igor.getKitID()) {
       weaponName = F4_Igor.getKitChatColor() + F4_Igor.getKitName();
-    } else if (kitID == F5_Wizard.getKitID()) {
-      weaponName = F5_Wizard.getKitChatColor() + F5_Wizard.getKitName();
+    } else if (kitID == F5_Sumo.getKitID()) {
+      weaponName = F5_Sumo.getKitChatColor() + F5_Sumo.getKitName();
     } else if (kitID == F6_Grief.getKitID()) {
       weaponName = F6_Grief.getKitChatColor() + F6_Grief.getKitName();
     } else {

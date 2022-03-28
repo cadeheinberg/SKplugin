@@ -2,7 +2,9 @@ package me.cade.PluginSK.KitListeners;
 
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
@@ -11,6 +13,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+
 import me.cade.PluginSK.AbilityEnchantment;
 import me.cade.PluginSK.Fighter;
 import me.cade.PluginSK.BuildKits.F3_Goblin;
@@ -29,71 +33,62 @@ public class G3_Goblin {
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
     }
-    G8_Cooldown.startAbilityDuration(killer, 200, 300);
+    G8_Cooldown.startAbilityDuration(killer, 200, 50);
     CraftPlayer craftPlayer = (CraftPlayer) killer;
     AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
-    locateNearestEnemy(killer, 200);
+    gustLaunch(killer);
     killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 8, 1);
   }
-
-  private static void locateNearestEnemy(Player killer, int duration) {
-    Player closestPlayer = null;
-    double lowestDistance = 0;
-    double currentDistance = 0;
-    int itterator = 0;
-
-    // search other team eventually instead
-    for (Entity victim : killer.getNearbyEntities(100, 50, 100)) {
-      if (victim instanceof Player) {
-        currentDistance = killer.getLocation().distance(victim.getLocation());
-        if (itterator == 0) {
-          lowestDistance = currentDistance;
-          closestPlayer = (Player) victim;
-          itterator++;
-          continue;
-        }
-        if (currentDistance < lowestDistance) {
-          lowestDistance = currentDistance;
-          closestPlayer = (Player) victim;
-        }
-        itterator++;
-      }
-    }
-
-    if (closestPlayer == null) {
-      killer.sendMessage(ChatColor.RED + "No enemies in range");
-      return;
-    }
-
-    ArrayList<Player> viewers = new ArrayList<Player>();
-    viewers.add(killer);
-    // eventually should just use team
-    
-    //Glowing.setGlowingOn((Player) closestPlayer, killer, viewers);
-
-    killer.sendMessage(ChatColor.AQUA + "Enemy Located");
-    killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 8, 1);
-
-  }
+  
+  public static void gustLaunch(Player killer) {
+	    Location playerLocation = killer.getLocation();
+	    killer.playSound(killer.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
+	    if (playerLocation.getPitch() > 49) {
+	      launchPlayer(killer, -1.5);
+	    }
+	    Location origin = killer.getEyeLocation();
+	    Vector direction = killer.getLocation().getDirection();
+	    double dX = direction.getX();
+	    double dY = direction.getY();
+	    double dZ = direction.getZ();
+	    playerLocation.setPitch((float) -30.0);
+	    int range = 13;
+	    double power = 2.8;
+	    ArrayList<Integer> hitList = new ArrayList<Integer>();
+	    for (int j = 2; j < range; j++) {
+	      origin = origin.add(dX * j, dY * j, dZ * j);
+	      killer.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, origin.getX(), origin.getY(), origin.getZ(),
+	        5);
+	      ArrayList<Entity> entityList =
+	        (ArrayList<Entity>) killer.getWorld().getNearbyEntities(origin, 2.5, 2.5, 2.5);
+	      for (Entity entity : entityList) {
+	        if (entity instanceof LivingEntity) 
+	          if(hitList.contains(((LivingEntity) entity).getEntityId())) {
+	            continue;
+	          }
+	          hitList.add(((LivingEntity) entity).getEntityId());{
+	          DealDamage.dealAmount(killer, (LivingEntity) entity, 1);
+	          if(killer.getName().equals(((LivingEntity) entity).getName())) {
+	            return;
+	          }
+	          Vector currentDirection = playerLocation.getDirection().normalize();
+	          currentDirection = currentDirection.multiply(new Vector(power, power, power));
+	          entity.setVelocity(currentDirection);
+	        }
+	      }
+	      origin = origin.subtract(dX * j, dY * j, dZ * j);
+	    }
+	  }
+  
+  public static void launchPlayer(Entity entity, Double power) {
+	      Vector currentDirection = entity.getLocation().getDirection().normalize();
+	      currentDirection = currentDirection.multiply(new Vector(power, power, power));
+	      entity.setVelocity(currentDirection);
+	  }
 
   public static void deActivateSpecial(Player player) {
-    turnOffLocater(player);
     CraftPlayer craftPlayer = (CraftPlayer) player;
     AbilityEnchantment.removeEnchanted(craftPlayer.getHandle());
-  }
-
-  private static void turnOffLocater(Player killer) {
-    //Player victim = Bukkit.getPlayer(Glowing.glowMap.get(killer.getUniqueId()));
-//    if (victim == null) {
-//      return;
-//    }
-//    if (!victim.isOnline()) {
-//      return;
-//    }
-//    ArrayList<Player> viewers = new ArrayList<Player>();
-//    viewers.add(killer);
-    // eventually should just use team
-    //Glowing.setGlowingOff(victim, killer, viewers);
   }
 
   public static void doArrorwHitEntity(Player killer, LivingEntity victim, Arrow arrow) {

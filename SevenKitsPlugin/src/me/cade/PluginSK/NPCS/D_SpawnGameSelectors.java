@@ -25,7 +25,7 @@ public class D_SpawnGameSelectors {
     names[2] = p + "Capture The Flag";
     locations[2] = new Location(Main.hub, -1034.5, 194.5, -117.5);
     
-    names[3] = p + "Ladder Match";
+    names[3] = p + "Soccer";
     locations[3] = new Location(Main.hub, -1038.5, 194.5, -120.5);
 
     //diamond search and destroy

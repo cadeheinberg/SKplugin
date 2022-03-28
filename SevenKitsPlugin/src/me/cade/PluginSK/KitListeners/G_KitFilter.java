@@ -22,10 +22,10 @@ public class G_KitFilter {
       G3_Goblin.deActivateSpecial(player);
     } else if (kitID == F4_Igor.getKitID()) {
       G4_Igor.deactivateSpecialAbility(player);
-    } else if (kitID == F5_Wizard.getKitID()) {
-      G5_Wizard.deActivateSpecial(player);
+    } else if (kitID == F5_Sumo.getKitID()) {
+      G5_Sumo.deActivateSpecial(player);
     } else if (kitID == F6_Grief.getKitID()) {
-      G6_Grief.deactivateSpecialAbility(player);
+      G6_Grief.deActivateSpecial(player);
     } 
   }
 

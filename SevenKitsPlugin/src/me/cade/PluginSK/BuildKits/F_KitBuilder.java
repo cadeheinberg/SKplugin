@@ -11,7 +11,7 @@ public class F_KitBuilder {
     F3_Goblin.makeKit();
     F4_Igor.makeKit();
     F6_Grief.makeKit();
-    F5_Wizard.makeKit();
+    F5_Sumo.makeKit();
   }
 
 }
