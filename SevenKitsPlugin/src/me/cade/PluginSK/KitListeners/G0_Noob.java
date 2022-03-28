@@ -3,6 +3,7 @@ package me.cade.PluginSK.KitListeners;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
@@ -33,7 +34,7 @@ public class G0_Noob {
 	  private static Plugin plugin = Main.getPlugin(Main.class);
   
   public static void doDrop(Player killer) {
-    if(killer.getExp() < 1) {
+	if (killer.getCooldown(Material.BIRCH_FENCE) > 0 || killer.getCooldown(Material.JUNGLE_FENCE) > 0) {
       killer.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
@@ -45,12 +46,11 @@ public class G0_Noob {
   }
   
   private static void activateSpecial(Player killer, int durationTicks, int rechargeTicks) {
+	G8_Cooldown.startAbilityDuration(killer, durationTicks, rechargeTicks);
     killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, durationTicks, 0));
     killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, durationTicks, 1));
     CraftPlayer craftPlayer = (CraftPlayer) killer;
     AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
-    G8_Cooldown.startAbilityDuration(killer, durationTicks, rechargeTicks);
-
 	doJump(killer, Fighter.get(killer));
     killer.sendMessage(ChatColor.AQUA + "Special Ability Activated");
     killer.playSound(killer.getLocation(), Sound.ENTITY_HORSE_ANGRY, 8, 1);

@@ -2,6 +2,7 @@ package me.cade.PluginSK.KitListeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
@@ -27,7 +28,7 @@ public class G2_Scorch {
       return;
     }
     shootSnowballs(player);
-    if (Fighter.fighters.get(player.getUniqueId()).isFighterAbility()) {
+    if (Fighter.fighters.get(player.getUniqueId()).isAbilityActive()) {
       player.setCooldown(F2_Scorch.getWeapon().getWeaponItem().getType(),
         ((F_Stats.getTicksList(F2_Scorch.getKitID())[0]) / 4));
       launchPlayer(player, -0.05);
@@ -39,7 +40,7 @@ public class G2_Scorch {
   }
 
   public static void doDrop(Player killer) {
-    if (killer.getExp() < 1) {
+	if (killer.getCooldown(Material.BIRCH_FENCE) > 0 || killer.getCooldown(Material.JUNGLE_FENCE) > 0) {
       killer.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
@@ -63,7 +64,7 @@ public class G2_Scorch {
 
   public static void doSnowballHitEntity(Player killer, LivingEntity victim, Snowball snowball) {
     if (snowball.getFireTicks() > 0) {
-      victim.setFireTicks(1200);
+      victim.setFireTicks(50);
     }
     DealDamage.dealAmount(killer, victim,
       F_Stats.getProjectileDamageList(F2_Scorch.getKitID())[Fighter.fighters
@@ -110,7 +111,7 @@ public class G2_Scorch {
     currentDirection5 = currentDirection5.multiply(new Vector(2, 1.5, 2));
     ball5.setVelocity(currentDirection5);
 
-    if (Fighter.fighters.get(player.getUniqueId()).isFighterAbility()) {
+    if (Fighter.fighters.get(player.getUniqueId()).isAbilityActive()) {
       ball.setFireTicks(1000);
       ball2.setFireTicks(1000);
       ball3.setFireTicks(1000);

@@ -17,7 +17,7 @@ public class Borders {
       @Override
       public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-          if (player.getLocation().getY() < 45) {
+          if (player.getLocation().getY() < 15) {
             if (player.getGameMode() == GameMode.CREATIVE) {
               return;
             }

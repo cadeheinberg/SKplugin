@@ -34,7 +34,7 @@ public class G5_Wizard {
 	//add ice cube spell
 
   public static void doDrop(Player killer) {
-    if (killer.getExp() < 1) {
+    if (killer.getCooldown(Material.BIRCH_FENCE) > 0 || killer.getCooldown(Material.JUNGLE_FENCE) > 0) {
       killer.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
@@ -143,10 +143,10 @@ public class G5_Wizard {
 	  }
 
   private static void activateSpecial(Player killer, int durationTicks, int rechargeTicks) {
-    CraftPlayer craftPlayer = (CraftPlayer) killer;
+	G8_Cooldown.startAbilityDuration(killer, durationTicks, rechargeTicks);
+	CraftPlayer craftPlayer = (CraftPlayer) killer;
     killer.setInvisible(true);
     makeInvisible(craftPlayer.getHandle());
-    G8_Cooldown.startAbilityDuration(killer, durationTicks, rechargeTicks);
     killer.sendMessage(ChatColor.AQUA + "Special Ability Activated");
     killer.playSound(killer.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
   }

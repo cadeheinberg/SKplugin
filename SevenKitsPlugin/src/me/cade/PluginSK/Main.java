@@ -24,9 +24,44 @@ import me.cade.PluginSK.SpecialItems.H1_CombatTracker;
 
 public class Main extends JavaPlugin {
 
-  // eating cake
-  // charges
-  // the fighter ability
+	  // fire is burning forever with scorch
+	
+		//new player starts out with 1 level and 0 exp some reason
+		
+		//trident does took much throwing damage, should do more melee
+		
+		//add back the cool wizard spells
+		
+		//killer.setWalkSpeed((float) 0.2); on respawn or death i guess
+		
+		//add baseline speed boost to goblin
+		
+		//apply night vision potion
+		
+		//able to break kit selectors
+		
+		//error inside of the console
+		
+		//add care packages back
+		
+		//add real snowmen with healing areas around them
+		
+		//give each island their own special thing
+		
+		//change biome for darker grass
+		
+		//quak craft with big map and speed boost
+	
+	//global game modes that apply to the hub world
+	//players wont join a new world to play
+	//if enough people are queued for one gamemode it will 
+	//change the hub map to add flags and put everyone
+	//on different teams
+		
+	
+	//global game modifiers that apply to the hub world
+		//fortnite mode where everyone gets blocks to build with
+		//and popup forts that go away after fortnite mode is over
 
   public static World hub;
   public static Location hubSpawn;

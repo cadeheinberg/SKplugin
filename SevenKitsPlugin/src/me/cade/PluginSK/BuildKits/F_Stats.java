@@ -55,7 +55,7 @@ public class F_Stats {
     // wizard
     damageList.add(new Integer[] {8, 8, 8, 8});
     ticksList.add(new Integer[] {55, 55, 55, 55});
-    projectileDamageList.add(new Double[] {4.5, 4.5, 4.5, 4.5});
+    projectileDamageList.add(new Double[] {7.0, 7.0, 7.0, 7.0});
     
     // grief
     // grief

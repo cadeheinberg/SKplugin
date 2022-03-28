@@ -2,6 +2,7 @@ package me.cade.PluginSK.KitListeners;
 
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
@@ -23,7 +24,7 @@ public class G3_Goblin {
   // or arrow it slows and poisons them and barrage arrow
 
   public static void doDrop(Player killer) {
-    if (killer.getExp() < 1) {
+	if (killer.getCooldown(Material.BIRCH_FENCE) > 0 || killer.getCooldown(Material.JUNGLE_FENCE) > 0) {
       killer.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
@@ -110,7 +111,7 @@ public class G3_Goblin {
     }
     shooter.setCooldown(F3_Goblin.getWeapon().getWeaponItem().getType(),
       F_Stats.getTicksList(F3_Goblin.getKitID())[0]);
-    if (Fighter.get(shooter).isFighterAbility()) {
+    if (Fighter.get(shooter).isAbilityActive()) {
       arrow.setFireTicks(1000);
     }
     return true;

@@ -21,6 +21,46 @@ import me.cade.PluginSK.BuildKits.F6_Grief;
 import me.cade.PluginSK.KitListeners.G6_Grief;
 
 public class EntityDamage implements Listener {
+	
+	//do grief give back health special
+	  @EventHandler
+	  public void onDamage(EntityDamageByEntityEvent e) {
+	    if(!(e.getEntity() instanceof Player)) {
+	      return;
+	    }
+	    if (e.getCause() != EntityDamageByEntityEvent.DamageCause.ENTITY_ATTACK) {
+	      e.setDamage(0);
+	      return;
+	    }
+	    if (SafeZone.safeZone(e.getEntity().getLocation())) {
+	      e.setCancelled(true);
+	      return;
+	    }
+	    
+	    Player victim;
+	    Player killer;
+
+	    victim = (Player) e.getEntity();
+	    killer = (Player) e.getDamager();
+
+	    if (victim.equals(killer)) {
+	      return;
+	    }
+
+	    Fighter fKiller = Fighter.get(killer);
+	    Fighter fVictim = Fighter.get(victim);
+	    
+	    if(fKiller.getKitID() == F6_Grief.getKitID()) {
+	      G6_Grief.doStealHealth(killer, fKiller, victim);
+	    }
+
+	    fVictim.setLastDamagedBy(killer);
+	    fKiller.setLastToDamage(victim);
+
+	    killer.setCooldown(H1_CombatTracker.getTrackerMaterial(), 200);
+	    victim.setCooldown(H1_CombatTracker.getTrackerMaterial(), 200);
+
+	  }
   
   //do grief give back health special
   @EventHandler
@@ -72,6 +112,8 @@ public class EntityDamage implements Listener {
     
     Fighter fVictim = Fighter.get(victim);
     fVictim.incDeaths();
+    
+    fVictim.fighterDeath();
 
     killer = Bukkit.getPlayer(fVictim.getLastDamagedBy());
     if(!checkKillerStatus(killer, victim, fVictim)) {

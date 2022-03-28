@@ -50,8 +50,8 @@ public class D_SpawnKitSelectors {
     
     double x = -1046.5;
     for(int i = 0; i < 7; i++) {
-      Location locale = new Location(Main.hub, x, 196, -106.5);
-      kits[i] = new D1_ArmorStand(kitNames[i] , locale, 180, true, false);
+      Location locale = new Location(Main.hub, x, 195, -106.5);
+      kits[i] = new D1_ArmorStand(kitNames[i] , locale, 180, false, false);
       kits[i].equipColoredArmor(colors[i]);
       kits[i].getStand().setItemInHand(itemsHeld[i]);
       x = x - 2.0;

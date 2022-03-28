@@ -111,7 +111,13 @@ public class MySQL {
       statement.setInt(8, 0);
       statement.setInt(9, 500);
       statement.setInt(10, 0);
-      statement.setInt(11, 1111000);
+      statement.setInt(11, 0);
+      statement.setInt(12, 0);
+      statement.setInt(13, 0);
+      statement.setInt(14, 0);
+      statement.setInt(15, 0);
+      statement.setInt(16, 0);
+      statement.setInt(17, 0);
       statement.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();

@@ -23,7 +23,7 @@ public class G4_Igor {
   // put a cooldown on throwing the trident again
 
   public static void doDrop(Player killer) {
-    if(killer.getExp() < 1) {
+	if (killer.getCooldown(Material.BIRCH_FENCE) > 0 || killer.getCooldown(Material.JUNGLE_FENCE) > 0) {
       killer.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
@@ -46,7 +46,7 @@ public class G4_Igor {
     }
     player.setCooldown(F4_Igor.getWeapon().getWeaponItem().getType(),
       F_Stats.getTicksList(F4_Igor.getKitID())[0]);
-    if (Fighter.fighters.get((player).getUniqueId()).isFighterAbility()) {
+    if (Fighter.fighters.get((player).getUniqueId()).isAbilityActive()) {
       trident.setFireTicks(1000);
     }
     player.getInventory().remove(Material.TRIDENT);

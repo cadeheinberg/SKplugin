@@ -1,6 +1,7 @@
 package me.cade.PluginSK.KitListeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class G1_Beserker {
   }
 
   public static void doDrop(Player killer) {
-    if (killer.getExp() < 1) {
+    if (killer.getCooldown(Material.BIRCH_FENCE) > 0 || killer.getCooldown(Material.JUNGLE_FENCE) > 0) {
       killer.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
       killer.playSound(killer.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
       return;
@@ -33,12 +34,12 @@ public class G1_Beserker {
   }
 
   private static void activateSpecial(Player killer, int durationTicks, int rechargeTicks) {
-    killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, durationTicks, 0));
+	G8_Cooldown.startAbilityDuration(killer, durationTicks, rechargeTicks);
+	killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, durationTicks, 0));
     killer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, durationTicks, 0));
     killer.setWalkSpeed((float) 0.3);
     CraftPlayer craftPlayer = (CraftPlayer) killer;
     AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
-    G8_Cooldown.startAbilityDuration(killer, durationTicks, rechargeTicks);
     killer.sendMessage(ChatColor.AQUA + "Special Ability Activated");
     killer.playSound(killer.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
   }

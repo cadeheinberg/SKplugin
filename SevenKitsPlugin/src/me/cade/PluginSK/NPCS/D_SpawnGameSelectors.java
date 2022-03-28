@@ -17,16 +17,16 @@ public class D_SpawnGameSelectors {
     Location[] locations = new Location[4];
     
     names[0] = p + "Search & Destroy";
-    locations[0] = new Location(Main.hub, -1039.5, 195, -112.5);
+    locations[0] = new Location(Main.hub, -1039.5, 194.5, -110.5);
 
     names[1] = p + "Team Deathmatch";
-    locations[1] = new Location(Main.hub, -1034.5, 195, -113.5);
+    locations[1] = new Location(Main.hub, -1034.5, 194.5, -111.5);
     
     names[2] = p + "Capture The Flag";
-    locations[2] = new Location(Main.hub, -1034.5, 195, -119.5);
+    locations[2] = new Location(Main.hub, -1034.5, 194.5, -117.5);
     
     names[3] = p + "Ladder Match";
-    locations[3] = new Location(Main.hub, -1038.5, 195, -122.5);
+    locations[3] = new Location(Main.hub, -1038.5, 194.5, -120.5);
 
     //diamond search and destroy
     //-1039.5, 195, -112.5 facing 180
