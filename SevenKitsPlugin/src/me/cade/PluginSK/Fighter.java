@@ -41,7 +41,7 @@ public class Fighter {
 	private boolean abilityActive;
 	private boolean abilityRecharged;
 
-	//changes alot during the game
+	// changes alot during the game
 	private UUID lastToDamage;
 	private UUID lastDamagedBy;
 	private int cooldownTask;
@@ -57,26 +57,25 @@ public class Fighter {
 	private int exp;
 	private int[] unlockedKits = new int[7];
 	private ScoreBoardObject scoreBoardObject;
-	
-	  private static float walkSpeed = (float) 0.235;
-	  private static float walkSpeedBoosted = (float) 0.3;
+
+	private static float walkSpeed = (float) 0.235;
+	private static float walkSpeedBoosted = (float) 0.3;
 
 	private int groundPoundTask;
-	
+
 	private IceCageItem iceCageItem = null;
 	private ParachuteItem parachuteItem = null;
 	private CombatTracker combatTracker = null;
 	private ThrowingTNTItem throwingTNTItem = null;
-	
+
 	private D_ProtocolStand[] personalStands = new D_ProtocolStand[7];
-	
+
 	private D_ProtocolStand chargedStand = null;
-	
+
 	private FighterKit fKit = null;
-	
+
 	private static final int numberOfKits = 7;
-	private static FighterKit[] fKits = {new F0(),new F1(),new F2(),new F3(),
-			new F4(),new F5(),new F6()};
+	private static FighterKit[] fKits = { new F0(), new F1(), new F2(), new F3(), new F4(), new F5(), new F6() };
 
 	public Fighter(Player player) {
 		this.player = player;
@@ -84,27 +83,27 @@ public class Fighter {
 		this.addToFightersHashMap();
 		this.fighterJoin();
 	}
-	
-	//enchant armor when have better armor perk or health perk idk
-	
-	//CraftPlayer craftPlayer = (CraftPlayer) player;
-    //AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
-    //CraftPlayer craftPlayer = (CraftPlayer) player;
-    //AbilityEnchantment.removeEnchanted(craftPlayer.getHandle());
+
+	// enchant armor when have better armor perk or health perk idk
+
+	// CraftPlayer craftPlayer = (CraftPlayer) player;
+	// AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
+	// CraftPlayer craftPlayer = (CraftPlayer) player;
+	// AbilityEnchantment.removeEnchanted(craftPlayer.getHandle());
 
 	private void fighterJoin() {
 		this.setDefaults();
 		this.downloadDatabase();
-		chargedStand = new D_ProtocolStand(ChatColor.GREEN + "" + 
-	    		ChatColor.BOLD + player.getDisplayName() + "'s Spawn", Main.hubSpawn, player);
+		chargedStand = new D_ProtocolStand(ChatColor.GREEN + "" + ChatColor.BOLD + player.getDisplayName() + "'s Spawn",
+				Main.hubSpawn, player);
 		this.grantUnlocked();
 		this.scoreBoardObject = new ScoreBoardObject(player);
 		this.giveKit();
 		Main.getPpAPI().resetActivePlayerParticles(player);
 		this.resetSpecialAbility();
-	    this.adjustJoinModifiers();  
+		this.adjustJoinModifiers();
 	}
-	
+
 	public void fighterRespawn() {
 		this.setLastDamagedBy(null);
 		this.setLastToDamage(null);
@@ -112,7 +111,7 @@ public class Fighter {
 		this.resetSpecialAbility();
 		this.resetSpecialItemCooldowns();
 	}
-	
+
 	private void resetSpecialItemCooldowns() {
 		player.setCooldown(IceCageItem.getMaterial(), 0);
 		player.setCooldown(ParachuteItem.getMaterial(), 0);
@@ -125,15 +124,15 @@ public class Fighter {
 		this.fighterDismountParachute();
 		this.resetSpecialAbility();
 	}
-	
+
 	public void fighterDeath() {
 		this.resetSpecialAbility();
 		this.fighterDismountParachute();
 		this.incDeaths();
 	}
-	
+
 	public void fighterDismountParachute() {
-		if(this.parachuteItem != null) {
+		if (this.parachuteItem != null) {
 			this.parachuteItem.getOff();
 		}
 	}
@@ -143,7 +142,7 @@ public class Fighter {
 		setAbilityRecharged(true);
 		player.setExp(1);
 		player.setLevel(0);
-	    player.setWalkSpeed(getWalkSpeed());
+		player.setWalkSpeed(getWalkSpeed());
 	}
 
 	public void adjustJoinModifiers() {
@@ -155,13 +154,13 @@ public class Fighter {
 			}
 		}, 1);
 	}
-	
+
 	public void setAbilityActive(boolean fighterAbility) {
 		if (!fighterAbility) {
-			//turning ability active off
-			
-			//only if the ability was already active
-			if(this.abilityActive) {
+			// turning ability active off
+
+			// only if the ability was already active
+			if (this.abilityActive) {
 				player.setCooldown(Material.BIRCH_FENCE, 0);
 				cancelCooldownTask();
 				fKit.deActivateSpecial();
@@ -172,75 +171,71 @@ public class Fighter {
 	}
 
 	public void setAbilityRecharged(boolean fighterRecharged) {
-		if(fighterRecharged) {
-			//turning ability charged fully on
-			
-			//only if the ability was already not recharged
-			if(!this.abilityRecharged) {
+		if (fighterRecharged) {
+			// turning ability charged fully on
+
+			// only if the ability was already not recharged
+			if (!this.abilityRecharged) {
 				player.setCooldown(Material.JUNGLE_FENCE, 0);
 				cancelRechargeTask();
-			}	
+			}
 		}
 		this.abilityRecharged = fighterRecharged;
 		this.changeAbilityRechargedParticleEffect();
 	}
-	
+
 	private void changeAbilityActiveParticleEffect() {
-			if(this.kitID == 6) {
-				//greif goes invisible
-				return;
+		if (this.kitID == 6) {
+			// greif goes invisible
+			return;
+		}
+		if (this.abilityActive) {
+			if (Main.getPpAPI() != null) {
+				Main.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("normal"));
+				Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, ParticleStyle.fromName("normal"),
+						new OrdinaryColor(this.getFKit().getArmorColor().getRed(),
+								this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
 			}
-		if(this.abilityActive) {
-	        if (Main.getPpAPI() != null) {
-	        	Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, 
-	            		ParticleStyle.fromName("normal"), new OrdinaryColor(this.getFKit().getArmorColor().getRed(), 
-	            				this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
-	        	Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, 
-	            		ParticleStyle.fromName("normal"), new OrdinaryColor(this.getFKit().getArmorColor().getRed(), 
-	            				this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
-	        }
-		}else {
+		} else {
 			if (Main.getPpAPI() != null) {
-	        	Main.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("normal"));
-	        }
+				Main.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("normal"));
+			}
 		}
 	}
-	
+
 	private void changeAbilityRechargedParticleEffect() {
-		if(this.abilityRecharged) {
-	        if (Main.getPpAPI() != null) {
-	        	Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, 
-	            		ParticleStyle.fromName("point"), new OrdinaryColor(this.getFKit().getArmorColor().getRed(), 
-	            				this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
-	        	Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, 
-	            		ParticleStyle.fromName("point"), new OrdinaryColor(this.getFKit().getArmorColor().getRed(), 
-	            				this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
-	        }
-		}else {
+		if (this.abilityRecharged) {
 			if (Main.getPpAPI() != null) {
-	        	Main.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("point"));
-	        }
+				Main.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("point"));
+				Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, ParticleStyle.fromName("point"),
+						new OrdinaryColor(this.getFKit().getArmorColor().getRed(),
+								this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
+			}
+		} else {
+			if (Main.getPpAPI() != null) {
+				Main.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("point"));
+			}
 		}
 	}
-	
+
 	public void cancelCooldownTask() {
-		if(this.cooldownTask != -1) {
+		if (this.cooldownTask != -1) {
 			Bukkit.getScheduler().cancelTask(this.cooldownTask);
 			this.cooldownTask = -1;
 		}
 	}
-	
+
 	public void cancelRechargeTask() {
-		if(this.rechargeTask != -1) {
+		if (this.rechargeTask != -1) {
 			Bukkit.getScheduler().cancelTask(this.rechargeTask);
-			this.rechargeTask = -1; 
+			this.rechargeTask = -1;
 		}
 	}
 
 	public void addToFightersHashMap() {
 		fighters.put(this.uuid, this);
 	}
-	
+
 	private void downloadDatabase() {
 		if (Main.mysql.playerExists(player)) {
 			downloadFighter();
@@ -251,26 +246,22 @@ public class Fighter {
 	}
 
 	public void giveKit() {
-	    if (kitID == fKits[0].getKitID()) {
-	        fKit = new F0(player);
-	      } else if (kitID == fKits[1].getKitID()) {
-		        fKit = new F1(player);
-	      }
-	      else if (kitID == fKits[2].getKitID()) {
-		        fKit = new F2(player);
-	      }
-	      else if (kitID == fKits[3].getKitID()) {
-		        fKit = new F3(player);
-	      }
-	      else if (kitID == fKits[4].getKitID()) {
-		        fKit = new F4(player);
-	      }
-	      else if (kitID == fKits[5].getKitID()) {
-		        fKit = new F5(player);
-	      }
-	      else if (kitID == fKits[6].getKitID()) {
-		        fKit = new F6(player);
-	      }
+		if (kitID == fKits[0].getKitID()) {
+			fKit = new F0(player);
+		} else if (kitID == fKits[1].getKitID()) {
+			fKit = new F1(player);
+		} else if (kitID == fKits[2].getKitID()) {
+			fKit = new F2(player);
+		} else if (kitID == fKits[3].getKitID()) {
+			fKit = new F3(player);
+		} else if (kitID == fKits[4].getKitID()) {
+			fKit = new F4(player);
+		} else if (kitID == fKits[5].getKitID()) {
+			fKit = new F5(player);
+		} else if (kitID == fKits[6].getKitID()) {
+			fKit = new F6(player);
+		}
+		this.changeAbilityRechargedParticleEffect();
 	}
 
 	public void giveKitWithID(int kitID) {
@@ -545,7 +536,7 @@ public class Fighter {
 	public void setCooldownTask(int cooldownTask) {
 		this.cooldownTask = cooldownTask;
 	}
-	
+
 	public void setRechargeTask(int rechargeTask) {
 		this.rechargeTask = rechargeTask;
 	}
@@ -561,9 +552,9 @@ public class Fighter {
 	public IceCageItem getIceCageItem() {
 		return iceCageItem;
 	}
-	
+
 	public void setIceCubeItem(IceCageItem iceCageItem) {
-		this.iceCageItem =  iceCageItem;
+		this.iceCageItem = iceCageItem;
 	}
 
 	public ParachuteItem getParachuteItem() {
@@ -589,11 +580,11 @@ public class Fighter {
 	public void setThrowingTNTItem(ThrowingTNTItem throwingTNTItem) {
 		this.throwingTNTItem = throwingTNTItem;
 	}
-	
+
 	public ScoreBoardObject getScoreBoardObjext() {
 		return this.scoreBoardObject;
 	}
-	
+
 	public void setScoreBoardObjext(ScoreBoardObject scoreBoardObject) {
 		this.scoreBoardObject = scoreBoardObject;
 	}
@@ -613,18 +604,18 @@ public class Fighter {
 	public void setFKit(FighterKit fkit) {
 		this.fKit = fkit;
 	}
-	
+
 	public static FighterKit[] getFKits() {
 		return fKits;
 	}
-	
-	  public static float getWalkSpeed() {
-		return walkSpeed;
-	  }
 
-	  public static float getWalkSpeedBoosted() {
+	public static float getWalkSpeed() {
+		return walkSpeed;
+	}
+
+	public static float getWalkSpeedBoosted() {
 		return walkSpeedBoosted;
-	  }
+	}
 
 	public static int getNumberOfKits() {
 		return numberOfKits;
