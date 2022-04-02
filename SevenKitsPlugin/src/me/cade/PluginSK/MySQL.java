@@ -6,22 +6,27 @@ import java.sql.SQLException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import me.cade.PluginSK.HiddenPersonal.DatabaseAccess;
 
 public class MySQL {
 
-  private static java.sql.Connection connection;
-  private static String host;
-  private static String database;
-  private static String username;
-  private static String password;
-  private static int port;
+  private java.sql.Connection connection;
+  private String host;
+  private String database;
+  private String username;
+  private String password;
+  private int port;
   
-  private static String tableName;
-  public static String[] column;
+  private String tableName;
+  public String[] column;
   
-  public static void startConnection() {
+  private static Plugin plugin = Main.getPlugin(Main.class);
+  
+  public MySQL() {
 
     host = DatabaseAccess.getHost();
     port = DatabaseAccess.getPort();
@@ -30,14 +35,15 @@ public class MySQL {
     password = DatabaseAccess.getPassword();
 
     try {
+    Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL: CONNECTING...");
       connect();
-      Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL CONNECTED");
+      Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: CONNECTED");
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
-      Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL ERROR 1");
+      Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MYSQL: ERROR 1");
     } catch (SQLException e) {
       e.printStackTrace();
-      Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL ERROR 2");
+      Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MYSQL: ERROR 2");
     }
     
     tableName = "playerstats";
@@ -59,10 +65,12 @@ public class MySQL {
     column[14] = "Kit04";
     column[15] = "Kit05";
     column[16] = "Kit06";
+    
+    refreshConnection();
 
   }
   
-  public static void closeConnection() {
+  public void closeConnection() {
     try {
       connection.close();
     } catch (SQLException e) {
@@ -70,7 +78,7 @@ public class MySQL {
     }
   }
 
-  private static void connect() throws ClassNotFoundException, SQLException {
+  private void connect() throws ClassNotFoundException, SQLException {
     Class.forName("com.mysql.jdbc.Driver");
     MysqlDataSource dataSource = new MysqlDataSource();
     dataSource.setServerName(host);
@@ -81,7 +89,7 @@ public class MySQL {
     connection = dataSource.getConnection();
   }
   
-  public static void addScore(Player player) {
+  public void addScore(Player player) {
     String insertStatement = "INSERT INTO " + tableName + "(";
     for (int i = 0; i < column.length; i++) {
       if (i == column.length - 1) {
@@ -124,7 +132,7 @@ public class MySQL {
     }
   }
   
-  public static int getStat(Player player, String stat) {
+  public int getStat(Player player, String stat) {
     int getter = 0;
     PreparedStatement statement;
     try {
@@ -141,7 +149,7 @@ public class MySQL {
     return getter;
   }
   
-  public static void setStat(String uuid, String stat, int setter) {
+  public void setStat(String uuid, String stat, int setter) {
     PreparedStatement statement;
     try {
       statement = connection.prepareStatement(
@@ -154,7 +162,7 @@ public class MySQL {
     }
   }
 
-  public static void updateName(Player player, String stat, String setter) {
+  public void updateName(Player player, String stat, String setter) {
     PreparedStatement statement;
     try {
       statement = connection.prepareStatement(
@@ -167,7 +175,7 @@ public class MySQL {
     }
   }
   
-  public static void incOfflineStat(String name, String stat, int setter) {
+  public void incOfflineStat(String name, String stat, int setter) {
     // GET THE AMOUNT OF STAT
     int getter = 0;
     {
@@ -200,7 +208,7 @@ public class MySQL {
     }
   }
 
-  public static boolean playerExists(Player player) {
+  public boolean playerExists(Player player) {
     PreparedStatement statement;
     try {
       statement = connection.prepareStatement(
@@ -215,6 +223,21 @@ public class MySQL {
       e.printStackTrace();
       return false;
     }
+  }
+  
+  public void refreshConnection() {
+	new BukkitRunnable(){
+        @Override
+        public void run() {
+        	Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL: REFRESHING CONNECTION");
+            try {
+                connection.isValid(0);
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: REFRESHED");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }              
+        }
+    }.runTaskTimer(plugin, 20*60*60*7, 20*60*60*7);
   }
   
 }

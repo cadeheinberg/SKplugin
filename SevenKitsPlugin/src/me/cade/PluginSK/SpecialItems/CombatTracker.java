@@ -7,17 +7,18 @@ import org.bukkit.entity.Player;
 import me.cade.PluginSK.Main;
 import me.cade.PluginSK.Weapon;
 
-public class H1_CombatTracker {
+public class CombatTracker {
 
-  private static Weapon tracker;
-  private static Material mat;
-
-  public static void makeTracker() {
-    mat = Material.GOLD_INGOT;
-    tracker = new Weapon(mat, ChatColor.LIGHT_PURPLE + "Spawn Teleporter",
-      ChatColor.WHITE + "Right Click to go to /spawn",
-      ChatColor.WHITE + "Don't leave game while PvP cooldown is on!");
-
+  private static Material mat = Material.GOLD_INGOT;
+  private static Weapon tracker = new Weapon(mat, ChatColor.LIGHT_PURPLE + "Spawn Teleporter",
+	      ChatColor.WHITE + "Right Click to go to /spawn",
+	      ChatColor.WHITE + "Don't leave game while PvP cooldown is on!");
+  
+  private Player player;
+  
+  public CombatTracker(Player player) {
+	  this.player = player;
+	  player.getInventory().setItem(8, getTracker().getWeaponItem());
   }
 
   public static Weapon getTracker() {
@@ -28,9 +29,9 @@ public class H1_CombatTracker {
     return mat;
   }
   
-  public static void doRightClick(Player player) {
+  public void doRightClick() {
 		if (player.getWorld() == Main.hub) {
-	        if (player.getCooldown(H1_CombatTracker.getTrackerMaterial()) > 0) {
+	        if (player.getCooldown(CombatTracker.getTrackerMaterial()) > 0) {
 	          player.sendMessage(ChatColor.RED + "Can't" + ChatColor.AQUA + "" + ChatColor.BOLD
 	            + " /spawn" + ChatColor.RED + ". You have a" + ChatColor.AQUA + "" + ChatColor.BOLD
 	            + " PVP Cooldown " + ChatColor.RED + "on");

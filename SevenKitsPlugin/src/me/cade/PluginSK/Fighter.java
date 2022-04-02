@@ -11,13 +11,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import me.cade.PluginSK.BuildKits.F0_Noob;
-import me.cade.PluginSK.BuildKits.F_KitFilter;
-import me.cade.PluginSK.KitListeners.G5_Sumo;
-import me.cade.PluginSK.KitListeners.G_KitFilter;
+import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.particles.data.OrdinaryColor;
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import me.cade.PluginSK.BuildKits.F0;
+import me.cade.PluginSK.BuildKits.F1;
+import me.cade.PluginSK.BuildKits.F2;
+import me.cade.PluginSK.BuildKits.F3;
+import me.cade.PluginSK.BuildKits.F4;
+import me.cade.PluginSK.BuildKits.F5;
+import me.cade.PluginSK.BuildKits.F6;
+import me.cade.PluginSK.BuildKits.FighterKit;
+import me.cade.PluginSK.NPCS.D_ProtocolStand;
 import me.cade.PluginSK.ScoreBoard.ScoreBoardObject;
-import me.cade.PluginSK.SpecialItems.H1_CombatTracker;
+import me.cade.PluginSK.SpecialItems.CombatTracker;
+import me.cade.PluginSK.SpecialItems.IceCageItem;
+import me.cade.PluginSK.SpecialItems.ParachuteItem;
+import me.cade.PluginSK.SpecialItems.ThrowingTNTItem;
 
 public class Fighter {
 
@@ -47,100 +57,184 @@ public class Fighter {
 	private int exp;
 	private int[] unlockedKits = new int[7];
 	private ScoreBoardObject scoreBoardObject;
+	
+	  private static float walkSpeed = (float) 0.235;
+	  private static float walkSpeedBoosted = (float) 0.3;
 
 	private int groundPoundTask;
+	
+	private IceCageItem iceCageItem = null;
+	private ParachuteItem parachuteItem = null;
+	private CombatTracker combatTracker = null;
+	private ThrowingTNTItem throwingTNTItem = null;
+	
+	private D_ProtocolStand[] personalStands = new D_ProtocolStand[7];
+	
+	private D_ProtocolStand chargedStand = null;
+	
+	private FighterKit fKit = null;
+	
+	private static final int numberOfKits = 7;
+	private static FighterKit[] fKits = {new F0(),new F1(),new F2(),new F3(),
+			new F4(),new F5(),new F6()};
 
 	public Fighter(Player player) {
 		this.player = player;
 		this.uuid = player.getUniqueId();
 		this.addToFightersHashMap();
-		fighterJoin();
-		if(isAbilityActive()) {
-			player.sendMessage("called 5");
-			setAbilityActive(false);
-		}
-		if(!isAbilityRecharged()) {
-			player.sendMessage("called 6");
-			setAbilityRecharged(true);
-		};
+		this.fighterJoin();
 	}
+	
+	//enchant armor when have better armor perk or health perk idk
+	
+	//CraftPlayer craftPlayer = (CraftPlayer) player;
+    //AbilityEnchantment.makeEnchanted(craftPlayer.getHandle());
+    //CraftPlayer craftPlayer = (CraftPlayer) player;
+    //AbilityEnchantment.removeEnchanted(craftPlayer.getHandle());
 
 	private void fighterJoin() {
 		this.setDefaults();
 		this.downloadDatabase();
+		chargedStand = new D_ProtocolStand(ChatColor.GREEN + "" + 
+	    		ChatColor.BOLD + player.getDisplayName() + "'s Spawn", Main.hubSpawn, player);
 		this.grantUnlocked();
 		this.scoreBoardObject = new ScoreBoardObject(player);
 		this.giveKit();
-	    this.adjustJoinModifiers();
+		Main.getPpAPI().resetActivePlayerParticles(player);
+		this.resetSpecialAbility();
+	    this.adjustJoinModifiers();  
 	}
 	
 	public void fighterRespawn() {
 		this.setLastDamagedBy(null);
 		this.setLastToDamage(null);
 		this.adjustJoinModifiers();
+		this.resetSpecialAbility();
+		this.resetSpecialItemCooldowns();
 	}
 	
+	private void resetSpecialItemCooldowns() {
+		player.setCooldown(IceCageItem.getMaterial(), 0);
+		player.setCooldown(ParachuteItem.getMaterial(), 0);
+		player.setCooldown(CombatTracker.getTrackerMaterial(), 0);
+		player.setCooldown(ThrowingTNTItem.getMaterial(), 0);
+	}
+
 	public void fighterLeftServer() {
-		uploadFighter();
-		if(isAbilityActive()) {
-			setAbilityActive(false);
-		}
-		if(!isAbilityRecharged()) {
-			setAbilityRecharged(true);
-		};
-		player.setExp(1);
-		player.setLevel(0);
-	    player.setWalkSpeed((float) 0.2);
+		this.uploadFighter();
+		this.fighterDismountParachute();
+		this.resetSpecialAbility();
 	}
 	
 	public void fighterDeath() {
-		if(isAbilityActive()) {
-			setAbilityActive(false);
+		this.resetSpecialAbility();
+		this.fighterDismountParachute();
+		this.incDeaths();
+	}
+	
+	public void fighterDismountParachute() {
+		if(this.parachuteItem != null) {
+			this.parachuteItem.getOff();
 		}
-		if(!isAbilityRecharged()) {
-			setAbilityRecharged(true);
-		};
+	}
+
+	public void resetSpecialAbility() {
+		setAbilityActive(false);
+		setAbilityRecharged(true);
 		player.setExp(1);
 		player.setLevel(0);
-	    player.setWalkSpeed((float) 0.2);
+	    player.setWalkSpeed(getWalkSpeed());
 	}
 
 	public void adjustJoinModifiers() {
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override
 			public void run() {
-				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 0, true, false));
+				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0, true, false));
+				player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 0, true, false));
 			}
 		}, 1);
 	}
 	
 	public void setAbilityActive(boolean fighterAbility) {
-		this.abilityActive = fighterAbility;
 		if (!fighterAbility) {
 			//turning ability active off
-			player.setCooldown(Material.BIRCH_FENCE, 0);
-			cancelCooldownTask();
-			G_KitFilter.deactivateSpecialFromKitID(player, this.kitID, this.kitIndex);
+			
+			//only if the ability was already active
+			if(this.abilityActive) {
+				player.setCooldown(Material.BIRCH_FENCE, 0);
+				cancelCooldownTask();
+				fKit.deActivateSpecial();
+			}
 		}
+		this.abilityActive = fighterAbility;
+		changeAbilityActiveParticleEffect();
 	}
 
 	public void setAbilityRecharged(boolean fighterRecharged) {
-		this.abilityRecharged = fighterRecharged;
 		if(fighterRecharged) {
 			//turning ability charged fully on
-			player.setCooldown(Material.JUNGLE_FENCE, 0);
-			cancelRechargeTask();
+			
+			//only if the ability was already not recharged
+			if(!this.abilityRecharged) {
+				player.setCooldown(Material.JUNGLE_FENCE, 0);
+				cancelRechargeTask();
+			}	
+		}
+		this.abilityRecharged = fighterRecharged;
+		this.changeAbilityRechargedParticleEffect();
+	}
+	
+	private void changeAbilityActiveParticleEffect() {
+			if(this.kitID == 6) {
+				//greif goes invisible
+				return;
+			}
+		if(this.abilityActive) {
+	        if (Main.getPpAPI() != null) {
+	        	Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, 
+	            		ParticleStyle.fromName("normal"), new OrdinaryColor(this.getFKit().getArmorColor().getRed(), 
+	            				this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
+	        	Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, 
+	            		ParticleStyle.fromName("normal"), new OrdinaryColor(this.getFKit().getArmorColor().getRed(), 
+	            				this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
+	        }
+		}else {
+			if (Main.getPpAPI() != null) {
+	        	Main.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("normal"));
+	        }
+		}
+	}
+	
+	private void changeAbilityRechargedParticleEffect() {
+		if(this.abilityRecharged) {
+	        if (Main.getPpAPI() != null) {
+	        	Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, 
+	            		ParticleStyle.fromName("point"), new OrdinaryColor(this.getFKit().getArmorColor().getRed(), 
+	            				this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
+	        	Main.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, 
+	            		ParticleStyle.fromName("point"), new OrdinaryColor(this.getFKit().getArmorColor().getRed(), 
+	            				this.getFKit().getArmorColor().getGreen(), this.getFKit().getArmorColor().getBlue()));
+	        }
+		}else {
+			if (Main.getPpAPI() != null) {
+	        	Main.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("point"));
+	        }
 		}
 	}
 	
 	public void cancelCooldownTask() {
-		Bukkit.getScheduler().cancelTask(this.cooldownTask);
-		this.cooldownTask = -1;
+		if(this.cooldownTask != -1) {
+			Bukkit.getScheduler().cancelTask(this.cooldownTask);
+			this.cooldownTask = -1;
+		}
 	}
 	
 	public void cancelRechargeTask() {
-		Bukkit.getScheduler().cancelTask(this.rechargeTask);
-		this.rechargeTask = -1; 
+		if(this.rechargeTask != -1) {
+			Bukkit.getScheduler().cancelTask(this.rechargeTask);
+			this.rechargeTask = -1; 
+		}
 	}
 
 	public void addToFightersHashMap() {
@@ -148,25 +242,39 @@ public class Fighter {
 	}
 	
 	private void downloadDatabase() {
-		if (MySQL.playerExists(player)) {
+		if (Main.mysql.playerExists(player)) {
 			downloadFighter();
 		} else {
-			MySQL.addScore(player);
+			Main.mysql.addScore(player);
 		}
 		updateName();
 	}
 
 	public void giveKit() {
-		player.getInventory().clear();
-		F_KitFilter.giveKitFromKitID(player, this.kitID, this.kitIndex);
-		;
-		player.getInventory().setItem(8, H1_CombatTracker.getTracker().getWeaponItem());
-		player.closeInventory();
+	    if (kitID == fKits[0].getKitID()) {
+	        fKit = new F0(player);
+	      } else if (kitID == fKits[1].getKitID()) {
+		        fKit = new F1(player);
+	      }
+	      else if (kitID == fKits[2].getKitID()) {
+		        fKit = new F2(player);
+	      }
+	      else if (kitID == fKits[3].getKitID()) {
+		        fKit = new F3(player);
+	      }
+	      else if (kitID == fKits[4].getKitID()) {
+		        fKit = new F4(player);
+	      }
+	      else if (kitID == fKits[5].getKitID()) {
+		        fKit = new F5(player);
+	      }
+	      else if (kitID == fKits[6].getKitID()) {
+		        fKit = new F6(player);
+	      }
 	}
 
-	public void giveKit(int kitID, int kidIndex) {
+	public void giveKitWithID(int kitID) {
 		this.setKitID(kitID);
-		this.setKitIndex(kidIndex);
 		this.giveKit();
 	}
 
@@ -227,39 +335,39 @@ public class Fighter {
 	}
 
 	public void downloadFighter() {
-		this.setKitID(MySQL.getStat(player, MySQL.column[2]));
-		this.setKitIndex(MySQL.getStat(player, MySQL.column[3]));
-		this.setPlayerLevel(MySQL.getStat(player, MySQL.column[4]));
-		this.setKills(MySQL.getStat(player, MySQL.column[5]));
-		this.setKillStreak(MySQL.getStat(player, MySQL.column[6]));
-		this.setDeaths(MySQL.getStat(player, MySQL.column[7]));
-		this.setCakes(MySQL.getStat(player, MySQL.column[8]));
-		this.setExp(MySQL.getStat(player, MySQL.column[9]));
-		this.setUnlockedKit(0, MySQL.getStat(player, MySQL.column[10]));
-		this.setUnlockedKit(1, MySQL.getStat(player, MySQL.column[11]));
-		this.setUnlockedKit(2, MySQL.getStat(player, MySQL.column[12]));
-		this.setUnlockedKit(3, MySQL.getStat(player, MySQL.column[13]));
-		this.setUnlockedKit(4, MySQL.getStat(player, MySQL.column[14]));
-		this.setUnlockedKit(5, MySQL.getStat(player, MySQL.column[15]));
-		this.setUnlockedKit(6, MySQL.getStat(player, MySQL.column[16]));
+		this.setKitID(Main.mysql.getStat(player, Main.mysql.column[2]));
+		this.setKitIndex(Main.mysql.getStat(player, Main.mysql.column[3]));
+		this.setPlayerLevel(Main.mysql.getStat(player, Main.mysql.column[4]));
+		this.setKills(Main.mysql.getStat(player, Main.mysql.column[5]));
+		this.setKillStreak(Main.mysql.getStat(player, Main.mysql.column[6]));
+		this.setDeaths(Main.mysql.getStat(player, Main.mysql.column[7]));
+		this.setCakes(Main.mysql.getStat(player, Main.mysql.column[8]));
+		this.setExp(Main.mysql.getStat(player, Main.mysql.column[9]));
+		this.setUnlockedKit(0, Main.mysql.getStat(player, Main.mysql.column[10]));
+		this.setUnlockedKit(1, Main.mysql.getStat(player, Main.mysql.column[11]));
+		this.setUnlockedKit(2, Main.mysql.getStat(player, Main.mysql.column[12]));
+		this.setUnlockedKit(3, Main.mysql.getStat(player, Main.mysql.column[13]));
+		this.setUnlockedKit(4, Main.mysql.getStat(player, Main.mysql.column[14]));
+		this.setUnlockedKit(5, Main.mysql.getStat(player, Main.mysql.column[15]));
+		this.setUnlockedKit(6, Main.mysql.getStat(player, Main.mysql.column[16]));
 	}
 
 	public void uploadFighter() {
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[2], this.getKitID());
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[3], this.getKitIndex());
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[4], this.getPlayerLevel());
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[5], this.getKills());
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[6], this.getKillStreak());
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[7], this.getDeaths());
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[8], this.getCakes());
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[9], this.getExp());
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(0));
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(1));
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(2));
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(3));
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(4));
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(5));
-		MySQL.setStat(player.getUniqueId().toString(), MySQL.column[10], this.getUnlockedKit(6));
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[2], this.getKitID());
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[3], this.getKitIndex());
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[4], this.getPlayerLevel());
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[5], this.getKills());
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[6], this.getKillStreak());
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[7], this.getDeaths());
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[8], this.getCakes());
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[9], this.getExp());
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[10], this.getUnlockedKit(0));
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[10], this.getUnlockedKit(1));
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[10], this.getUnlockedKit(2));
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[10], this.getUnlockedKit(3));
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[10], this.getUnlockedKit(4));
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[10], this.getUnlockedKit(5));
+		Main.mysql.setStat(player.getUniqueId().toString(), Main.mysql.column[10], this.getUnlockedKit(6));
 	}
 
 	public int getPlayerLevel() {
@@ -323,11 +431,12 @@ public class Fighter {
 	}
 
 	public void doDeathChecks() {
-		if (kitID == F0_Noob.getKitID()) {
+		if (kitID == fKits[5].getKitID()) {
 			if (groundPoundTask != -1) {
-				G5_Sumo.stopListening(player, this);
+				F5.stopListening(this);
 			}
 		}
+		return;
 	}
 
 	public int getCakes() {
@@ -370,7 +479,7 @@ public class Fighter {
 	}
 
 	private void updateName() {
-		MySQL.updateName(player, MySQL.column[1], player.getName());
+		Main.mysql.updateName(player, Main.mysql.column[1], player.getName());
 	}
 
 	public void setDefaults() {
@@ -380,7 +489,7 @@ public class Fighter {
 		this.player.setExp(1);
 		this.player.setLevel(0);
 		this.player.setInvisible(false);
-		this.player.setWalkSpeed((float) 0.2);
+		this.player.setWalkSpeed(getWalkSpeed());
 		// Glowing.setGlowingOffForAll(this.player);
 		this.lastToDamage = null;
 		this.lastDamagedBy = null;
@@ -421,15 +530,6 @@ public class Fighter {
 		this.groundPoundTask = groundPoundTask;
 	}
 
-	public void checkListeningForNoob() {
-		if (kitID == F0_Noob.getKitID()) {
-			if (groundPoundTask != -1) {
-				G5_Sumo.stopListening(player, this);
-			}
-		}
-		return;
-	}
-
 	public Plugin getPlugin() {
 		return plugin;
 	}
@@ -456,6 +556,78 @@ public class Fighter {
 
 	public boolean isAbilityRecharged() {
 		return abilityRecharged;
+	}
+
+	public IceCageItem getIceCageItem() {
+		return iceCageItem;
+	}
+	
+	public void setIceCubeItem(IceCageItem iceCageItem) {
+		this.iceCageItem =  iceCageItem;
+	}
+
+	public ParachuteItem getParachuteItem() {
+		return parachuteItem;
+	}
+
+	public void setParachuteItem(ParachuteItem parachuteItem) {
+		this.parachuteItem = parachuteItem;
+	}
+
+	public CombatTracker getCombatTracker() {
+		return combatTracker;
+	}
+
+	public void setCombatTracker(CombatTracker combatTracker) {
+		this.combatTracker = combatTracker;
+	}
+
+	public ThrowingTNTItem getThrowingTNTItem() {
+		return throwingTNTItem;
+	}
+
+	public void setThrowingTNTItem(ThrowingTNTItem throwingTNTItem) {
+		this.throwingTNTItem = throwingTNTItem;
+	}
+	
+	public ScoreBoardObject getScoreBoardObjext() {
+		return this.scoreBoardObject;
+	}
+	
+	public void setScoreBoardObjext(ScoreBoardObject scoreBoardObject) {
+		this.scoreBoardObject = scoreBoardObject;
+	}
+
+	public D_ProtocolStand[] getPersonalStands() {
+		return personalStands;
+	}
+
+	public D_ProtocolStand getChargedStand() {
+		return chargedStand;
+	}
+
+	public FighterKit getFKit() {
+		return fKit;
+	}
+
+	public void setFKit(FighterKit fkit) {
+		this.fKit = fkit;
+	}
+	
+	public static FighterKit[] getFKits() {
+		return fKits;
+	}
+	
+	  public static float getWalkSpeed() {
+		return walkSpeed;
+	  }
+
+	  public static float getWalkSpeedBoosted() {
+		return walkSpeedBoosted;
+	  }
+
+	public static int getNumberOfKits() {
+		return numberOfKits;
 	}
 
 }

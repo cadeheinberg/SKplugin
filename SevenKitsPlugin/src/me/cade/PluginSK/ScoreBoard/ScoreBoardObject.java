@@ -102,7 +102,7 @@ public class ScoreBoardObject {
     noColliders.addPlayer(player);
     noColliders.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
     
-    theBoard = board;
+    this.theBoard = board;
     player.setScoreboard(board);
   }
 
@@ -167,6 +167,24 @@ public class ScoreBoardObject {
 
   public Player getPlayer() {
     return player;
+  }
+  
+  public void unhideScoreBoard() {
+	  player.setScoreboard(theBoard);
+  }
+  
+  @SuppressWarnings("deprecation")
+public void hideScoreBoard() {
+//	  Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+//		  public void run() {
+//		  player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+//		  }
+//	  }, 20L);
+	  Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+	  noColliders = board.registerNewTeam(player.getName());
+	  noColliders.addPlayer(player);
+	  noColliders.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
+	  player.setScoreboard(board);
   }
 
 

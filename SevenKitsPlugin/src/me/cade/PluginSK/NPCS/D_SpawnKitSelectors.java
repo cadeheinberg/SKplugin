@@ -1,61 +1,82 @@
 package me.cade.PluginSK.NPCS;
 
+import java.text.NumberFormat;
+
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.inventory.ItemStack;
+
+import me.cade.PluginSK.Fighter;
 import me.cade.PluginSK.Main;
 import me.cade.PluginSK.BuildKits.*;
 
 public class D_SpawnKitSelectors {
-  
-  private static D1_ArmorStand[] kits;
-  static String[] kitNames;
 
-  private static ChatColor y;
-  private static ChatColor b;
-  
-  @SuppressWarnings("deprecation")
-  public static void spawnKitSelectors() {
-    y = ChatColor.YELLOW;
-    b = ChatColor.BOLD;
-    String p = y + "" + b + "";
-    kits = new D1_ArmorStand[7];
-    kitNames = new String[7];
-    kitNames[0] = p + "  " + F0_Noob.getKitName() + "  ";
-    kitNames[1] = p + "  " + F1_Beserker.getKitName() + "  ";
-    kitNames[2] = p + "  " + F2_Scorch.getKitName() + "  ";
-    kitNames[3] = p + "  " + F3_Goblin.getKitName() + "  ";
-    kitNames[4] = p + "  " + F4_Igor.getKitName() + "  ";
-    kitNames[5] = p + "  " + F5_Sumo.getKitName() + "  ";
-    kitNames[6] = p + "  " + F6_Grief.getKitName() + "  ";
-    
-    ItemStack[] itemsHeld = new ItemStack[7];
-    itemsHeld[0] = F0_Noob.getWeapon().getWeaponItem();
-    itemsHeld[1] = F1_Beserker.getWeapon().getWeaponItem();
-    itemsHeld[2] = F2_Scorch.getWeapon().getWeaponItem();
-    itemsHeld[3] = F3_Goblin.getWeapon().getWeaponItem();
-    itemsHeld[4] = F4_Igor.getWeapon().getWeaponItem();
-    itemsHeld[5] = F5_Sumo.getWeapon().getWeaponItem();
-    itemsHeld[6] = F6_Grief.getWeapon().getWeaponItem();
-    
-    Color[] colors = new Color[7];
-    colors[0] = F0_Noob.getArmorColor();
-    colors[1] = F1_Beserker.getArmorColor();
-    colors[2] = F2_Scorch.getArmorColor();
-    colors[3] = F3_Goblin.getArmorColor();
-    colors[4] = F4_Igor.getArmorColor();
-    colors[5] = F5_Sumo.getArmorColor();
-    colors[6] = F6_Grief.getArmorColor();
-    
-    double x = -1046.5;
-    for(int i = 0; i < 7; i++) {
-      Location locale = new Location(Main.hub, x, 195, -106.5);
-      kits[i] = new D1_ArmorStand(kitNames[i] , locale, 180, false, false);
-      kits[i].equipColoredArmor(colors[i]);
-      kits[i].getStand().setItemInHand(itemsHeld[i]);
-      x = x - 2.0;
-    }
-  }
+	private static D1_ArmorStand[] kits;
+	
+	private static FighterKit[] fKits = Fighter.getFKits();
+
+	private static Location[] locations = {
+			new Location(Main.hub, -1043.5, 195, -106.5),
+			new Location(Main.hub, -1045.5, 195, -103.5),
+			new Location(Main.hub, -1048.5, 195, -101.5),
+			new Location(Main.hub, -1052.5, 195, -100.5),
+			new Location(Main.hub, -1056.5, 195, -101.5),
+			new Location(Main.hub, -1059.5, 195, -103.5),
+			new Location(Main.hub, -1061.5, 195, -106.5)
+	};
+
+	@SuppressWarnings("deprecation")
+	public static void spawnKitSelectors() {
+		ChatColor y = ChatColor.YELLOW;
+		ChatColor b = ChatColor.BOLD;
+		String p = y + "" + b + "";
+		kits = new D1_ArmorStand[Fighter.getNumberOfKits()];
+		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
+			kits[i] = new D1_ArmorStand(p + fKits[i].getKitName(), locations[i], 180, false, false);
+			kits[i].equipColoredArmor(fKits[i].getArmorColor());
+			kits[i].getStand().setItemInHand(fKits[i].getWeapons()[0].getWeaponItem());
+		}
+		spawnKitSelectorStats();
+	}
+
+	public static void spawnKitSelectorStats() {
+		ChatColor y = ChatColor.AQUA;
+		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
+			locations[i].setY(locations[i].getY() + .50);
+			new D1_ArmorStand(y + "  Q: " + fKits[i].getKitDrop() + ""
+			+ "  ", locations[i], 180, false, false);
+		}
+
+		for (int i = 0; i < 7; i++) {
+			locations[i].setY(locations[i].getY() - .25);
+			new D1_ArmorStand(y + "  RC: " + fKits[i].getKitRightClick() + "  ", locations[i], 180, false, false);
+		}
+		spawnKitSelectorPrices();
+	}
+
+	public static void spawnKitSelectorPrices() {
+		NumberFormat myFormat = NumberFormat.getInstance(); 
+		myFormat.setGroupingUsed(true);
+		String[] kitPrice = new String[Fighter.getNumberOfKits()];
+		ChatColor y = ChatColor.GREEN;
+		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
+//			if(F_Stats.getPrice(i) == 0) {
+//				kitPrice[i] = y + "  Free  ";
+//			}else {
+//				kitPrice[i] = y + "  Price: $" + myFormat.format(F_Stats.getPrice(i)) + "  ";
+//			}
+			kitPrice[i] = y + "  Unlocked  ";
+		}
+
+		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
+			locations[i].setY(locations[i].getY() + .50);
+			new D1_ArmorStand(kitPrice[i], locations[i], 180, false, false);
+		}
+
+	}
+	
+	public static Location getLocationOfSelector(int kitID) {
+		return locations[kitID];
+	}
 
 }

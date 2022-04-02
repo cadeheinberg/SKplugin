@@ -14,7 +14,7 @@ public class CreateExplosion {
     location.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, location.getX(), location.getY() + 2,
       location.getZ(), 2);
     location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 2, 1);
-    for (Entity ent : location.getWorld().getNearbyEntities(location, 4, 4, 4)) {
+    for (Entity ent : location.getWorld().getNearbyEntities(location, 3, 3, 3)) {
       if (!(ent instanceof LivingEntity)) {
         continue;
       }

@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -44,6 +45,11 @@ public class BasicPermissions implements Listener {
   }
 
   @EventHandler
+  public void onGrow(BlockFadeEvent e) {
+    e.setCancelled(true);
+  }
+  
+  @EventHandler
   public void onGrow(BlockGrowEvent e) {
     e.setCancelled(true);
   }
@@ -78,8 +84,8 @@ public class BasicPermissions implements Listener {
 
   @EventHandler
   public void onFoodChange(FoodLevelChangeEvent e) {
+	e.setFoodLevel(20);
     e.setCancelled(true);
-    e.setFoodLevel(20);
   }
 
   @EventHandler
