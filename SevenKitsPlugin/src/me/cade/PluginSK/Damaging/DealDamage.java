@@ -21,7 +21,7 @@ public class DealDamage {
         return;
       }
       EntityDamageByEntityEvent damage =
-        new EntityDamageByEntityEvent(killer, (Player) victim, DamageCause.ENTITY_ATTACK, amount);
+        new EntityDamageByEntityEvent(killer, victim, DamageCause.ENTITY_ATTACK, amount);
       Bukkit.getServer().getPluginManager().callEvent(damage);
     }
     victim.damage(0.01);

@@ -45,7 +45,7 @@ public class F4 extends FighterKit {
 	public void setUpPrivateKitVariables() {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
-		this.meleeDamage = 5;
+		this.meleeDamage = 6;
 		this.projectileDamage = 4;
 		this.specialDamage = 4;
 		this.cooldownTicks = 5;
@@ -72,15 +72,14 @@ public class F4 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick() {
-		// pass
-		return true;
+	public boolean doRightClick(Material material) {
+		return super.doRightClick(material);
 	}
 
 	@Override
-	public void doDrop() {
+	public void doDrop(Material material) {
 		// do special conditions before (right here)
-		super.doDrop();
+		super.doDrop(material);
 	}
 
 	@Override
@@ -111,7 +110,7 @@ public class F4 extends FighterKit {
 		if (trident.getFireTicks() > 0) {
 			Location local = victim.getLocation();
 			local.setY(local.getY() - 0.5);
-			CreateExplosion.doAnExplosion(super.player, local, 0.3, 6.5);
+			CreateExplosion.doAnExplosion(super.player, local, 0.7, 6.5, true);
 			trident.remove();
 		} else {
 			DealDamage.dealAmount(super.player, victim, this.getProjectileDamage());
@@ -120,7 +119,7 @@ public class F4 extends FighterKit {
 
 	public void doTridentHitGround(Location location, CraftTrident trident) {
 		if (trident.getFireTicks() > 0) {
-			CreateExplosion.doAnExplosion(super.player, location, 0.3, 6.0);
+			CreateExplosion.doAnExplosion(super.player, location, 0.7, 6.5, true);
 		}
 		trident.remove();
 	}

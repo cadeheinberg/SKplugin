@@ -1,6 +1,7 @@
 package me.cade.PluginSK.BuildKits;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftTrident;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
@@ -17,10 +18,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import me.cade.PluginSK.*;
-import me.cade.PluginSK.SpecialItems.CombatTracker;
-import me.cade.PluginSK.SpecialItems.IceCageItem;
-import me.cade.PluginSK.SpecialItems.ParachuteItem;
-import me.cade.PluginSK.SpecialItems.ThrowingTNTItem;
 
 public class KitListener implements Listener {
 
@@ -38,23 +35,11 @@ public class KitListener implements Listener {
 		if (e.getItem() == null) {
 			return;
 		}
+		if(e.getMaterial() == Material.BOW || e.getMaterial() == Material.TRIDENT) {
+			return;
+		}
 		Player player = e.getPlayer();
-		if (Fighter.get(player).getFKit().doRightClickIfRightMaterial(e.getItem().getType())) {
-			return;
-		}
-		if (e.getItem().getType() == ParachuteItem.getMaterial()) {
-			Fighter.get(player).getParachuteItem().doRightClick();
-			return;
-		} else if (e.getItem().getType() == ThrowingTNTItem.getMaterial()) {
-			Fighter.get(player).getThrowingTNTItem().doRightClick();
-			return;
-		} else if (e.getItem().getType() == IceCageItem.getMaterial()) {
-			Fighter.get(player).getIceCageItem().doRightClick();
-			return;
-		} else if (e.getItem().getType() == CombatTracker.getTrackerMaterial()) {
-			Fighter.get(player).getCombatTracker().doRightClick();
-			return;
-		}
+		Fighter.getFighterFKit(player).doRightClick(e.getMaterial());
 	}
 
 	@EventHandler
@@ -66,7 +51,7 @@ public class KitListener implements Listener {
 		if (SafeZone.safeZone(e.getPlayer().getLocation())) {
 			return;
 		}
-		Fighter.get(e.getPlayer()).getFKit().doDrop();
+		Fighter.get(e.getPlayer()).getFKit().doDrop(e.getItemDrop().getItemStack().getType());
 
 	}
 
@@ -103,6 +88,9 @@ public class KitListener implements Listener {
 			if (!(e.getHitEntity() instanceof LivingEntity)) {
 				return;
 			}
+			if(e.getHitEntity() == shooter) {
+				return;
+			}
 			if (e.getEntityType() == EntityType.SNOWBALL) {
 				((F2) Fighter.get(shooter).getFKit()).doSnowballHitEntity((LivingEntity) e.getHitEntity(),
 						(Snowball) e.getEntity());
@@ -113,7 +101,7 @@ public class KitListener implements Listener {
 
 				} else {
 					// goblin probably
-					((F3) Fighter.get(shooter).getFKit()).doArrorwHitEntity(shooter, (Arrow) e.getEntity());
+					((F3) Fighter.get(shooter).getFKit()).doArrorwHitEntity((LivingEntity) e.getHitEntity(), (Arrow) e.getEntity());
 				}
 			}
 			if (e.getEntityType() == EntityType.TRIDENT) {
@@ -131,7 +119,9 @@ public class KitListener implements Listener {
 		}
 		if (e.getEntityType() == EntityType.TRIDENT) {
 			if (e.getEntity().getShooter() instanceof Player) {
-				((F4) Fighter.get((Player) e.getEntity().getShooter()).getFKit()).doThrowTrident((CraftTrident) e.getEntity());
+				if(!((F4) Fighter.get((Player) e.getEntity().getShooter()).getFKit()).doThrowTrident((CraftTrident) e.getEntity())) {
+					e.setCancelled(true);
+				}
 			}
 		}
 	}

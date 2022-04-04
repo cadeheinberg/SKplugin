@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +16,6 @@ import me.cade.PluginSK.Fighter;
 import me.cade.PluginSK.SpecialItems.CombatTracker;
 import me.cade.PluginSK.PlayerChat;
 import me.cade.PluginSK.SafeZone;
-import me.cade.PluginSK.BuildKits.F6;
 import me.cade.PluginSK.NPCS.D0_NpcListener;
 
 public class EntityDamage implements Listener {
@@ -51,37 +51,50 @@ public class EntityDamage implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		if (!(e.getEntity() instanceof Player)) {
+		if (!(e.getDamager() instanceof Player)) {
+			if (e.getDamager().getType() == EntityType.PRIMED_TNT) {
+				e.setDamage(0);
+			}
+			return;
+		}
+		if (!(e.getEntity() instanceof LivingEntity)) {
 			return;
 		}
 		if (e.getCause() != EntityDamageByEntityEvent.DamageCause.ENTITY_ATTACK) {
 			e.setDamage(0);
 			return;
 		}
+		Player killer = (Player) e.getDamager();
+		Fighter fKiller = Fighter.get(killer);
 
-		Player victim;
-		Player killer;
+		if (killer.getPassengers() != null) {
+			if (killer.getPassengers().size() > 0) {
+				if (killer.getPassengers().get(0).equals(e.getEntity())) {
+					fKiller.getFKit().doThrow(killer, (LivingEntity) e.getEntity());
+				}
+			}
+		}
 
-		victim = (Player) e.getEntity();
-		killer = (Player) e.getDamager();
+		if (!(e.getEntity() instanceof Player)) {
+			return;
+		}
+
+		Player victim = (Player) e.getEntity();
 
 		if (victim.equals(killer)) {
 			return;
 		}
 
-		Fighter fKiller = Fighter.get(killer);
 		Fighter fVictim = Fighter.get(victim);
 
-		if (fKiller.getKitID() == Fighter.getFKits()[6].getKitID()) {
-			((F6)fKiller.getFKit()).doStealHealth(victim);
-		}
+		fKiller.getFKit().doStealHealth(victim);
 
 		fVictim.setLastDamagedBy(killer);
 		fKiller.setLastToDamage(victim);
 
-		killer.setCooldown(CombatTracker.getTrackerMaterial(), 200);
-		victim.setCooldown(CombatTracker.getTrackerMaterial(), 200);
-		
+		killer.setCooldown(CombatTracker.mat, 200);
+		victim.setCooldown(CombatTracker.mat, 200);
+
 		victim.setCooldown(Material.BRICK, 200);
 
 	}
@@ -97,9 +110,9 @@ public class EntityDamage implements Listener {
 		Fighter fVictim = Fighter.get(victim);
 
 		fVictim.fighterDeath();
-		
-		if(victim.getCooldown(Material.BRICK) < 1) {
-			//After 10 seconds don't count the kill for the killer
+
+		if (victim.getCooldown(Material.BRICK) < 1) {
+			// After 10 seconds don't count the kill for the killer
 			return;
 		}
 
@@ -136,7 +149,7 @@ public class EntityDamage implements Listener {
 	}
 
 	public void tellDeathMessage(Player killer, String killerName, String victimName, int kitID) {
-		String weaponName = Fighter.get(killer).getFKit().getWeaponName();
+		String weaponName = Fighter.get(killer).getFKit().getKitName();
 
 		PlayerChat.tellPlayerMessageToAll(ChatColor.YELLOW + "" + ChatColor.ITALIC + killerName + ChatColor.RESET
 				+ " killed " + ChatColor.YELLOW + "" + ChatColor.ITALIC + victimName + ChatColor.RESET + " using " + ""

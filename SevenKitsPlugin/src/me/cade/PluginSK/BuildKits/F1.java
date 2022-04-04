@@ -44,10 +44,10 @@ public class F1 extends FighterKit {
 	public void setUpPrivateKitVariables() {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
-		this.meleeDamage = 5;
-		this.projectileDamage = 4;
-		this.specialDamage = 4;
-		this.cooldownTicks = 5;
+		this.meleeDamage = 6;
+		this.projectileDamage = 0;
+		this.specialDamage = 0;
+		this.cooldownTicks = 140;
 		this.material = Material.IRON_AXE;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
@@ -71,8 +71,8 @@ public class F1 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick() {
-		if (super.doRightClick()) {
+	public boolean doRightClick(Material material) {
+		if (super.doRightClick(material)) {
 			doBoosterJump(player);
 			return true;
 		}
@@ -80,9 +80,9 @@ public class F1 extends FighterKit {
 	}
 
 	@Override
-	public void doDrop() {
+	public void doDrop(Material material) {
 		// do special conditions before (right here)
-		super.doDrop();
+		super.doDrop(material);
 	}
 
 	@Override

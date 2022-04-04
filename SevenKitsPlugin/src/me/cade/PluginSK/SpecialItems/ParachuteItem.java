@@ -8,47 +8,44 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import me.cade.PluginSK.Main;
 import me.cade.PluginSK.Weapon;
 
-public class ParachuteItem {
+public class ParachuteItem extends SpecialItem {
 
 	private static int cooldown = 250;
-	private static Material mat = Material.PHANTOM_MEMBRANE;
+	public static Material mat = Material.PHANTOM_MEMBRANE;
 	private static Weapon weapon = new Weapon(mat, ChatColor.YELLOW + "Parachute", ChatColor.WHITE + "Right Click to open",
 			ChatColor.WHITE + "Coolwdown: " + Math.floor((cooldown / 20) * 100) / 100);
 
-	private Player player;
 	private int itemTask;
 	private Chicken chicken;
 
-	private static Plugin plugin = Main.getPlugin(Main.class);
-
 	public ParachuteItem(Player player) {
-		this.player = player;
+		super(player);
 		player.getInventory().addItem(getWeapon().getWeaponItem());
 		this.setItemTask(-1);
 		this.setChicken(null);
 	}
 
-	public static Weapon getWeapon() {
-		return weapon;
-	}
-
-	public static Material getMaterial() {
-		return mat;
-	}
-
-	public void doRightClick() {
-		if (player.getCooldown(getMaterial()) > 0) {
-			player.sendMessage(ChatColor.RED + "Item needs to recharge");
-			return;
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean doRightClick() {
+		if (player.isOnGround()) {
+			return false;
 		}
-		this.doParachute(player);
-		player.setCooldown(getMaterial(), cooldown);
+		if(super.doRightClick()) {
+			this.doParachute(player);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void doDrop() {
+		this.doRightClick();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -78,15 +75,15 @@ public class ParachuteItem {
 					return;
 				}
 				Location loc = player.getEyeLocation();
-				if (loc.getPitch() < 50) {
-					loc.setPitch(50);
+				if (loc.getPitch() < 40) {
+					loc.setPitch(40);
 				} else if (loc.getPitch() >= 75) {
 					loc.setPitch(75);
 				}
 				Vector vector = loc.getDirection();
 				chicken.setVelocity(vector.multiply(0.6));
 			}
-		}.runTaskTimer(plugin, 0L, 1L).getTaskId());
+		}.runTaskTimer(Main.getInstance(), 0L, 1L).getTaskId());
 	}
 
 	public void getOff() {
@@ -116,8 +113,19 @@ public class ParachuteItem {
 		this.chicken = chicken;
 	}
 	
-	public void resetCooldown() {
-		player.setCooldown(getMaterial(), 0);
+	@Override
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
+	@Override
+	public Material getMaterial() {
+		return mat;
+	}
+	
+	@Override
+	public int getCooldown() {
+		return cooldown;
 	}
 
 }

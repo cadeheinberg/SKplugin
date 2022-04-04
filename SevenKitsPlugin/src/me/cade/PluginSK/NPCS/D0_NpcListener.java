@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,6 +12,7 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import me.cade.PluginSK.Fighter;
+import me.cade.PluginSK.SafeZone;
 
 public class D0_NpcListener implements Listener {
 
@@ -19,10 +21,18 @@ public class D0_NpcListener implements Listener {
 		if (e.getHand() == EquipmentSlot.OFF_HAND) {
 			return; // off hand packet, ignore.
 		}
-		if (e.getRightClicked().getType() != EntityType.ARMOR_STAND) {
+		if(SafeZone.safeZone(e.getRightClicked().getLocation())) {
+			if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
+				handleKitSelection(e.getPlayer(), e.getRightClicked().getLocation().getBlockX());
+				return;
+			}
 			return;
 		}
-		handleKitSelection(e.getPlayer(), e.getRightClicked().getLocation().getBlockX());
+	    if (e.getRightClicked() instanceof LivingEntity) {
+	    	Fighter.getFighterFKit(e.getPlayer()).doPickUp((LivingEntity) e.getRightClicked());
+	    	return;
+	    }
+		return;
 	}
 	
 	public static void handleKitSelection(Player player, int x){

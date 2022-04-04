@@ -7,38 +7,46 @@ import org.bukkit.entity.Player;
 import me.cade.PluginSK.Main;
 import me.cade.PluginSK.Weapon;
 
-public class CombatTracker {
+public class CombatTracker extends SpecialItem {
 
-  private static Material mat = Material.GOLD_INGOT;
-  private static Weapon tracker = new Weapon(mat, ChatColor.LIGHT_PURPLE + "Spawn Teleporter",
-	      ChatColor.WHITE + "Right Click to go to /spawn",
-	      ChatColor.WHITE + "Don't leave game while PvP cooldown is on!");
-  
-  private Player player;
-  
-  public CombatTracker(Player player) {
-	  this.player = player;
-	  player.getInventory().setItem(8, getTracker().getWeaponItem());
-  }
+	public static Material mat = Material.GOLD_INGOT;
+	private static Weapon weapon = new Weapon(mat, ChatColor.LIGHT_PURPLE + "Spawn Teleporter",
+			ChatColor.WHITE + "Right Click to go to /spawn",
+			ChatColor.WHITE + "Don't leave game while PvP cooldown is on!");
 
-  public static Weapon getTracker() {
-    return tracker;
-  }
+	public CombatTracker(Player player) {
+		super(player);
+		player.getInventory().setItem(8, getWeapon().getWeaponItem());
+	}
 
-  public static Material getTrackerMaterial() {
-    return mat;
-  }
-  
-  public void doRightClick() {
+	@Override
+	public boolean doRightClick() {
 		if (player.getWorld() == Main.hub) {
-	        if (player.getCooldown(CombatTracker.getTrackerMaterial()) > 0) {
-	          player.sendMessage(ChatColor.RED + "Can't" + ChatColor.AQUA + "" + ChatColor.BOLD
-	            + " /spawn" + ChatColor.RED + ". You have a" + ChatColor.AQUA + "" + ChatColor.BOLD
-	            + " PVP Cooldown " + ChatColor.RED + "on");
-	          return;
-	        }
-	        player.teleport(Main.hubSpawn);
+			if (player.getCooldown(this.getMaterial()) > 0) {
+				player.sendMessage(ChatColor.RED + "Can't" + ChatColor.AQUA + "" + ChatColor.BOLD + " /spawn"
+						+ ChatColor.RED + ". You have a" + ChatColor.AQUA + "" + ChatColor.BOLD + " PVP Cooldown "
+						+ ChatColor.RED + "on");
+				return false;
+			}
+			player.teleport(Main.hubSpawn);
+			return true;
 		}
-  }
+		return false;
+	}
+
+	@Override
+	public void doDrop() {
+		this.doRightClick();
+	}
+
+	@Override
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
+	@Override
+	public Material getMaterial() {
+		return mat;
+	}
 
 }

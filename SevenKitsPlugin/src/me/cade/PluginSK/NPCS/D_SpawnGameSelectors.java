@@ -25,7 +25,7 @@ public class D_SpawnGameSelectors {
     names[2] = p + "Capture The Flag";
     locations[2] = new Location(Main.hub, -1027.5, 193.5, -119.5);
     
-    names[3] = p + "Soccer";
+    names[3] = p + "Gun Game";
     locations[3] = new Location(Main.hub, -1031.5, 193.5, -122.5);
 
     D1_ArmorStand killStreak = new D1_ArmorStand(names[0], locations[0], 120, false, false);

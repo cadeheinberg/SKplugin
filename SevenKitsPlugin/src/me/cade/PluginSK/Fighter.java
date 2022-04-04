@@ -24,10 +24,7 @@ import me.cade.PluginSK.BuildKits.F6;
 import me.cade.PluginSK.BuildKits.FighterKit;
 import me.cade.PluginSK.NPCS.D_ProtocolStand;
 import me.cade.PluginSK.ScoreBoard.ScoreBoardObject;
-import me.cade.PluginSK.SpecialItems.CombatTracker;
-import me.cade.PluginSK.SpecialItems.IceCageItem;
 import me.cade.PluginSK.SpecialItems.ParachuteItem;
-import me.cade.PluginSK.SpecialItems.ThrowingTNTItem;
 
 public class Fighter {
 
@@ -58,15 +55,10 @@ public class Fighter {
 	private int[] unlockedKits = new int[7];
 	private ScoreBoardObject scoreBoardObject;
 
-	private static float walkSpeed = (float) 0.235;
+	private static float walkSpeed = (float) 0.275;
 	private static float walkSpeedBoosted = (float) 0.3;
 
 	private int groundPoundTask;
-
-	private IceCageItem iceCageItem = null;
-	private ParachuteItem parachuteItem = null;
-	private CombatTracker combatTracker = null;
-	private ThrowingTNTItem throwingTNTItem = null;
 
 	private D_ProtocolStand[] personalStands = new D_ProtocolStand[7];
 
@@ -102,6 +94,7 @@ public class Fighter {
 		Main.getPpAPI().resetActivePlayerParticles(player);
 		this.resetSpecialAbility();
 		this.adjustJoinModifiers();
+		this.fKit.resetSpecialItemCooldowns();
 	}
 
 	public void fighterRespawn() {
@@ -109,14 +102,7 @@ public class Fighter {
 		this.setLastToDamage(null);
 		this.adjustJoinModifiers();
 		this.resetSpecialAbility();
-		this.resetSpecialItemCooldowns();
-	}
-
-	private void resetSpecialItemCooldowns() {
-		player.setCooldown(IceCageItem.getMaterial(), 0);
-		player.setCooldown(ParachuteItem.getMaterial(), 0);
-		player.setCooldown(CombatTracker.getTrackerMaterial(), 0);
-		player.setCooldown(ThrowingTNTItem.getMaterial(), 0);
+		this.fKit.resetSpecialItemCooldowns();
 	}
 
 	public void fighterLeftServer() {
@@ -132,8 +118,11 @@ public class Fighter {
 	}
 
 	public void fighterDismountParachute() {
-		if (this.parachuteItem != null) {
-			this.parachuteItem.getOff();
+		if (((ParachuteItem) this.fKit.getSpecialItem(ParachuteItem.mat)) == null) {
+			return;
+		}
+		if(((ParachuteItem) this.fKit.getSpecialItem(ParachuteItem.mat)).getItemTask() != -1){
+			((ParachuteItem) this.fKit.getSpecialItem(ParachuteItem.mat)).getOff();
 		}
 	}
 
@@ -150,7 +139,6 @@ public class Fighter {
 			@Override
 			public void run() {
 				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0, true, false));
-				player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 0, true, false));
 			}
 		}, 1);
 	}
@@ -261,6 +249,9 @@ public class Fighter {
 		} else if (kitID == fKits[6].getKitID()) {
 			fKit = new F6(player);
 		}
+		this.adjustJoinModifiers();
+		this.resetSpecialAbility();
+		this.fKit.resetSpecialItemCooldowns();
 		this.changeAbilityRechargedParticleEffect();
 	}
 
@@ -549,38 +540,6 @@ public class Fighter {
 		return abilityRecharged;
 	}
 
-	public IceCageItem getIceCageItem() {
-		return iceCageItem;
-	}
-
-	public void setIceCubeItem(IceCageItem iceCageItem) {
-		this.iceCageItem = iceCageItem;
-	}
-
-	public ParachuteItem getParachuteItem() {
-		return parachuteItem;
-	}
-
-	public void setParachuteItem(ParachuteItem parachuteItem) {
-		this.parachuteItem = parachuteItem;
-	}
-
-	public CombatTracker getCombatTracker() {
-		return combatTracker;
-	}
-
-	public void setCombatTracker(CombatTracker combatTracker) {
-		this.combatTracker = combatTracker;
-	}
-
-	public ThrowingTNTItem getThrowingTNTItem() {
-		return throwingTNTItem;
-	}
-
-	public void setThrowingTNTItem(ThrowingTNTItem throwingTNTItem) {
-		this.throwingTNTItem = throwingTNTItem;
-	}
-
 	public ScoreBoardObject getScoreBoardObjext() {
 		return this.scoreBoardObject;
 	}
@@ -599,6 +558,10 @@ public class Fighter {
 
 	public FighterKit getFKit() {
 		return fKit;
+	}
+	
+	public static FighterKit getFighterFKit(Player player) {
+		return Fighter.get(player).getFKit();
 	}
 
 	public void setFKit(FighterKit fkit) {

@@ -48,7 +48,7 @@ public class ScoreBoardObject {
 
     cookies = board.registerNewTeam(A_CakeManager.currencyNameSingular);
     cookies.setPrefix(ChatColor.AQUA + A_CakeManager.currencyNameSingular + ": ");
-    cookies.setSuffix(ChatColor.WHITE + "" + fighter.getCakes());
+    cookies.setSuffix(ChatColor.WHITE + "$" + fighter.getCakes());
     cookies.addEntry(ChatColor.AQUA + "");
     objective.getScore(ChatColor.AQUA + "").setScore(9);    
 

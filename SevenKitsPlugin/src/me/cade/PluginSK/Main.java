@@ -1,5 +1,7 @@
 package me.cade.PluginSK;
 
+import java.text.NumberFormat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -38,6 +40,8 @@ public class Main extends JavaPlugin {
 	private static Plugin plugin = null;
 	private static ProtocolManager protocolManager;
 	private static PlayerParticlesAPI ppAPI;
+	
+	private static NumberFormat myFormat = NumberFormat.getInstance(); 
 
 	@Override
 	public void onEnable() {
@@ -49,6 +53,7 @@ public class Main extends JavaPlugin {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		startMySQL();
+		myFormat.setGroupingUsed(true);
 		setLocations();
 		D_SpawnAllNPCS.removeAllNpcs();
 		D_SpawnAllNPCS.spawnNPCS();
@@ -143,6 +148,10 @@ public class Main extends JavaPlugin {
 
 	public static PlayerParticlesAPI getPpAPI() {
 		return ppAPI;
+	}
+	
+	public static NumberFormat getMyNumberFormat() {
+		return myFormat;
 	}
 
 }

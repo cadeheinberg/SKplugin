@@ -5,10 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -17,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import me.cade.PluginSK.Fighter;
 import me.cade.PluginSK.Main;
-import me.cade.PluginSK.Damaging.DealDamage;
+import me.cade.PluginSK.Damaging.CreateExplosion;
 
 public class F5 extends FighterKit {
 
@@ -55,7 +53,7 @@ public class F5 extends FighterKit {
 		this.meleeDamage = 5;
 		this.projectileDamage = 4;
 		this.specialDamage = 4;
-		this.cooldownTicks = 5;
+		this.cooldownTicks = 180;
 		this.material = Material.BAMBOO;
 		this.primaryEnchantment = new EnchantmentPair(Enchantment.KNOCKBACK, 3);
 		this.sceondaryMeleeDamage = 0;
@@ -64,30 +62,33 @@ public class F5 extends FighterKit {
 		this.secondaryMaterial = null;
 		secondaryEnchantment = null;
 	}
-	
+
 	public F5() {
 		super();
 	}
-	
+
 	public F5(Player player) {
 		super(player);
 	}
-	
+
 	@Override
 	public void loadSecondaryWeapon() {
-		//pass
+		// pass
 	}
 
 	@Override
-	public boolean doRightClick() {
-		//pick up player and throw them
-		return true;
+	public boolean doRightClick(Material material) {
+		if (material == this.material) {
+			// see pickUp method, we don't do this normally
+			return true;
+		}
+		return super.doRightClick(material);
 	}
 
 	@Override
-	public
-	void doDrop() {
-		super.doDrop();
+	public void doDrop(Material material) {
+		// do special conditions before (right here)
+		super.doDrop(material);
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class F5 extends FighterKit {
 	public void deActivateSpecial() {
 		super.deActivateSpecial();
 	}
-	
+
 	public static void doJump(Player player, Fighter pFight) {
 		player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
 		launchPlayer(player, 1.4, pFight);
@@ -122,7 +123,7 @@ public class F5 extends FighterKit {
 			}
 		}, 5);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static void listenForFall(Player player, Fighter pFight) {
 		pFight.setGroundPoundTask(new BukkitRunnable() {
@@ -167,22 +168,50 @@ public class F5 extends FighterKit {
 
 	// make this freeze players also
 	public static void doGroundHit(Player shooter, Location location, double power) {
-		shooter.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, location.getX(), location.getY() + 1,
-				location.getZ(), 3);
-		shooter.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 2, 1);
-		for (Entity ent : shooter.getWorld().getNearbyEntities(location, 4, 4, 4)) {
-			if (!(ent instanceof LivingEntity)) {
+		CreateExplosion.doAnExplosion(shooter, location, 0.7, 6.5, true);
+	}
+
+	@Override
+	public void doPickUp(LivingEntity rightClicked) {
+		if (player.getPassengers() == null) {
+			return;
+		}
+		if (player.getPassengers().size() >= 1) {
+			return;
+		}
+		if (rightClicked instanceof Player) {
+			if (((Player) rightClicked).isSneaking()) {
 				return;
 			}
-			DealDamage.dealAmount(shooter, (LivingEntity) ent, 5.0);
-			Location upShoot = ent.getLocation();
-			if (ent.isOnGround()) {
-				upShoot.setY(upShoot.getY() + 1);
-			}
-			Vector currentDirection = upShoot.toVector().subtract(location.toVector());
-			currentDirection = currentDirection.multiply(new Vector(power, power, power));
-			((LivingEntity) ent).setVelocity(currentDirection);
 		}
+		if(player.getInventory().getItemInMainHand().getType() != this.material) {
+			return;
+		}
+		if (this.getCooldownTicks() > 0) {
+			if (player.getCooldown(this.getMaterial()) > 0) {
+				return;
+			}
+			player.setCooldown(this.getMaterial(), this.getCooldownTicks());
+			player.addPassenger(rightClicked);
+			return;
+		}
+	}
+
+	@Override
+	public void doThrow(Player killer, LivingEntity victim) {
+		killer.eject();
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				Location playerLocation = killer.getLocation();
+				if (playerLocation.getPitch() < -60) {
+					playerLocation.setPitch((float) -60.0);
+				}
+				Vector currentDirection = playerLocation.getDirection().normalize();
+				currentDirection = currentDirection.multiply(new Vector(2, 2, 2));
+				victim.setVelocity(currentDirection);
+			}
+		}, 1);
 	}
 
 	/*
@@ -265,7 +294,7 @@ public class F5 extends FighterKit {
 	public int getCooldownTicks() {
 		return cooldownTicks;
 	}
-	
+
 	public String getSecondaryWeaponName() {
 		return secondaryWeaponName;
 	}
@@ -289,4 +318,5 @@ public class F5 extends FighterKit {
 	public Material getSecondaryMaterial() {
 		return secondaryMaterial;
 	}
+
 }

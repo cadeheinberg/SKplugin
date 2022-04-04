@@ -46,10 +46,10 @@ public class F2 extends FighterKit {
 	public void setUpPrivateKitVariables() {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
-		this.meleeDamage = 5;
-		this.projectileDamage = 4;
-		this.specialDamage = 4;
-		this.cooldownTicks = 5;
+		this.meleeDamage = 6;
+		this.projectileDamage = 0.75;
+		this.specialDamage = 1.0;
+		this.cooldownTicks = 30;
 		this.material = Material.IRON_SHOVEL;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
@@ -74,8 +74,8 @@ public class F2 extends FighterKit {
 
 
 	@Override
-	public boolean doRightClick() {
-		if (super.doRightClick()) {
+	public boolean doRightClick(Material material) {
+		if (super.doRightClick(material)) {
 			shootSnowballs(player);
 			launchPlayer(player, -0.6);
 			return true;
@@ -84,8 +84,9 @@ public class F2 extends FighterKit {
 	}
 
 	@Override
-	public void doDrop() {
-		super.doDrop();
+	public void doDrop(Material material) {
+		// do special conditions before (right here)
+		super.doDrop(material);
 	}
 
 	@Override

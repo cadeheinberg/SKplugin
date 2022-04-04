@@ -6,15 +6,11 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.FireworkMeta;
 import com.mojang.datafixers.util.Pair;
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.styles.ParticleStyle;
@@ -60,7 +56,7 @@ public class F6 extends FighterKit {
 		this.meleeDamage = 5;
 		this.projectileDamage = 4;
 		this.specialDamage = 4;
-		this.cooldownTicks = 5;
+		this.cooldownTicks = 0;
 		this.material = Material.NETHERITE_SWORD;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
@@ -84,15 +80,14 @@ public class F6 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick() {
-		return true;
+	public boolean doRightClick(Material material) {
+		return super.doRightClick(material);
 	}
 
 	@Override
-	public
-	void doDrop() {
-		//do special conditions before (right here)
-		super.doDrop();
+	public void doDrop(Material material) {
+		// do special conditions before (right here)
+		super.doDrop(material);
 	}
 
 	@Override
@@ -164,12 +159,6 @@ public class F6 extends FighterKit {
 				super.player.setHealth(combined);
 			}
 			super.player.playSound(super.player.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 16, 1);
-			Firework firework = super.player.getWorld().spawn(super.player.getLocation(), Firework.class);
-			FireworkMeta data = (FireworkMeta) firework.getFireworkMeta();
-			data.addEffects(FireworkEffect.builder().withColor(Color.PURPLE).withColor(Color.YELLOW)
-					.with(Type.BALL_LARGE).withFlicker().build());
-			data.setPower(1);
-			firework.setFireworkMeta(data);
 		}
 	}
 

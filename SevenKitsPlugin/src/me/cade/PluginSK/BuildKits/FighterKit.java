@@ -10,6 +10,7 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +23,7 @@ import me.cade.PluginSK.Weapon;
 import me.cade.PluginSK.SpecialItems.CombatTracker;
 import me.cade.PluginSK.SpecialItems.IceCageItem;
 import me.cade.PluginSK.SpecialItems.ParachuteItem;
+import me.cade.PluginSK.SpecialItems.SpecialItem;
 import me.cade.PluginSK.SpecialItems.ThrowingTNTItem;
 
 public class FighterKit {
@@ -29,8 +31,12 @@ public class FighterKit {
 	Player player;
 	Fighter pFight;
 	Weapon[] weapons = new Weapon[2];
-	
-	EnchantmentPair perkEnchantment1 = null;
+
+	EnchantmentPair perkEnchantment1;
+
+	SpecialItem[] specialItems = new SpecialItem[4];
+
+	private SpecialItem combatTracker;
 
 	public FighterKit() {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Creating FighterKit without player");
@@ -50,7 +56,7 @@ public class FighterKit {
 
 	private void checkIfHasPerkEnchantments() {
 		if (true) {
-			perkEnchantment1 = new EnchantmentPair(Enchantment.FIRE_ASPECT, 1);
+			// perkEnchantment1 = new EnchantmentPair(Enchantment.FIRE_ASPECT, 1);
 		}
 	}
 
@@ -78,50 +84,72 @@ public class FighterKit {
 	}
 
 	private void loadPrimaryWeapon() {
-			weapons[0] = new Weapon(this.getMaterial(), this.getWeaponName(), this.getMeleeDamage(),
-					this.getProjectileDamage(), this.getSpecialDamage(), this.getCooldownTicks(),
-					this.getDurationTicks(), this.getRechargeTicks(), this.getPrimaryEnchantment(),
-					perkEnchantment1);
+		weapons[0] = new Weapon(this.getMaterial(), this.getWeaponName(), this.getMeleeDamage(),
+				this.getProjectileDamage(), this.getSpecialDamage(), this.getCooldownTicks(), this.getDurationTicks(),
+				this.getRechargeTicks(), this.getPrimaryEnchantment(), perkEnchantment1);
 	}
 
 	private void addSpecialWeapons() {
 		if (true) {
-			pFight.setParachuteItem(new ParachuteItem(this.player));
+			this.specialItems[0] = (new ParachuteItem(this.player));
 		}
 		if (true) {
-			pFight.setThrowingTNTItem(new ThrowingTNTItem(this.player));
+			this.specialItems[1] = (new ThrowingTNTItem(this.player));
 		}
 		if (true) {
-			pFight.setIceCubeItem(new IceCageItem(this.player));
+			this.specialItems[2] = (new IceCageItem(this.player));
 		}
 		if (true) {
-			pFight.setCombatTracker(new CombatTracker(this.player));
+			this.combatTracker = (new CombatTracker(this.player));
+			this.specialItems[3] = this.combatTracker;
 		}
 	}
 
-	public boolean doRightClickIfRightMaterial(Material material) {
+	public void doSpecialItemRightClick(Material material) {
+		this.getSpecialItem(material).doRightClick();
+	}
+	
+	public void doSpecialItemDrop(Material material) {
+		SpecialItem sItem = this.getSpecialItem(material);
+		if(sItem != null) {
+			sItem.doDrop();
+		}
+	}
+
+	public boolean doRightClick(Material material) {
 		if (this.getMaterial() == material) {
-			this.doRightClick();
-			return true;
+			if(this.getCooldownTicks() > 0) {
+				if (player.getCooldown(this.getMaterial()) > 0) {
+					return false;
+				}
+				player.setCooldown(this.getMaterial(), this.getCooldownTicks());
+				return true;
+			}
+		}else {
+			this.doSpecialItemRightClick(material);
 		}
 		return false;
 	}
 
-	public boolean doRightClick() {
-		if (player.getCooldown(this.getMaterial()) > 0) {
-			return false;
+	public void doDrop(Material material) {
+		if (this.getMaterial() == material || this.getSecondaryMaterial() == material) {
+			if (this.player.getCooldown(Material.BIRCH_FENCE) > 0
+					|| this.player.getCooldown(Material.JUNGLE_FENCE) > 0) {
+				this.player.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
+				this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+				return;
+			}
+			this.activateSpecial();
+			return;
+		}else {
+			this.doSpecialItemDrop(material);
 		}
-		player.setCooldown(this.getMaterial(), this.getCooldownTicks());
-		return true;
+		return;
 	}
 
-	public void doDrop() {
-		if (this.player.getCooldown(Material.BIRCH_FENCE) > 0 || this.player.getCooldown(Material.JUNGLE_FENCE) > 0) {
-			this.player.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
-			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-			return;
-		}
-		this.activateSpecial();
+	public Material getSecondaryMaterial() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	void activateSpecial() {
@@ -222,7 +250,7 @@ public class FighterKit {
 		int cooldownTask = new BukkitRunnable() {
 			@Override
 			public void run() {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Cooldown Task Running");
+				//Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Cooldown Task Running");
 				if (player != null) {
 					if (!player.isOnline()) {
 						return;
@@ -248,7 +276,7 @@ public class FighterKit {
 		int rechargeTask = new BukkitRunnable() {
 			@Override
 			public void run() {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Recharge Task Running");
+				//Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Recharge Task Running");
 				if (player != null) {
 					if (!player.isOnline()) {
 						return;
@@ -367,6 +395,45 @@ public class FighterKit {
 	public EnchantmentPair getPrimaryEnchantment() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public CombatTracker getCombatTracker() {
+		return (CombatTracker) combatTracker;
+	}
+
+	public SpecialItem[] getSpecialItems() {
+		return specialItems;
+	}
+
+	public SpecialItem getSpecialItem(Material material) {
+		for(SpecialItem sItem : Fighter.getFighterFKit(player).getSpecialItems()) {
+			if(sItem.getMaterial() == material) {
+				return sItem;
+			}
+		}
+		return null;
+	}
+
+	public void resetSpecialItemCooldowns() {
+		for(SpecialItem sItem : Fighter.getFighterFKit(player).getSpecialItems()) {
+			sItem.resetCooldown();
+		}
+	}
+
+	//override in class where pickup is used
+	public void doPickUp(LivingEntity rightClicked) {
+		//pass
+	}
+
+	//override in class where pickup is used
+	public void doThrow(Player killer, LivingEntity victim) {
+		// pass
+		
+	}
+	//override in class where pickup is used
+	public void doStealHealth(Player victim) {
+		// pass
+		
 	}
 
 }

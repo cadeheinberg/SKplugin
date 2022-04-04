@@ -19,6 +19,8 @@ public class Weapon {
   private ItemStack weaponItem;
   private Material weaponMaterial;
   private String weaponName;
+  
+  private static ChatColor noColor = ChatColor.GRAY;
 
   public Weapon(Material material, String name, String lore) {
     ArrayList<String> itemLore = new ArrayList<String>();
@@ -142,23 +144,45 @@ public class Weapon {
 		  int abilityRecharge, EnchantmentPair enchantment,
 		  EnchantmentPair perkEnchantment1) {
 	    ArrayList<String> itemLore = new ArrayList<String>();
-	    itemLore.add(ChatColor.WHITE + "" + meleeDamage + ChatColor.YELLOW + " attack damage");
-	    itemLore.add(ChatColor.WHITE + "" + projectileDamage + ChatColor.YELLOW + " projectile damage");
-	    itemLore.add(ChatColor.WHITE + "" + specialDamage + ChatColor.YELLOW + " ability damage");
-	    itemLore.add(ChatColor.WHITE + "" + Math.round((weaponCooldown/20) / 10)*10 + ChatColor.YELLOW + " weapon cooldown");
-	    itemLore.add(ChatColor.WHITE + "" + Math.round((abilityCooldown/20) / 10)*10 + ChatColor.YELLOW + " ability cooldown");
-	    itemLore.add(ChatColor.WHITE + "" + Math.round((abilityRecharge/20) / 10)*10 + ChatColor.YELLOW + " ability recharge");
-	    
+	    if(meleeDamage > 0) {
+	    	itemLore.add(ChatColor.WHITE + "" + meleeDamage + ChatColor.YELLOW + " attack damage");
+	    }else {
+	    	itemLore.add(noColor + "" + meleeDamage + noColor + " attack damage");
+	    }
+	    if(projectileDamage > 0) {
+	    	itemLore.add(ChatColor.WHITE + "" + projectileDamage + ChatColor.YELLOW + " projectile damage");
+	    }else {
+	    	itemLore.add(noColor + "" + projectileDamage + noColor + " projectile damage");
+	    }
+	    if(weaponCooldown > 0) {
+	    	itemLore.add(ChatColor.WHITE + "" + Math.round((weaponCooldown/20.0) * 10)/10.0 + "s" + ChatColor.YELLOW + " RC cooldown");
+	    }else {
+	    	itemLore.add(noColor + "" + Math.round((weaponCooldown/20.0) * 10)/10.0 + "s" + noColor + " RC cooldown");
+	    }
+	    if(specialDamage > 0) {
+	    	itemLore.add(ChatColor.WHITE + "" + specialDamage + ChatColor.AQUA + " Q damage");
+	    }else {
+	    	itemLore.add(noColor + "" + specialDamage + noColor + " Q damage");
+	    }
+	    if(abilityCooldown > 0) {
+	    	itemLore.add(ChatColor.WHITE + "" + Math.round((abilityCooldown/20.0) * 10)/10.0 + "s" + ChatColor.AQUA + " Q duration");
+	    }else {
+	    	itemLore.add(noColor + "" + Math.round((abilityCooldown/20.0) * 10)/10.0 + "s" + noColor + " Q duration");
+	    }if(abilityRecharge > 0) {
+	    	itemLore.add(ChatColor.WHITE + "" + Math.round((abilityRecharge/20.0) * 10)/10.0 + "s" + ChatColor.AQUA + " Q recharge");
+	    }else {
+	    	itemLore.add(noColor + "" + Math.round((abilityRecharge/20.0) * 10)/10.0 + "s" + noColor + " Q recharge");
+	    }
 	    if(enchantment != null) {
 	    	itemLore.add(ChatColor.DARK_PURPLE + "Primary: " +  enchantment.getString());
 	    }else {
-	    	itemLore.add(ChatColor.DARK_PURPLE + "Primary: no enchantment");
+	    	itemLore.add(noColor + "Primary: no enchantment");
 	    }
 	    
 	    if(perkEnchantment1 != null) {
 	    	itemLore.add(ChatColor.DARK_PURPLE + "Perk: " + perkEnchantment1.getString());
 	    }else {
-	    	itemLore.add(ChatColor.DARK_PURPLE + "Perk: no enchantment");
+	    	itemLore.add(noColor + "Perk: no enchantment");
 	    }
 	    
 	    weaponMaterial = material;

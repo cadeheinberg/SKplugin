@@ -48,8 +48,8 @@ public class F3 extends FighterKit {
 	public void setUpPrivateKitVariables() {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
-		this.meleeDamage = 5;
-		this.projectileDamage = 4;
+		this.meleeDamage = 0;
+		this.projectileDamage = 3;
 		this.specialDamage = 4;
 		this.cooldownTicks = 5;
 		this.material = Material.BOW;
@@ -79,15 +79,14 @@ public class F3 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick() {
-		// pass
-		return true;
+	public boolean doRightClick(Material material) {
+		return super.doRightClick(material);
 	}
 
 	@Override
-	public void doDrop() {
+	public void doDrop(Material material) {
 		// do special conditions before (right here)
-		super.doDrop();
+		super.doDrop(material);
 	}
 
 	@Override
@@ -104,15 +103,12 @@ public class F3 extends FighterKit {
 	public void doArrorwHitEntity(LivingEntity victim, Arrow arrow) {
 		// create your own form of knockback
 		if (victim instanceof Player) {
-			if (Fighter.get((Player) victim).getParachuteItem().getItemTask() != -1) {
-				Fighter.get((Player) victim).getParachuteItem().getOff();
-				victim.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
-			}
+			Fighter.get(player).fighterDismountParachute();
+			victim.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
 		}
 		DealDamage.dealAmount(super.player, victim, this.getProjectileDamage());
 		if (arrow.getFireTicks() > 0) {
 			victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
-			victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 2));
 		}
 	}
 
@@ -258,6 +254,7 @@ public class F3 extends FighterKit {
 		return secondaryEnchantment;
 	}
 	
+	@Override
 	public Material getSecondaryMaterial() {
 		return secondaryMaterial;
 	}

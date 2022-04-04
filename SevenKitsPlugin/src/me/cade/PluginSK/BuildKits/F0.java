@@ -7,6 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -47,12 +48,15 @@ public class F0 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
+		// for when you add enhancements, make sure you check if the player is null or
+		// not
+		// because the kit armor stands use this
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
-		this.meleeDamage = 5;
-		this.projectileDamage = 4;
-		this.specialDamage = 4;
-		this.cooldownTicks = 5;
+		this.meleeDamage = 6;
+		this.projectileDamage = 0;
+		this.specialDamage = 1;
+		this.cooldownTicks = 0;
 		this.material = Material.IRON_SWORD;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
@@ -61,11 +65,11 @@ public class F0 extends FighterKit {
 		this.secondaryMaterial = null;
 		secondaryEnchantment = null;
 	}
-	
+
 	public F0() {
 		super();
 	}
-	
+
 	public F0(Player player) {
 		super(player);
 	}
@@ -76,16 +80,16 @@ public class F0 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick() {
-	      return true;
+	public boolean doRightClick(Material material) {
+		return super.doRightClick(material);
 	}
 
 	@Override
-	public void doDrop() {
+	public void doDrop(Material material) {
 		if (Fighter.get(this.getPlayer()).getGroundPoundTask() != -1) {
 			return;
 		}
-		super.doDrop();
+		super.doDrop(material);
 	}
 
 	@Override
@@ -94,7 +98,7 @@ public class F0 extends FighterKit {
 		this.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, durationTicks, 1));
 		this.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, durationTicks, 1));
 		gustLaunch(this.getPlayer());
-		this.getPlayer().playSound(this.getPlayer().getLocation(), Sound.ENTITY_HORSE_ANGRY, 8, 1);
+		super.player.playSound(super.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
 	}
 
 	@Override
@@ -104,9 +108,9 @@ public class F0 extends FighterKit {
 
 	public static void gustLaunch(Player killer) {
 		Location playerLocation = killer.getLocation();
-		killer.playSound(killer.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
 		if (playerLocation.getPitch() > 49) {
 			launchPlayer(killer, -1.5);
+			return;
 		}
 		Location origin = killer.getEyeLocation();
 		Vector direction = killer.getLocation().getDirection();
@@ -119,33 +123,40 @@ public class F0 extends FighterKit {
 		ArrayList<Integer> hitList = new ArrayList<Integer>();
 		for (int j = 2; j < range; j++) {
 			origin = origin.add(dX * j, dY * j, dZ * j);
-			killer.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, origin.getX(), origin.getY(), origin.getZ(), 5);
+			killer.spawnParticle(Particle.REDSTONE, origin, 100, 0.5, 0.75, 0.5, new DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
 			ArrayList<Entity> entityList = (ArrayList<Entity>) killer.getWorld().getNearbyEntities(origin, 2.5, 2.5,
 					2.5);
 			for (Entity entity : entityList) {
-				if (entity instanceof LivingEntity)
-					if (hitList.contains(((LivingEntity) entity).getEntityId())) {
+				//Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "1 Living Entity Found");
+				if (!(entity instanceof LivingEntity)) {
+					continue;
+				} else if (hitList.contains(((LivingEntity) entity).getEntityId())) {
+					continue;
+				} else if (killer.getName().equals(((LivingEntity) entity).getName())) {
+					continue;
+				}
+				if (!(entity instanceof Player)) {
+					if(((Player) ((LivingEntity) entity)).isSneaking()){
 						continue;
 					}
-				hitList.add(((LivingEntity) entity).getEntityId());
-				{
-					DealDamage.dealAmount(killer, (LivingEntity) entity, 1);
-					if (killer.getName().equals(((LivingEntity) entity).getName())) {
-						return;
-					}
-					Vector currentDirection = playerLocation.getDirection().normalize();
-					currentDirection = currentDirection.multiply(new Vector(power, power, power));
-					entity.setVelocity(currentDirection);
 				}
+				hitList.add(((LivingEntity) entity).getEntityId());
+				DealDamage.dealAmount(killer, (LivingEntity) entity, 0);
+				//killer.sendMessage("doing gust one 1 entity");
+				Vector currentDirection = playerLocation.getDirection().normalize();
+				currentDirection = currentDirection.multiply(new Vector(power, power, power));
+				entity.setVelocity(currentDirection);
+
 			}
 			origin = origin.subtract(dX * j, dY * j, dZ * j);
 		}
 	}
 
-	public static void launchPlayer(Entity entity, Double power) {
-		Vector currentDirection = entity.getLocation().getDirection().normalize();
+	public static void launchPlayer(Player player, Double power) {
+		player.spawnParticle(Particle.REDSTONE, player.getLocation(), 100, 0.5, 0.5, 0.5, new DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
+		Vector currentDirection = player.getLocation().getDirection().normalize();
 		currentDirection = currentDirection.multiply(new Vector(power, power, power));
-		entity.setVelocity(currentDirection);
+		player.setVelocity(currentDirection);
 	}
 
 	/*
@@ -228,7 +239,7 @@ public class F0 extends FighterKit {
 	public int getCooldownTicks() {
 		return cooldownTicks;
 	}
-	
+
 	public String getSecondaryWeaponName() {
 		return secondaryWeaponName;
 	}
