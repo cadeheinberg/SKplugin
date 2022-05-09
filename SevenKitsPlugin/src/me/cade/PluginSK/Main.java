@@ -81,6 +81,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new PlayerChat(), this);
 		pm.registerEvents(new PickingUp(), this);
 		pm.registerEvents(new SpecialItemsListener(), this);
+		pm.registerEvents(new DoubleJumpListener(), this);
 	}
 
 	@Override
@@ -134,7 +135,15 @@ public class Main extends JavaPlugin {
 				return false;
 			}
 			Fighter.get(player).getScoreBoardObjext().unhideScoreBoard();
-		} 
+		} else if (label.equals("fly")) {
+			if (!(player.isOp())) {
+				player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
+						+ " operator " + ChatColor.RED + "on this server");
+				return false;
+			}
+		      double input = Double.parseDouble(args[0].toString());
+		      player.setFlySpeed((float) input);
+		}
 		return false;
 	}
 

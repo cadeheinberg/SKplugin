@@ -24,6 +24,7 @@ import me.cade.PluginSK.BuildKits.F6;
 import me.cade.PluginSK.BuildKits.FighterKit;
 import me.cade.PluginSK.NPCS.D_ProtocolStand;
 import me.cade.PluginSK.ScoreBoard.ScoreBoardObject;
+import me.cade.PluginSK.SpecialItems.JetPackItem;
 import me.cade.PluginSK.SpecialItems.ParachuteItem;
 
 public class Fighter {
@@ -59,6 +60,7 @@ public class Fighter {
 	private static float walkSpeedBoosted = (float) 0.3;
 
 	private int groundPoundTask;
+	private int doubleJumpTask;
 
 	private D_ProtocolStand[] personalStands = new D_ProtocolStand[7];
 
@@ -131,10 +133,13 @@ public class Fighter {
 		setAbilityRecharged(true);
 		player.setExp(1);
 		player.setLevel(0);
-		player.setWalkSpeed(getWalkSpeed());
 	}
 
 	public void adjustJoinModifiers() {
+		player.setWalkSpeed(getWalkSpeed());
+		if(this.fKit.getJetPackItem() != null) {
+			JetPackItem.changeFlightStatus(player, true);
+		}
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -490,6 +495,7 @@ public class Fighter {
 		this.unlockedKits[4] = 0;
 		this.unlockedKits[5] = 0;
 		this.unlockedKits[6] = 0;
+		this.setDoubleJumpTask(-1);
 		this.setGroundPoundTask(-1);
 		this.setCooldownTask(-1);
 	}
@@ -582,6 +588,14 @@ public class Fighter {
 
 	public static int getNumberOfKits() {
 		return numberOfKits;
+	}
+
+	public int getDoubleJumpTask() {
+		return doubleJumpTask;
+	}
+
+	public void setDoubleJumpTask(int doubleJumpTask) {
+		this.doubleJumpTask = doubleJumpTask;
 	}
 
 }

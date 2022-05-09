@@ -49,7 +49,7 @@ public class F3 extends FighterKit {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
 		this.meleeDamage = 0;
-		this.projectileDamage = 3;
+		this.projectileDamage = 2.5;
 		this.specialDamage = 4;
 		this.cooldownTicks = 5;
 		this.material = Material.BOW;

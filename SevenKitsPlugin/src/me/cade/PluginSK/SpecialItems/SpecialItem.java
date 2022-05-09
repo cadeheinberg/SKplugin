@@ -14,6 +14,10 @@ public class SpecialItem {
 	}
 
 	public boolean doRightClick() {
+		return this.checkAndSetCooldown();
+	}
+	
+	public boolean checkAndSetCooldown() {
 		if (player.getCooldown(this.getMaterial()) > 0) {
 			player.sendMessage(ChatColor.RED + "Item needs to recharge");
 			return false;
@@ -47,6 +51,11 @@ public class SpecialItem {
 	public int getCooldown() {
 		// see override methods
 		return -1;
+	}
+
+	public void doDoubleJump() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

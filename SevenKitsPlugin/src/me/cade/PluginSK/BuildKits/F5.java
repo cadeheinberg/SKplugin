@@ -124,9 +124,9 @@ public class F5 extends FighterKit {
 		}, 5);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static void listenForFall(Player player, Fighter pFight) {
 		pFight.setGroundPoundTask(new BukkitRunnable() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				if (player == null) {

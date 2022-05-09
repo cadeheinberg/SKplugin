@@ -46,7 +46,7 @@ public class F4 extends FighterKit {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
 		this.meleeDamage = 6;
-		this.projectileDamage = 4;
+		this.projectileDamage = 3.5;
 		this.specialDamage = 4;
 		this.cooldownTicks = 5;
 		this.material = Material.TRIDENT;

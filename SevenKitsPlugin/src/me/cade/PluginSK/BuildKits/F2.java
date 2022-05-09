@@ -47,7 +47,7 @@ public class F2 extends FighterKit {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
 		this.meleeDamage = 6;
-		this.projectileDamage = 0.75;
+		this.projectileDamage = 0.25;
 		this.specialDamage = 1.0;
 		this.cooldownTicks = 30;
 		this.material = Material.IRON_SHOVEL;

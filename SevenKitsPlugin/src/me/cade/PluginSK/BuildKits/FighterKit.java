@@ -22,6 +22,7 @@ import me.cade.PluginSK.Main;
 import me.cade.PluginSK.Weapon;
 import me.cade.PluginSK.SpecialItems.CombatTracker;
 import me.cade.PluginSK.SpecialItems.IceCageItem;
+import me.cade.PluginSK.SpecialItems.JetPackItem;
 import me.cade.PluginSK.SpecialItems.ParachuteItem;
 import me.cade.PluginSK.SpecialItems.SpecialItem;
 import me.cade.PluginSK.SpecialItems.ThrowingTNTItem;
@@ -34,9 +35,10 @@ public class FighterKit {
 
 	EnchantmentPair perkEnchantment1;
 
-	SpecialItem[] specialItems = new SpecialItem[4];
+	SpecialItem[] specialItems = new SpecialItem[5];
 
 	private SpecialItem combatTracker;
+	private SpecialItem jetPackItem;
 
 	public FighterKit() {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Creating FighterKit without player");
@@ -103,9 +105,16 @@ public class FighterKit {
 			this.combatTracker = (new CombatTracker(this.player));
 			this.specialItems[3] = this.combatTracker;
 		}
+		if (true) {
+			this.jetPackItem = (new JetPackItem(this.player));
+			this.specialItems[4] = this.jetPackItem;
+		}
 	}
 
 	public void doSpecialItemRightClick(Material material) {
+		if(this.getSpecialItem(material) == null) {
+			return;
+		}
 		this.getSpecialItem(material).doRightClick();
 	}
 	
@@ -399,6 +408,10 @@ public class FighterKit {
 
 	public CombatTracker getCombatTracker() {
 		return (CombatTracker) combatTracker;
+	}
+	
+	public JetPackItem getJetPackItem() {
+		return (JetPackItem) jetPackItem;
 	}
 
 	public SpecialItem[] getSpecialItems() {
