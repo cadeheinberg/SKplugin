@@ -1,13 +1,12 @@
 # The most important class is Fighter.java.
+```
 It stores all of the players stats and holds
 key methods that are used during the game.
-
-# A Fighter instance is created for every player that joins the server.
-```
 As the player plays progresses, their 
 Fighter instance is updated respectively.
 ```
 
+# A Fighter instance is created for every player that joins the server.
 ```
 When the player leaves the server,
 to save the their stats the
