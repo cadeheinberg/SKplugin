@@ -6,6 +6,12 @@ As the player plays progresses, their respective Fighter instance is updated acc
 
 ### A Fighter instance is created for every player that joins the server.
 ```
+See PlayerJoin/PlayerJoinListener.java
+From there you can follow what happens to a player from the moment
+they join the server to the moment they leave.
+```
+
+```
 When the player leaves the server, to save the their stats
 the data held by the Fighter instance is uploaded to the MySQL server.
 ```
