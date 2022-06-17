@@ -15,4 +15,4 @@ When the player rejoins, the data is then downloaded from the MySQL server
 and then injected into the newly made Fighter instance for the player!
 ```
 
-# Email me: cadeheinberg@outlook.com
+## Email me: cadeheinberg@outlook.com
