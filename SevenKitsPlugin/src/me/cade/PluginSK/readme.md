@@ -1,11 +1,10 @@
-### The most important class is Fighter.java.
+### The most important class is [Fighter.java](https://github.com/cadeheinberg/SKplugin/blob/main/SevenKitsPlugin/src/me/cade/PluginSK/Fighter.java).
 ```
 It stores all of the players stats and holds key methods that are used during the game.
 As the player plays progresses, their respective Fighter instance is updated accordingly.
 ```
 
-### A Fighter instance is created for every player that joins the server.
-See [PluginSK/PlayerJoin/PlayerJoinListener.java](https://github.com/cadeheinberg/SKplugin/blob/main/SevenKitsPlugin/src/me/cade/PluginSK/PlayerJoin/PlayerJoinListener.java)
+### A Fighter instance is created for every player that joins the server in [PlayerJoinListener.java](https://github.com/cadeheinberg/SKplugin/blob/main/SevenKitsPlugin/src/me/cade/PluginSK/PlayerJoin/PlayerJoinListener.java).
 ```
 From there you can follow what happens to a player from the moment
 they join the server to the moment they leave.
