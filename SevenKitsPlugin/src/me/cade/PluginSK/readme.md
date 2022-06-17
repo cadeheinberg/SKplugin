@@ -8,10 +8,8 @@ Fighter instance is updated respectively.
 
 ### A Fighter instance is created for every player that joins the server.
 ```
-- When the player leaves the server,
-to save the their stats the
-data held by the Fighter instance is
-uploaded to the MySQL server.
+When the player leaves the server, to save the their stats
+the data held by the Fighter instance is uploaded to the MySQL server.
 ```
 
 ```
