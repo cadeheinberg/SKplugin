@@ -5,8 +5,8 @@ As the player plays progresses, their respective Fighter instance is updated acc
 ```
 
 ### A Fighter instance is created for every player that joins the server.
-```
 See [PluginSK/PlayerJoin/PlayerJoinListener.java](https://github.com/cadeheinberg/SKplugin/blob/main/SevenKitsPlugin/src/me/cade/PluginSK/PlayerJoin/PlayerJoinListener.java)
+```
 From there you can follow what happens to a player from the moment
 they join the server to the moment they leave.
 ```
