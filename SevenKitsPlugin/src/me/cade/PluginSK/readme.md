@@ -7,7 +7,8 @@
 - When the player leaves the server, to save the their stats the data held by the Fighter instance is uploaded to the MySQL server.
 - When the player rejoins, the data is then downloaded from the MySQL server and then injected into the newly made Fighter instance for the player!
 
-### Fighter.java has 7 children classes called F0, F2, ....F6 which can be found in [/BuildKits](https://github.com/cadeheinberg/SKplugin/tree/main/SevenKitsPlugin/src/me/cade/PluginSK/BuildKits).
+### Each Fighter on the server has their own Weapons and abilities, which are managed by their [FighterKit.java](https://github.com/cadeheinberg/SKplugin/tree/main/SevenKitsPlugin/src/me/cade/PluginSK/BuildKits/FightKit.java).
+- FighterK.java has 7 children classes called F0, F2, ....F6 which can be found in [/BuildKits](https://github.com/cadeheinberg/SKplugin/tree/main/SevenKitsPlugin/src/me/cade/PluginSK/BuildKits).
 - Each of these Children are a specific kit/class on the server. So there are 7 kits on the server
 
 ## Email me: cadeheinberg@outlook.com
